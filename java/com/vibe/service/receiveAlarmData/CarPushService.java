@@ -4,9 +4,7 @@ import com.vibe.pojo.parking.CarParkingStop;
 import com.vibe.util.constant.ResponseModel;
 import com.vibe.utils.Page;
 
-import java.util.List;
-
-/**
+import java.util.List; /**
  * 分类名称
  * ClassName: CarPushService
  * Package:com.vibe.service.receiveAlarmData

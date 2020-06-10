@@ -11,23 +11,26 @@ import com.vibe.utils.FormJson;
 
 public interface WorkSimulatorService {
 
-    FormJson operationSimulatorWork(WorkPattern workpattern);
+	FormJson operationSimulatorWork(WorkPattern workpattern);
 
-    EasyUIJson findAllSimulatorWork(int page, int rows, WorkPattern workpattern);
+	EasyUIJson findAllSimulatorWork(int page, int rows, WorkPattern workpattern);
 
-    FormJson delSimulatorWork(int[] ids);
+	FormJson delSimulatorWork(int[] ids);
 
-    EasyUIJson findAllWorkPeriod(int page, int rows, WorkPeriod workPeriod);
+	EasyUIJson findAllWorkPeriod(int page, int rows, WorkPeriod workPeriod);
 
-    FormJson delWorkPeriod(int[] ids, int falg);
+	FormJson delWorkPeriod(int[] ids, int falg);
 
-    List<WorkPattern> findAllWorkPatternName(User user);
+	List<WorkPattern> findAllWorkPatternName(User user);
 
-    List<WorkPattern> findWorkPatternCheckId(int[] id);
+	List<WorkPattern> findWorkPatternCheckId(int[] id);
 
-    List<WorkPattern> findSimulatorWork(Integer[] ids);
+	List<WorkPattern> findSimulatorWork(Integer[] ids);
 
-    FormJson operationWorkPeriod(WorkPeriod period);
+	FormJson operationWorkPeriod(WorkPeriod period);
+
+
+
 
 
 }

@@ -13,22 +13,21 @@ import com.vibe.utils.Page;
 
 @Controller
 public class ParkCameraRecognitionController {
-
-    @Autowired
-    private ParkCameraRecognitionService pcrs;
-
-    @RequestMapping("park/findLimitCameraRecognitionlog")
-    @ResponseBody
-    public Page<CameraRecognitionData> cameraRecognitionLog(@RequestParam(defaultValue = "0") int page,
-                                                            @RequestParam(defaultValue = "10") int rows, CameraRecognitionData data) {
-        return pcrs.findCameraRecognitionLog(page, rows, data);
-    }
-
-    @RequestMapping("park/delCameraRecognitionlog")
-    @ResponseBody
-    public FormJson delCameraRecognitionlog(int[] ids) {
-        return pcrs.delCameraRecognitionlog(ids);
-    }
-
-
+	
+	@Autowired
+	private ParkCameraRecognitionService pcrs;
+	
+	@RequestMapping("park/findLimitCameraRecognitionlog")
+	@ResponseBody
+	public Page<CameraRecognitionData> cameraRecognitionLog(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int rows, CameraRecognitionData data){
+		return pcrs.findCameraRecognitionLog(page,rows,data);
+	}
+	@RequestMapping("park/delCameraRecognitionlog")
+	@ResponseBody
+	public FormJson delCameraRecognitionlog(int[] ids){
+		return pcrs.delCameraRecognitionlog(ids);
+	}
+	
+	
 }

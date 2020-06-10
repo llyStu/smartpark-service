@@ -5,6 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 
 public interface Dispatcher {
 
-    void forward(HttpServletRequest req, HttpServletResponse resp) throws Exception;
+	void forward(HttpServletRequest req, HttpServletResponse resp) throws Exception;
 
 }

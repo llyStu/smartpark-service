@@ -10,12 +10,12 @@ import java.util.List;
 @Repository
 public interface OperationMapper {
 
-    int insertOperation(Operation oper);
+	int insertOperation(Operation oper);
 
-    int deleteOperation(@Param("oids") int[] oids);
+	int deleteOperation(@Param("oids") int[] oids);
 
-    int updateOperation(Operation oper);
+	int updateOperation(Operation oper);
 
-    List<Operation> queryOperation(OperationVo oper);
+	List<Operation> queryOperation(OperationVo oper);
 
 }

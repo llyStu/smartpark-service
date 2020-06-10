@@ -11,32 +11,32 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 
 public class HtmlExportType implements IExportType {
-    @Override
-    public String getSuffix() {
-        return "html";
-    }
+	@Override
+	public String getSuffix() {
+		return "html";
+	}
 
-    @Override
-    public void writeAndClose(OutputStream outputStream, JasperPrint print) throws JRException {
-        HtmlExporter exporter = new HtmlExporter();
+	@Override
+	public void writeAndClose(OutputStream outputStream, JasperPrint print) throws JRException {
+		HtmlExporter exporter = new HtmlExporter();
 
-        ExporterInput exporterInput = new SimpleExporterInput(print);
-        exporter.setExporterInput(exporterInput);
+		ExporterInput exporterInput = new SimpleExporterInput(print);
+		exporter.setExporterInput(exporterInput);
 
-        SimpleHtmlExporterOutput out = new SimpleHtmlExporterOutput(outputStream);
-        exporter.setExporterOutput(out);
-        exporter.exportReport();
-    }
+		SimpleHtmlExporterOutput out = new SimpleHtmlExporterOutput(outputStream);
+		exporter.setExporterOutput(out);
+		exporter.exportReport();
+	}
 
-    @Override
-    public void writeAndClose(Writer writer, JasperPrint print) throws JRException {
-        HtmlExporter exporter = new HtmlExporter();
+	@Override
+	public void writeAndClose(Writer writer, JasperPrint print) throws JRException {
+		HtmlExporter exporter = new HtmlExporter();
 
-        ExporterInput exporterInput = new SimpleExporterInput(print);
-        exporter.setExporterInput(exporterInput);
+		ExporterInput exporterInput = new SimpleExporterInput(print);
+		exporter.setExporterInput(exporterInput);
 
-        SimpleHtmlExporterOutput out = new SimpleHtmlExporterOutput(writer);
-        exporter.setExporterOutput(out);
-        exporter.exportReport();
-    }
+		SimpleHtmlExporterOutput out = new SimpleHtmlExporterOutput(writer);
+		exporter.setExporterOutput(out);
+		exporter.exportReport();
+	}
 }

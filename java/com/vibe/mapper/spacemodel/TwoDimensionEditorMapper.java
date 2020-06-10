@@ -9,17 +9,17 @@ import java.util.List;
 @Repository
 public interface TwoDimensionEditorMapper {
 
-    int insertTwoDimensionMessage(@Param("name") String name, @Param("filename") String filename);
+	int insertTwoDimensionMessage(@Param("name") String name, @Param("filename") String filename);
 
 
-    TwoDimension findTwoDimensionEditor(@Param("name") String name);
+	TwoDimension findTwoDimensionEditor(@Param("name") String name);
 
 
-    int updateTwoDimensionMessage(@Param("name") String name, @Param("filename") String filename);
+	int updateTwoDimensionMessage(@Param("name") String name, @Param("filename") String filename);
 
-    List<String> findAllName();
+	List<String> findAllName();
 
 
-    int deleteTwoDimensionEditor(@Param("name") String name);
+	int deleteTwoDimensionEditor(@Param("name") String name);
 
 }

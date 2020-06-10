@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vibe.mapper.report.TemplateMapper">
-    <insert id="add">
-        insert into qs_test.t_template_data(name, clazz, method, data) values(#{name}, #{clazz}, #{method}, #{data})
-    </insert>
+	<insert id="add">
+		insert into qs_test.t_template_data(name, clazz, method, data) values(#{name}, #{clazz}, #{method}, #{data})
+	</insert>
 
-    <select id="find" resultType="com.vibe.pojo.report.TemplateData">
-        select * from qs_test.t_template_data where name=#{name}
-    </select>
+	<select id="find" resultType="com.vibe.pojo.report.TemplateData">
+		select * from qs_test.t_template_data where name=#{name}
+	</select>
 </mapper>

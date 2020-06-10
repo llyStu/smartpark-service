@@ -9,12 +9,11 @@ import java.util.List;
 @Repository
 public interface CommentDao {
 
-    int insert(Comment comment);
+	int insert(Comment comment);
 
-    List<Comment> queryByPost(int pid);
-
-    List<Comment> queryByPage(
+	List<Comment> queryByPost(int pid);
+	List<Comment> queryByPage(
             @Param("pageCommnets") List<Comment> pageCommnets);
 
-    String getLongUsername();
+	String getLongUsername();
 }

@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vibe.mapper.user.UserRoleMapper">
-    <!-- 登录功能查询 用户 -->
+	<!-- 登录功能查询 用户 -->
     <select id="queryUserRole" parameterType="int" resultType="UserRole">
-        select * from t_user_role where uid=#{id}
-    </select>
-    <select id="queryRoles" parameterType="int" resultType="Role">
-        select r.id,r.name from db_vibe_basic.t_role r
-        inner join db_vibe_basic.t_user_role ru on ru.rid=r.rid
-        inner join db_vibe_basic.t_user u on u.id=ru.uid
-        where u.uid=#{id};
-    </select>
-    <!-- 根据用户id，删除用户权限 -->
-    <delete id="deleteUserRole" parameterType="int">
-        delete from
-        db_vibe_basic.t_user_Role where uid=#{uid} and rid=#{rid}
-    </delete>
-    <!-- 根据用户uid,添加权限pid -->
-    <insert id="addUserRole" parameterType="userRole">
-        insert into db_vibe_basic.t_user_role (uid,rid
-        ) values (#{uid},#{rid})
+		select * from t_user_role where uid=#{id}
+	</select> 
+	<select id="queryRoles" parameterType="int" resultType="Role">
+		select r.id,r.name from db_vibe_basic.t_role r 
+				inner join db_vibe_basic.t_user_role ru  on ru.rid=r.rid 
+				inner join db_vibe_basic.t_user u  on u.id=ru.uid 
+ 			where u.uid=#{id};
+	</select>
+	<!-- 根据用户id，删除用户权限 -->
+	<delete id="deleteUserRole" parameterType="int">
+		delete from
+		db_vibe_basic.t_user_Role where uid=#{uid} and rid=#{rid}
+	</delete>
+	<!-- 根据用户uid,添加权限pid -->
+	<insert id="addUserRole" parameterType="userRole">
+		insert into db_vibe_basic.t_user_role (uid,rid
+		) values (#{uid},#{rid})
 
 
-    </insert>
-    <!-- 更新角色 -->
-    <update id="updateUserRole" parameterType="userRole">
-        update
-        db_vibe_basic.t_user_role
-        <set>
-            <if test="rid!=null">
-                rid = #{rid}
-            </if>
-        </set>
-        where uid = #{uid}
-    </update>
+	</insert>
+	<!-- 更新角色 -->
+	<update id="updateUserRole" parameterType="userRole">
+		update
+			db_vibe_basic.t_user_role
+		<set>
+			<if test="rid!=null">
+				rid = #{rid}
+			</if>
+		</set>
+		where uid = #{uid}
+	</update>
 </mapper>

@@ -1,68 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.maintenace.MaintenaceDao">
+	
+	<select id="queryMaintenaceByDeviceId" resultType="MaintenaceDeviceBean" parameterType="int">
+	   	select id,picture,maintenance_time,maintenance_content,maintenance_type,remark,maintenance_person,device_id from db_vibe_monitor.t_maintenance ma,db_vibe_monitor.t_device_maintenance dema where ma.id = dema.maintenance_id and dema.device_id = #{deviceId}
+	</select>
+	
+	<insert id="addMaintenace" parameterType="com.vibe.pojo.MaintenaceBean" useGeneratedKeys="true" keyProperty="id">
+		insert into db_vibe_monitor.t_maintenance(picture,maintenance_time,maintenance_content,maintenance_type,remark,maintenance_person) values(#{picture},#{maintenance_time},#{maintenance_content},#{maintenance_type},#{remark},#{maintenance_person})
+	</insert>
+	
+	<insert id="addDeviceMaintenace">
+		insert into db_vibe_monitor.t_device_maintenance(maintenance_id,device_id) values(#{maintenaceId},#{deviceId})
+	</insert>
 
-    <select id="queryMaintenaceByDeviceId" resultType="MaintenaceDeviceBean" parameterType="int">
-        select id,picture,maintenance_time,maintenance_content,maintenance_type,remark,maintenance_person,device_id from
-        db_vibe_monitor.t_maintenance ma,db_vibe_monitor.t_device_maintenance dema where ma.id = dema.maintenance_id and
-        dema.device_id = #{deviceId}
-    </select>
-
-    <insert id="addMaintenace" parameterType="com.vibe.pojo.MaintenaceBean" useGeneratedKeys="true" keyProperty="id">
-        insert into
-        db_vibe_monitor.t_maintenance(picture,maintenance_time,maintenance_content,maintenance_type,remark,maintenance_person)
-        values(#{picture},#{maintenance_time},#{maintenance_content},#{maintenance_type},#{remark},#{maintenance_person})
-    </insert>
-
-    <insert id="addDeviceMaintenace">
-        insert into db_vibe_monitor.t_device_maintenance(maintenance_id,device_id) values(#{maintenaceId},#{deviceId})
-    </insert>
-
-    <update id="updateMaintenace" parameterType="com.vibe.pojo.MaintenaceBean">
-        update db_vibe_monitor.t_maintenance
-        <set>
-            <if test="picture !='' and picture != null">
-                picture = #{picture},
-            </if>
-            <if test="maintenance_time!=null">
-                maintenance_time = #{maintenance_time},
-            </if>
-            <if test="maintenance_content!=null">
-                maintenance_content = #{maintenance_content},
-            </if>
-            <if test="maintenance_type!=null">
-                maintenance_type = #{maintenance_type},
-            </if>
-            <if test="remark!=null">
-                remark = #{remark},
-            </if>
-            <if test="maintenance_person!=null">
-                maintenance_person = #{maintenance_person},
-            </if>
-        </set>
-        WHERE id=#{id}
-    </update>
-
-    <select id="queryDeviceIdsByMaintenaceId" resultType="int">
-        select device_id from db_vibe_monitor.t_device_maintenance where maintenance_id = #{maintenaceId}
-    </select>
-
-    <delete id="deleteDeviceMaintenace">
-        delete from db_vibe_monitor.t_device_maintenance where maintenance_id = #{maintenaceId} and device_id =
-        #{deviceId}
-    </delete>
-
-    <update id="updateDeviceMaintenace">
-        update db_vibe_monitor.t_device_maintenance set
-        detail = #{detail} where id = #{id}
-    </update>
-
-    <delete id="deleteMaintenace" parameterType="int">
-        delete from db_vibe_monitor.t_maintenance where id = #{id}
-    </delete>
+	<update id="updateMaintenace" parameterType="com.vibe.pojo.MaintenaceBean">
+		update db_vibe_monitor.t_maintenance
+		<set>
+			<if test="picture !='' and picture != null">
+				picture = #{picture},
+			</if>
+			<if test="maintenance_time!=null">
+				maintenance_time = #{maintenance_time},
+			</if>
+			<if test="maintenance_content!=null">
+				maintenance_content = #{maintenance_content},
+			</if>
+			<if test="maintenance_type!=null">
+				maintenance_type = #{maintenance_type},
+			</if>
+			<if test="remark!=null">
+				remark = #{remark},
+			</if>
+			<if test="maintenance_person!=null">
+				maintenance_person = #{maintenance_person},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	
+	<select id="queryDeviceIdsByMaintenaceId" resultType="int">
+	   	select device_id from db_vibe_monitor.t_device_maintenance where maintenance_id = #{maintenaceId}
+	</select>
+	
+	<delete id="deleteDeviceMaintenace">
+		delete from db_vibe_monitor.t_device_maintenance where maintenance_id = #{maintenaceId} and device_id = #{deviceId}
+	</delete>
+	
+	<update id="updateDeviceMaintenace">
+		update db_vibe_monitor.t_device_maintenance set 
+		 detail = #{detail} where id = #{id}
+	</update>
+	
+	<delete id="deleteMaintenace" parameterType="int">
+		delete from db_vibe_monitor.t_maintenance where id = #{id}
+	</delete>
 
 </mapper>
 

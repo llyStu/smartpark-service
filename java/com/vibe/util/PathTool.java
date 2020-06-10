@@ -26,219 +26,219 @@ import org.springframework.web.multipart.MultipartFile;
  * */
 public class PathTool {
 
-    public static String getRelativePath(MultipartFile file, HttpServletRequest request) {
+	public static String getRelativePath(MultipartFile file, HttpServletRequest request) {
 
-        String relative_path = "";
+		String relative_path = "";
 
-        // 获取上传路径 webapp/upload
+		// 获取上传路径 webapp/upload
 //		String uploadPath = request.getSession().getServletContext().getRealPath("/upload/");
 //		String uploadPath = "C:\\img_upload_test\\";
 //		String uploadPath = "/home/file/";
-        String uploadPath = ConfUtil.getPushSelectPrefix();
-        if (!(new File(uploadPath)).exists()) {
-            (new File(uploadPath)).mkdirs();
-        }
-        if (file.getSize() > 1) {
+		String uploadPath = ConfUtil.getPushSelectPrefix();
+		if (!(new File(uploadPath)).exists()) {
+			(new File(uploadPath)).mkdirs();
+		}
+		if (file.getSize() > 1) {
 
-            String originalName = file.getOriginalFilename();
-            String fileName = UUID.randomUUID() + originalName.substring(originalName.lastIndexOf("."));
-            File newFile = new File(uploadPath + fileName);
-            try {
-                // 上传文件转存
-                file.transferTo(newFile);
-                relative_path = "/image/" + fileName;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return relative_path;
-    }
+			String originalName = file.getOriginalFilename();
+			String fileName = UUID.randomUUID() + originalName.substring(originalName.lastIndexOf("."));
+			File newFile = new File(uploadPath + fileName);
+			try {
+				// 上传文件转存
+				file.transferTo(newFile);
+				relative_path = "/image/"+ fileName;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return relative_path;
+	}
 
-    public static String getRelativePath(MultipartFile file, HttpServletRequest request, String url) {
+	public static String getRelativePath(MultipartFile file, HttpServletRequest request,String url) {
 
-        String relative_path = "";
+		String relative_path = "";
 
-        // 获取上传路径 webapp/upload
-        String uploadPath = request.getSession().getServletContext().getRealPath(url);
-        //System.out.println(uploadPath);
-        if (!(new File(uploadPath)).exists()) {
-            (new File(uploadPath)).mkdirs();
-        }
-        if (file.getSize() > 1) {
+		// 获取上传路径 webapp/upload
+		String uploadPath = request.getSession().getServletContext().getRealPath(url);
+		//System.out.println(uploadPath);
+		if (!(new File(uploadPath)).exists()) {
+			(new File(uploadPath)).mkdirs();
+		}
+		if (file.getSize() > 1) {
 
-            String originalName = file.getOriginalFilename();
-            String fileName = UUID.randomUUID() + originalName.substring(originalName.lastIndexOf("."));
-            File newFile = new File(uploadPath + fileName);
-            try {
-                // 上传文件转存
-                file.transferTo(newFile);
-                relative_path = fileName;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return relative_path;
-    }
+			String originalName = file.getOriginalFilename();
+			String fileName = UUID.randomUUID() + originalName.substring(originalName.lastIndexOf("."));
+			File newFile = new File(uploadPath + fileName);
+			try {
+				// 上传文件转存
+				file.transferTo(newFile);
+				relative_path = fileName;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return relative_path;
+	}
 
-    public static String getRelativePath(MultipartFile[] file, HttpServletRequest request) {
+	public static String getRelativePath(MultipartFile[] file, HttpServletRequest request) {
 
-        StringBuffer relative_path = new StringBuffer("");
+		StringBuffer relative_path = new StringBuffer("");
 
-        if (file.length != 0 && file[0].getSize() > 1) {
+		if (file.length != 0 && file[0].getSize() > 1) {
 
-            for (int i = 0; i < file.length; i++) {
-                String path = getRelativePath(file[i], request);
-                relative_path.append(path);
-                if (i < file.length - 1) {
-                    relative_path.append(",");
-                }
-            }
-        }
-        return relative_path.toString();
-    }
+			for (int i = 0; i < file.length; i++) {
+				String path = getRelativePath(file[i], request);
+				relative_path.append(path);
+				if (i < file.length - 1) {
+					relative_path.append(",");
+				}
+			}
+		}
+		return relative_path.toString();
+	}
 
-    public static String getAbsolutePath(String fileName, HttpServletRequest request) {
+	public static String getAbsolutePath(String fileName, HttpServletRequest request) {
 
-        // 获取服务器ip地址，端口号等
-        String pathPrefix = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                + request.getContextPath() + "/upload/";
+		// 获取服务器ip地址，端口号等
+		String pathPrefix = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+				+ request.getContextPath() + "/upload/";
 
-        return pathPrefix + fileName;
-    }
+		return pathPrefix + fileName;
+	}
 
-    /*参数类型：由,分隔的地址字符串
-     * 结果类型：绝对路径的集合
-     * */
-    public static List<String> getAbsolutePathList(String fileNameColl, HttpServletRequest request) {
+	/*参数类型：由,分隔的地址字符串
+	 * 结果类型：绝对路径的集合
+	 * */
+	public static List<String> getAbsolutePathList(String fileNameColl, HttpServletRequest request) {
 
-        List<String> list = new ArrayList<String>();
-        if (fileNameColl != null) {
-            String[] path = fileNameColl.split(",");
+		List<String> list = new ArrayList<String>();
+		if(fileNameColl!=null){
+			String[] path = fileNameColl.split(",");
 
-            for (String p : path) {
-                String absolute_path = getAbsolutePath(p, request);
-                list.add(absolute_path);
-            }
-        }
-        return list;
-    }
+			for (String p : path) {
+				String absolute_path = getAbsolutePath(p, request);
+				list.add(absolute_path);
+			}
+		}
+		return list;
+	}
 
-    public static String alterFile(String delPath, // 要删除的文件的url
-                                   MultipartFile[] newFile, // 新添加的多个文件
-                                   String fileNames, // 原来的文件名串
-                                   HttpServletRequest request) {
+	public static String alterFile(String delPath, // 要删除的文件的url
+								   MultipartFile[] newFile, // 新添加的多个文件
+								   String fileNames, // 原来的文件名串
+								   HttpServletRequest request) {
 
-        StringBuffer pathSB = new StringBuffer("");
+		StringBuffer pathSB = new StringBuffer("");
 
-        // 前台传来delPath格式为"[XXXX,XXXX]"
-        if (delPath != null && delPath.length() > 0) {
+		// 前台传来delPath格式为"[XXXX,XXXX]"
+		if (delPath!=null&&delPath.length() > 0) {
 
 
-            String[] del_path = (delPath.substring(1, delPath.length() - 1)).split(",");
+			String[] del_path = (delPath.substring(1, delPath.length() - 1)).split(",");
 
-            List<String> temp = new ArrayList<String>();
-            List<String> list = new ArrayList<String>();
+			List<String> temp = new ArrayList<String>();
+			List<String> list = new ArrayList<String>();
 
-            String[] path = fileNames.split(",");
+			String[] path = fileNames.split(",");
 
-            for (String p : path) {
-                list.add(p);
-            }
-            for (String del : del_path) {
-                for (String p : path) {
-                    if (del.contains(p)) {
-                        temp.add(p);
-                    }
-                }
-            }
-            list.removeAll(temp);
-            for (int i = 0; i < list.size(); i++) {
-                pathSB.append(list.get(i));
-                pathSB.append(",");
-            }
-        }
+			for (String p : path) {
+				list.add(p);
+			}
+			for (String del : del_path) {
+				for (String p : path) {
+					if (del.contains(p)) {
+						temp.add(p);
+					}
+				}
+			}
+			list.removeAll(temp);
+			for (int i = 0; i < list.size(); i++) {
+				pathSB.append(list.get(i));
+				pathSB.append(",");
+			}
+		}
 
-        // 对前台传来的照片的保存和对象属性名的更改
-        if (newFile != null && newFile.length != 0 && newFile[0].getSize() > 0) {
+		// 对前台传来的照片的保存和对象属性名的更改
+		if (newFile!=null&&newFile.length!=0&&newFile[0].getSize() > 0) {
 
-            for (int i = 0; i < newFile.length; i++) {
-                String relative_path = getRelativePath(newFile[i], request);
-                pathSB.append(relative_path);
-                if (i < newFile.length - 1) {
-                    pathSB.append(",");
-                }
-            }
-        }
+			for (int i = 0; i < newFile.length; i++) {
+				String relative_path = getRelativePath(newFile[i], request);
+				pathSB.append(relative_path);
+				if (i < newFile.length - 1) {
+					pathSB.append(",");
+				}
+			}
+		}
 
-        if (pathSB.length() > 1 && pathSB.lastIndexOf(",") == pathSB.length() - 1) {
-            pathSB = new StringBuffer(pathSB.substring(0, pathSB.length() - 1));
-        }
-        return pathSB.toString();
-    }
+		if (pathSB.length() > 1 && pathSB.lastIndexOf(",") == pathSB.length() - 1) {
+			pathSB = new StringBuffer(pathSB.substring(0, pathSB.length() - 1));
+		}
+		return pathSB.toString();
+	}
 
-    //接收遗产评估doc，保存之，并返回相对路径(时间毫秒值)
-    public static String getDocRelativePath(MultipartFile file,
-                                            HttpServletRequest request) {
+	//接收遗产评估doc，保存之，并返回相对路径(时间毫秒值)
+	public static String getDocRelativePath(MultipartFile file,
+											HttpServletRequest request){
 
-        String relative_path = "";
-        if (file != null && file.getSize() > 0) {
+		String relative_path="";
+		if(file!=null&&file.getSize()>0){
 
-            //为文件重命名
-            //获取当前系统时间毫秒值作为文件的名字relative_path
-            Calendar calendar = Calendar.getInstance();
-            String millis = calendar.getTimeInMillis() + "";
+			//为文件重命名
+			//获取当前系统时间毫秒值作为文件的名字relative_path
+			Calendar calendar = Calendar.getInstance();
+			String millis = calendar.getTimeInMillis() + "";
 
-            String dir = request.getSession().getServletContext().getRealPath("/doc/");
+			String dir = request.getSession().getServletContext().getRealPath("/doc/");
 
-            //创建上传路径
-            if (!new File(dir).exists()) {
-                new File(dir).mkdirs();
-            }
-            //截取文件类型串，如.txt
-            String originName = file.getOriginalFilename();
+			//创建上传路径
+			if(!new File(dir).exists()){
+				new File(dir).mkdirs();
+			}
+			//截取文件类型串，如.txt
+			String originName = file.getOriginalFilename();
 
-            String fileName = millis + originName.substring(originName.lastIndexOf("."));
+			String fileName = millis + originName.substring(originName.lastIndexOf("."));
 
-            File desFile = new File(dir + fileName);
-            try {
+			File desFile = new File(dir + fileName);
+			try {
 
-                file.transferTo(desFile);
-                relative_path = fileName;
-            } catch (IllegalStateException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return relative_path;
+				file.transferTo(desFile);
+				relative_path = fileName;
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return 	relative_path;
 
-    }
+	}
 
-    // 根据名字中的毫秒值获得上传时间
-    public static String getRelativePathAsDate(String fileName) {
-        System.out.println(fileName);
-        String millis = fileName.substring(0, fileName.lastIndexOf("."));
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.setTimeInMillis(Long.parseLong(millis));
-        Date date = calendar2.getTime();
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String dateFormat = formater.format(date);
-        return dateFormat;
+	// 根据名字中的毫秒值获得上传时间
+	public static String getRelativePathAsDate(String fileName){
+		System.out.println(fileName);
+		String 	millis = fileName.substring(0, fileName.lastIndexOf("."));
+		Calendar calendar2 = Calendar.getInstance();
+		calendar2.setTimeInMillis(Long.parseLong(millis));
+		Date date = calendar2.getTime();
+		SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String dateFormat = formater.format(date);
+		return dateFormat;
 
-    }
+	}
 
-    public static String getDocAbsolutePath(String fileName, HttpServletRequest request) {
+	public static String getDocAbsolutePath(String fileName, HttpServletRequest request) {
 
-        // 获取服务器ip地址，端口号等
-        String pathPrefix = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-                + request.getContextPath() + "/doc/";
+		// 获取服务器ip地址，端口号等
+		String pathPrefix = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+				+ request.getContextPath() + "/doc/";
 
-        return pathPrefix + fileName;
-    }
+		return pathPrefix + fileName;
+	}
 
-    public static String getFileName(String fileName) {
-        if (fileName != null && !"".equals(fileName) && fileName.contains(".")) {
-            int lastIndexOf = fileName.lastIndexOf(".");
-            return fileName.substring(0, lastIndexOf);
-        }
-        return null;
-    }
+	public static String getFileName(String fileName) {
+		if(fileName != null && !"".equals(fileName) && fileName.contains(".")){
+			int lastIndexOf = fileName.lastIndexOf(".");
+			return fileName.substring(0,lastIndexOf);
+		}
+		return null;
+	}
 }

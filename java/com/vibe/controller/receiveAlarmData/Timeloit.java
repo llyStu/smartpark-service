@@ -9,22 +9,22 @@ import com.vibe.service.receiveAlarmData.TimeloitService;
 
 @Controller
 public class Timeloit {
-    @Autowired
-    private TimeloitService timeloitService;
+	@Autowired
+	private  TimeloitService timeloitService;
 
-    @RequestMapping("/timeloit/alarm")
-    @ResponseBody
-    public String receiveTimeloitAlarmData(TimeloitAlarmData data) {
-        try {
-            timeloitService.receiveData(data);
-            return "200";
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-            return "500";
-        }
-
-
-    }
+	@RequestMapping("/timeloit/alarm")
+	@ResponseBody
+	public String receiveTimeloitAlarmData(TimeloitAlarmData data){
+		try {
+			timeloitService.receiveData(data);
+			return "200";
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return "500";
+		}
+		
+		 
+	}
 }
 

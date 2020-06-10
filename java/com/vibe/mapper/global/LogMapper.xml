@@ -1,128 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.global.LogMapper">
+	 
+	
+	<insert id="insertLog" parameterType="com.vibe.service.logAop.Syslog">
+		insert into db_vibe_basic.t_operation_log 
+		(login_id,login_name,ip_address,result,method_remark,operating_content,opt_date,response_time) 
+		values
+		(#{loginId},#{loginName},#{ipAddress},#{result},#{methodRemark},#{operatingContent},#{optDate},#{responseTime})
+	</insert>
+	<select id="queryLogList" parameterType="com.vibe.service.logAop.Syslog" resultType="com.vibe.service.logAop.Syslog">
+		select login_id loginId
+		      ,login_name loginName
+		      ,ip_address ipAddress
+		      ,method_remark methodRemark
+		      ,operating_content operatingContent
+		      ,result result
+		      ,opt_date optDate
+		 from db_vibe_basic.t_operation_log 
+		<where>
+		1=1
+			<if test="loginId != null and loginId !='' ">
+				and login_id=#{loginId}
+			</if>
+			<if test="operatingContent != null and operatingContent !='' ">
+				and operating_content like "%"#{operatingContent}"%"
+			</if>
+			<if test="loginName != null   ">
+				and login_name like "%"#{loginName}"%"
+			</if>
+			<if test="result != null   ">
+				and result like "%"#{result}"%"
+			</if>
+			<if test="ipAddress != null and ipAddress !='' ">
+				and ip_address=#{ipAddress}
+			</if>
+			<if test="methodRemark != null and methodRemark !='' ">
+				and method_remark=#{methodRemark}
+			</if>
+			<if test="optDate != null and '' != optDate">
+				and opt_date =#{optDate}
+			</if>
+			<if test="startTime != null and startTime != '' and lastTime != null and lastTime != ''">
+	    	    and opt_date between #{startTime} and #{lastTime} 
+	        </if>
+			order by opt_date desc
+		</where>
+	</select>
+	<!-- 新增审查记录日志 -->
+	<insert id="addRecordLog" parameterType="recordLog">
+		insert into db_vibe_basic.t_record_log (id, date, uid, type, details, result)
+		values (#{id}, #{date},#{uid},#{type},#{details},#{result})
+	</insert>
+	<!-- 根据用户id，查询详情 -->
+	<select id="queryRecordLogById" parameterType="int" resultType="recordLog">
+		select * from db_vibe_basic.t_record_log where valid=1 and id=#{id}
+	</select>
+	
+	<!-- 根据用户id，查询详情 -->
+	<select id="queryRecordLogList" parameterType="recordLog" resultType="recordLog">
+		select * from db_vibe_basic.t_record_log 
+		<where>
+			valid=1 
+			<if test="id != null ">
+				and id=#{id}
+			</if>
+			<if test="uid != null ">
+				and uid=#{uid}
+			</if>
+			<if test="details != null and details !='' ">
+				and details like "%"#{details}"%"
+			</if>
+			<if test="date!= null and '' != date">
+				and date=#{date}
+			</if>
+			<if test="type != null">
+				and type=#{type}
+			</if>
+			<if test="result != null and result != ''">
+				and result like "%"#{result}"%"
+			</if>
+			<if test="startTime != null and lastTime != null">
+	    	    and date between #{startTime} and #{lastTime} 
+	        </if>
+		</where>
+	</select>
+	
+	<!-- 更新记录日志 -->
+	<update id="editRecordLogById" parameterType="recordLog">
+		update db_vibe_basic.t_record_log
+		<set>
+			<if test="id != null ">
+				and id=#{id}
+			</if>
+			<if test="uid != null ">
+				and uid=#{uid}
+			</if>
+			<if test="details != null and details !='' ">
+				and details like "%"#{details}"%"
+			</if>
+			<if test="date!= null and '' != date">
+				and date=#{date}
+			</if>
+			<if test="type != null">
+				and type=#{type}
+			</if>
+			<if test="result != null and result != ''">
+				and result like "%"#{result}"%"
+			</if>
+			<if test="valid!=null">
+				valid=#{valid},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
 
-
-    <insert id="insertLog" parameterType="com.vibe.service.logAop.Syslog">
-        insert into db_vibe_basic.t_operation_log
-        (login_id,login_name,ip_address,result,method_remark,operating_content,opt_date,response_time)
-        values
-        (#{loginId},#{loginName},#{ipAddress},#{result},#{methodRemark},#{operatingContent},#{optDate},#{responseTime})
-    </insert>
-    <select id="queryLogList" parameterType="com.vibe.service.logAop.Syslog"
-            resultType="com.vibe.service.logAop.Syslog">
-        select login_id loginId
-        ,login_name loginName
-        ,ip_address ipAddress
-        ,method_remark methodRemark
-        ,operating_content operatingContent
-        ,result result
-        ,opt_date optDate
-        from db_vibe_basic.t_operation_log
-        <where>
-            1=1
-            <if test="loginId != null and loginId !='' ">
-                and login_id=#{loginId}
-            </if>
-            <if test="operatingContent != null and operatingContent !='' ">
-                and operating_content like "%"#{operatingContent}"%"
-            </if>
-            <if test="loginName != null   ">
-                and login_name like "%"#{loginName}"%"
-            </if>
-            <if test="result != null   ">
-                and result like "%"#{result}"%"
-            </if>
-            <if test="ipAddress != null and ipAddress !='' ">
-                and ip_address=#{ipAddress}
-            </if>
-            <if test="methodRemark != null and methodRemark !='' ">
-                and method_remark=#{methodRemark}
-            </if>
-            <if test="optDate != null and '' != optDate">
-                and opt_date =#{optDate}
-            </if>
-            <if test="startTime != null and startTime != '' and lastTime != null and lastTime != ''">
-                and opt_date between #{startTime} and #{lastTime}
-            </if>
-            order by opt_date desc
-        </where>
-    </select>
-    <!-- 新增审查记录日志 -->
-    <insert id="addRecordLog" parameterType="recordLog">
-        insert into db_vibe_basic.t_record_log (id, date, uid, type, details, result)
-        values (#{id}, #{date},#{uid},#{type},#{details},#{result})
-    </insert>
-    <!-- 根据用户id，查询详情 -->
-    <select id="queryRecordLogById" parameterType="int" resultType="recordLog">
-        select * from db_vibe_basic.t_record_log where valid=1 and id=#{id}
-    </select>
-
-    <!-- 根据用户id，查询详情 -->
-    <select id="queryRecordLogList" parameterType="recordLog" resultType="recordLog">
-        select * from db_vibe_basic.t_record_log
-        <where>
-            valid=1
-            <if test="id != null ">
-                and id=#{id}
-            </if>
-            <if test="uid != null ">
-                and uid=#{uid}
-            </if>
-            <if test="details != null and details !='' ">
-                and details like "%"#{details}"%"
-            </if>
-            <if test="date!= null and '' != date">
-                and date=#{date}
-            </if>
-            <if test="type != null">
-                and type=#{type}
-            </if>
-            <if test="result != null and result != ''">
-                and result like "%"#{result}"%"
-            </if>
-            <if test="startTime != null and lastTime != null">
-                and date between #{startTime} and #{lastTime}
-            </if>
-        </where>
-    </select>
-
-    <!-- 更新记录日志 -->
-    <update id="editRecordLogById" parameterType="recordLog">
-        update db_vibe_basic.t_record_log
-        <set>
-            <if test="id != null ">
-                and id=#{id}
-            </if>
-            <if test="uid != null ">
-                and uid=#{uid}
-            </if>
-            <if test="details != null and details !='' ">
-                and details like "%"#{details}"%"
-            </if>
-            <if test="date!= null and '' != date">
-                and date=#{date}
-            </if>
-            <if test="type != null">
-                and type=#{type}
-            </if>
-            <if test="result != null and result != ''">
-                and result like "%"#{result}"%"
-            </if>
-            <if test="valid!=null">
-                valid=#{valid},
-            </if>
-        </set>
-        WHERE id=#{id}
-    </update>
-
-    <!-- 根据主键删除 -->
-    <!-- <delete id="deleteCustomerById" parameterType="int"> delete from db_vibe_basic.t_record_log
-        where cust_id = #{cust_id} </delete> -->
-
+	<!-- 根据主键删除 -->
+	<!-- <delete id="deleteCustomerById" parameterType="int"> delete from db_vibe_basic.t_record_log 
+		where cust_id = #{cust_id} </delete> -->
+	
 </mapper>
 
 

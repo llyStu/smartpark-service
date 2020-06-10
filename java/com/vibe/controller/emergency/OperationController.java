@@ -13,29 +13,29 @@ import com.vibe.utils.Page;
 
 @RestController
 public class OperationController {
-    @Autowired
-    private OperationService os;
+	@Autowired
+	private OperationService os;
 
-    @RequestMapping("/emergency/insertOperation")
-    @MethodLog(remark = "add", option = "添加演练信息")
-    public FormJson insertOperation(Operation oper) {
-        return os.insertOperation(oper);
-    }
+	@RequestMapping("/emergency/insertOperation")
+	@MethodLog(remark="add",option="添加演练信息")
+	public FormJson insertOperation(Operation oper) {
+		return os.insertOperation(oper);
+	}
 
-    @RequestMapping("/emergency/deleteOperation")
-    @MethodLog(remark = "detete", option = "删除演练信息")
-    public FormJson deleteOperation(int[] oid) {
-        return os.deleteOperation(oid);
-    }
+	@RequestMapping("/emergency/deleteOperation")
+	@MethodLog(remark="detete",option="删除演练信息")
+	public FormJson deleteOperation(int[] oid) {
+		return os.deleteOperation(oid);
+	}
 
-    @RequestMapping("/emergency/updateOperation")
-    @MethodLog(remark = "edit", option = "编辑演练信息")
-    public FormJson updateOperation(Operation oper) {
-        return os.updateOperation(oper);
-    }
+	@RequestMapping("/emergency/updateOperation")
+	@MethodLog(remark="edit",option="编辑演练信息")
+	public FormJson updateOperation(Operation oper) {
+		return os.updateOperation(oper);
+	}
 
-    @RequestMapping("/emergency/queryOperation")
-    public Page<Operation> queryOperation(OperationVo oper) {
-        return os.queryOperation(oper, oper.getPageNum(), oper.getPageSize());
-    }
+	@RequestMapping("/emergency/queryOperation")
+	public Page<Operation> queryOperation(OperationVo oper) {
+		return os.queryOperation(oper, oper.getPageNum(), oper.getPageSize());
+	}
 }

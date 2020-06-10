@@ -1,133 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.dailycheck.WorkOrderDao">
-
-    <insert id="insert" parameterType="WorkOrder">
-        insert into db_vibe_basic.t_work_order(num, project, type, region,
-        cycle, send_time, send_time, priority, exp_stt_time, recv_ddline, act_stt_time,
-        exp_duration, act_duration, recv_person, state, memo)
-        values (#{num,jdbcType=INTEGER}, #{project,jdbcType=INTEGER},
-        #{type,jdbcType=INTEGER}, #{region,jdbcType=INTEGER},
-        #{cycle,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{sendingTime,jdbcType=DATE},
-        #{priority,jdbcType=INTEGER}, #{expectStartTime,jdbcType=DATE},
-        #{deadline,jdbcType=DATE}, #{actualStartTime,jdbcType=DATE},
-        #{expectDuration,jdbcType=DATE},
-        #{actualDuration,jdbcType=DATE},
-        #{receivePerson,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR})
-    </insert>
-
-    <delete id="remove" parameterType="int">
-        delete from db_vibe_basic.t_work_order
-        where id = #{id}
-    </delete>
-
-    <update id="update" parameterType="WorkOrder">
-        update db_vibe_basic.t_work_order
-        <set>
-            <if test="num != null">
-                num = #{num},
-            </if>
-            <if test="project != null">
-                project = #{project},
-            </if>
-            <if test="type != null">
-                type = #{type},
-            </if>
-            <if test="region != null">
-                region = #{region},
-            </if>
-            <if test="cycle != null">
-                cycle = #{cycle},
-            </if>
-            <if test="createTime != '' and createTime != null">
-                create_time = #{createTime},
-            </if>
-            <if test="sendingTime != '' and sendingTime != null">
-                send_time = #{sendingTime},
-            </if>
-            <if test="priority != null">
-                priority = #{priority},
-            </if>
-            <if test="expectStartTime != '' and expectStartTime != null">
-                exp_stt_time = #{expectStartTime},
-            </if>
-            <if test="deadline != '' and deadline != null">
-                recv_ddline = #{deadline},
-            </if>
-            <if test="actualStartTime != '' and actualStartTime != null">
-                act_stt_time = #{actualStartTime},
-            </if>
-            <if test="expectDuration != '' and expectDuration != null">
-                exp_duration = #{expectDuration},
-            </if>
-            <if test="actualDuration != '' and actualDuration != null">
-                act_duration = #{actualDuration},
-            </if>
-            <if test="receivePerson != null">
-                recv_person = #{receivePerson},
-            </if>
-            <if test="state != null">
-                state = #{state},
-            </if>
-            <if test="memo != null">
-                memo = #{memo},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-
-    <select id="queryForList" parameterType="java.util.Map" resultType="WorkOrder">
-        select num, project, type, region, cycle, create_time as createTime, send_time as sendingTime, priority,
-        exp_stt_time as expectStartTime, recv_ddline as deadline, act_stt_time as actualStartTime,
-        exp_duration as expectDuration, act_duration as actualDuration, recv_person as receivePerson,
-        state, memo
-        from db_vibe_basic.t_work_order
-        <where>
-            <if test="num != null">
-                num like #{num} and
-            </if>
-            <if test="project != null">
-                project like #{project} and
-            </if>
-            <if test="type != null">
-                type like #{type} and
-            </if>
-            <if test="region != null">
-                region like #{region} and
-            </if>
-            <if test="cycle != null">
-                cycle like #{cycle} and
-            </if>
-            <if test="startTime != '' and startTime != null">
-                create_time > #{startTime} and
-            </if>
-            <if test="startTime != '' and startTime != null and
+	
+	<insert id="insert" parameterType="WorkOrder">
+		insert into db_vibe_basic.t_work_order(num, project, type, region,
+				cycle, send_time, send_time, priority, exp_stt_time, recv_ddline, act_stt_time,
+				exp_duration, act_duration, recv_person, state, memo)
+			values (#{num,jdbcType=INTEGER}, #{project,jdbcType=INTEGER},
+				#{type,jdbcType=INTEGER}, #{region,jdbcType=INTEGER},
+				#{cycle,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{sendingTime,jdbcType=DATE},
+				#{priority,jdbcType=INTEGER}, #{expectStartTime,jdbcType=DATE},
+				#{deadline,jdbcType=DATE}, #{actualStartTime,jdbcType=DATE},
+				#{expectDuration,jdbcType=DATE},
+				#{actualDuration,jdbcType=DATE},
+				#{receivePerson,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR})
+	</insert>
+		
+	<delete id="remove" parameterType="int">
+		delete from db_vibe_basic.t_work_order 
+			where id = #{id}
+	</delete>	
+	
+	<update id="update" parameterType="WorkOrder">
+			update db_vibe_basic.t_work_order 
+	    <set>	    	   	     
+	      <if test="num != null" >
+	        num = #{num},
+	      </if>
+	      <if test="project != null" >
+	        project = #{project},
+	      </if>
+	       <if test="type != null" >
+	        type = #{type},
+	      </if>
+	      <if test="region != null" >
+	        region = #{region},
+	      </if>
+	       <if test="cycle != null" >
+	        cycle = #{cycle},
+	      </if>
+	      <if test="createTime != '' and createTime != null" >
+	        create_time = #{createTime},
+	      </if>	
+	      <if test="sendingTime != '' and sendingTime != null" >
+	        send_time = #{sendingTime},
+	      </if>	      
+	      <if test="priority != null" >
+	        priority = #{priority},
+	      </if>
+	      <if test="expectStartTime != '' and expectStartTime != null" >
+	        exp_stt_time = #{expectStartTime},
+	      </if>
+	      <if test="deadline != '' and deadline != null" >
+	        recv_ddline = #{deadline},
+	      </if>
+	      <if test="actualStartTime != '' and actualStartTime != null" >
+	        act_stt_time = #{actualStartTime},
+	      </if>
+	      <if test="expectDuration != '' and expectDuration != null" >
+	        exp_duration = #{expectDuration},
+	      </if>
+	      <if test="actualDuration != '' and actualDuration != null" >
+	        act_duration = #{actualDuration},
+	      </if>
+	      <if test="receivePerson != null" >
+	        recv_person = #{receivePerson},
+	      </if>
+	      <if test="state != null" >
+	        state = #{state},
+	      </if>
+	      <if test="memo != null" >
+	        memo = #{memo},
+	      </if>	      
+	    </set>
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<select id="queryForList" parameterType="java.util.Map" resultType="WorkOrder">
+		select num, project, type, region, cycle, create_time as createTime, send_time as sendingTime, priority, 
+			exp_stt_time as expectStartTime, recv_ddline as deadline, act_stt_time as actualStartTime,
+			exp_duration as expectDuration, act_duration as actualDuration, recv_person as receivePerson,
+			state, memo
+		from db_vibe_basic.t_work_order 
+		<where>	
+			<if test="num != null" >
+	        num like #{num} and
+	      </if>
+	      <if test="project != null" >
+	        project like #{project} and
+	      </if>
+	       <if test="type != null" >
+	        type like #{type} and
+	      </if>
+	      <if test="region != null" >
+	        region like #{region} and
+	      </if>
+	       <if test="cycle != null" >
+	        cycle like #{cycle} and
+	      </if>
+	      <if test="startTime != '' and startTime != null" >
+	        create_time > #{startTime} and
+	      </if>	
+	       <if test="startTime != '' and startTime != null and 
 	       				endTime != '' and endTime != null">
-                create_time between #{startTime} and #{endTime} and
-            </if>
-            <if test="state != null">
-                state like #{state} and
-            </if>
-            date(create_time) = date(now()) order by create_time DESC
-        </where>
-    </select>
-
-    <select id="query" parameterType="int" resultType="WorkOrder">
-        select num, project, type, region, cycle, create_time as createTime, send_time as sendingTime, priority,
-        exp_stt_time as expectStartTime, recv_ddline as deadline, act_stt_time as actualStartTime,
-        exp_duration as expectDuration, act_duration as actualDuration, recv_person as receivePerson,
-        state, memo
-        from db_vibe_basic.t_work_order
-        where id = #{id}
-    </select>
-
-    <select id="getCurrentOrderQuantity" resultType="java.util.Map">
-        select count(*) as count, state from db_vibe_basic.t_work_order group by state
-    </select>
-
+	        create_time between #{startTime} and #{endTime} and
+	      </if>	
+	      <if test="state != null" >
+	        state like #{state} and
+	      </if>	    	     
+			date(create_time) = date(now()) order by create_time DESC
+		 </where>		
+	</select>
+	 
+	<select id="query" parameterType="int" resultType="WorkOrder">
+		select num, project, type, region, cycle, create_time as createTime, send_time as sendingTime, priority, 
+			exp_stt_time as expectStartTime, recv_ddline as deadline, act_stt_time as actualStartTime,
+			exp_duration as expectDuration, act_duration as actualDuration, recv_person as receivePerson,
+			state, memo
+		from db_vibe_basic.t_work_order 
+			where id =  #{id}
+	</select>
+	
+	<select id="getCurrentOrderQuantity" resultType="java.util.Map">
+		select count(*) as count, state from db_vibe_basic.t_work_order group by state		
+	</select>
+	
 </mapper>
 
 

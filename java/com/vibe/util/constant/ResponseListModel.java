@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @Auther: zhousili
  * @Date: 2019/07/26
- * @Description: 处理响应列表类的接口，泛型指定需要响应的实体
+ * @Description:  处理响应列表类的接口，泛型指定需要响应的实体
  */
 @Data
 public class ResponseListModel<T> {
@@ -34,7 +34,6 @@ public class ResponseListModel<T> {
         this.data = data;
 
     }
-
     public ResponseListModel<T> check() throws Exception {
         if (!this.getSuccessful()) {
             throw new Exception(this.getMessage());

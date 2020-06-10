@@ -10,21 +10,21 @@ import java.util.List;
 @Repository
 public interface PostDao {
 
-    int insertPost(Post post);
+	int insertPost(Post post);
 
-    List<Post> queryPostList(int level);
+	List<Post> queryPostList(int level);
 
-    void updatePostState(
+	void updatePostState(
             @Param("pid") int pid,
             @Param("newLevel") int newLevel);
 
-    Post queryPost(int pid);
+	Post queryPost(int pid);
 
-    List<Post> queryDraft(@Param("uid") int uid);
+	List<Post> queryDraft(@Param("uid") int uid);
 
-    List<Post> getSearchPosts(PostVo s);
+	List<Post> getSearchPosts(PostVo s);
 
-    void updateViews(int pid);
+	void updateViews(int pid);
 
-    void delete(@Param("ids") int[] ids);
+	void delete(@Param("ids") int[] ids);
 }

@@ -1,132 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.vibe.mapper.emergency.EmergencyMessageMapper">
-
-    <resultMap type="com.vibe.pojo.emergency.EmergencyMessage" id="emergencyMessage">
-        <id column="mid" property="id"></id>
-        <result column="provenance" property="provenance"/>
-        <result column="registrant" property="registrant"/>
-        <result column="pid" property="pid"/>
-        <result column="description" property="description"/>
-        <result column="euid" property="euid"/>
-        <result column="eetid" property="etid"/>
-        <result column="eegid" property="egid"/>
-        <result column="status" property="status"/>
-        <result column="pcaption" property="caption"/>
-        <result column="begintime" property="beginTime"/>
-        <association property="emergencyUser" javaType="com.vibe.pojo.emergency.EmergencyUser">
-            <id column="uid" property="id"></id>
-            <result column="name" property="name"/>
-            <result column="sex" property="sex"/>
-            <result column="phone" property="phone"/>
-            <result column="department" property="department"/>
-            <result column="u_default" property="udefault"/>
-        </association>
-        <association property="emergencyEventType" javaType="com.vibe.pojo.emergency.EmergencyEventType">
-            <id column="etid" property="etid"/>
-            <result column="event_name" property="eventName"/>
-        </association>
-        <association property="emergencyEventGrade" javaType="com.vibe.pojo.emergency.EmergencyEventGrade">
-            <id column="egid" property="egid"/>
-            <result column="event_grade" property="eventGrade"/>
-        </association>
-    </resultMap>
-
-
-    <select id="findAllEmergencyMessage" parameterType="com.vibe.pojo.emergency.EmergencyMessage"
-            resultMap="emergencyMessage">
-        select m.id as mid
-        ,m.provenance,
-        m.registrant,
-        m.description,
-        m.begintime,
-        m.`status`,
-        m.euid,
-        m.egid as eegid,
-        m.etid as eetid,
-        m.pid,
-        et.etid,
-        et.event_name,
-        eg.egid,
-        eg.event_grade,
-        tu.id as uid,
-        tu.`name`,
-        tu.phone,
-        tp.caption as pcaption
-        from
-        db_vibe_basic.t_emergency_message m left join db_vibe_basic.t_emergency_event_type et on m.etid=et.etid
-        left join db_vibe_basic.t_emergency_user tu on m.euid=tu.id left join
-        db_vibe_monitor.t_probe as tp on m.pid=tp.id left join db_vibe_basic.t_emergency_event_grade as eg on
-        eg.egid=m.egid
-        <where>
-            <if test="name !=null">tu.`name` like "%"#{name}"%"</if>
-            <if test="etid !=null">and m.etid=#{etid}</if>
-            <if test="egid !=null">and m.egid=#{egid}</if>
-        </where>
-        order by m.id desc
-    </select>
-
-    <insert id="addEmergencyMessage" parameterType="com.vibe.pojo.emergency.EmergencyMessage">
-        insert into
-        db_vibe_basic.t_emergency_message(provenance,registrant,pid,description,euid,etid,egid,status,begintime)
-        value(#{provenance},#{registrant},#{pid},#{description},#{euid},#{etid},#{egid},#{status},#{beginTime})
-    </insert>
-    <select id="findOneEmergencyMessage" resultMap="emergencyMessage">
-        select m.id as mid
-        ,m.provenance,
-        m.registrant,
-        m.description,
-        m.begintime,
-        m.`status`,
-        m.euid,
-        m.egid as eegid,
-        m.etid as eetid,
-        m.pid,
-        et.etid,
-        et.event_name,
-        eg.egid,
-        eg.event_grade,
-        tu.id as uid,
-        tu.`name`,
-        tu.phone,
-        tp.caption as pcaption
-        from
-        db_vibe_basic.t_emergency_message m left join db_vibe_basic.t_emergency_event_type et on m.etid=et.etid
-        left join db_vibe_basic.t_emergency_user tu on m.euid=tu.id left join
-        db_vibe_monitor.t_probe as tp on m.pid=tp.id left join db_vibe_basic.t_emergency_event_grade as eg on
-        eg.egid=m.egid where m.id=#{id}
-    </select>
-
-    <update id="updateEmergencyMessage" parameterType="com.vibe.pojo.emergency.EmergencyMessage">
-        update db_vibe_basic.t_emergency_message as m
-        <set>
-            <if test="description !=null">m.description=#{description},</if>
-            <if test="status !=null">m.`status`=#{status},</if>
-            <if test="pid !=null">m.pid=#{pid},</if>
-            <if test="euid !=null">m.euid=#{euid},</if>
-            <if test="egid !=null">m.egid=#{egid},</if>
-            <if test="etid !=null">m.etid=#{etid},</if>
-            <if test="endTime!=null">m.endtime=#{endTime}</if>
-        </set>
-        where m.id=#{id}
-    </update>
-
-    <delete id="deleteEmergencyMessage">
-        delete from db_vibe_basic.t_emergency_message where id=#{id}
-    </delete>
-
-    <delete id="deleteEmergencyMessages">
-        delete from db_vibe_basic.t_emergency_message
-        <where>
-            id in
-            <foreach collection="ids" item="id" open="(" close=")" separator=",">
-                #{id}
-            </foreach>
-        </where>
-    </delete>
+	
+	<resultMap type="com.vibe.pojo.emergency.EmergencyMessage" id="emergencyMessage">
+		<id column="mid" property="id"></id>
+		<result column="provenance" property="provenance"/>	
+		<result column="registrant" property="registrant"/>	
+		<result column="pid" property="pid"/>	
+		<result column="description" property="description"/>	
+		<result column="euid" property="euid"/>	
+		<result column="eetid" property="etid"/>	
+		<result column="eegid" property="egid"/>	
+		<result column="status" property="status"/>	
+		<result column="pcaption" property="caption"/>	
+		<result column="begintime" property="beginTime"/>	
+		<association property="emergencyUser" javaType="com.vibe.pojo.emergency.EmergencyUser">
+			<id column="uid" property="id"></id>
+			<result column="name" property="name"/>
+			<result column="sex" property="sex"/>
+			<result column="phone" property="phone"/>
+			<result column="department" property="department"/>
+			<result column="u_default" property="udefault"/>
+		</association>
+		<association property="emergencyEventType" javaType="com.vibe.pojo.emergency.EmergencyEventType">
+			<id column="etid" property="etid"/>
+			<result column="event_name" property="eventName"/>
+		</association>
+		<association property="emergencyEventGrade" javaType="com.vibe.pojo.emergency.EmergencyEventGrade">
+			<id column="egid" property="egid"/>
+			<result column="event_grade" property="eventGrade"/>
+		</association>
+	</resultMap>
+	
+	
+	<select id="findAllEmergencyMessage" parameterType="com.vibe.pojo.emergency.EmergencyMessage" resultMap="emergencyMessage">
+	select m.id as mid
+	,m.provenance,
+	m.registrant,
+	m.description,
+	m.begintime,
+	m.`status`,
+	m.euid,
+	m.egid as eegid,
+	m.etid as eetid,
+	m.pid,
+	et.etid,
+	et.event_name,
+	eg.egid,
+	eg.event_grade,
+	tu.id as uid,
+	tu.`name`,
+	tu.phone,
+	tp.caption as pcaption
+	from
+	db_vibe_basic.t_emergency_message m left join db_vibe_basic.t_emergency_event_type et on m.etid=et.etid
+	left join db_vibe_basic.t_emergency_user tu on m.euid=tu.id left join
+	db_vibe_monitor.t_probe as tp on m.pid=tp.id left join db_vibe_basic.t_emergency_event_grade as eg on eg.egid=m.egid
+	 <where>
+		<if test="name !=null">tu.`name` like "%"#{name}"%" </if>
+		<if test="etid !=null">and m.etid=#{etid} </if>
+		<if test="egid !=null">and m.egid=#{egid} </if>
+	</where> 
+		 order by m.id desc
+	</select>
+	
+	<insert id="addEmergencyMessage" parameterType="com.vibe.pojo.emergency.EmergencyMessage">
+		insert into db_vibe_basic.t_emergency_message(provenance,registrant,pid,description,euid,etid,egid,status,begintime)
+		value(#{provenance},#{registrant},#{pid},#{description},#{euid},#{etid},#{egid},#{status},#{beginTime})
+	</insert>
+	<select id="findOneEmergencyMessage" resultMap="emergencyMessage">
+		select m.id as mid
+	,m.provenance,
+	m.registrant,
+	m.description,
+	m.begintime,
+	m.`status`,
+	m.euid,
+	m.egid as eegid,
+	m.etid as eetid,
+	m.pid,
+	et.etid,
+	et.event_name,
+	eg.egid,
+	eg.event_grade,
+	tu.id as uid,
+	tu.`name`,
+	tu.phone,
+	tp.caption as pcaption
+	from
+	db_vibe_basic.t_emergency_message m left join db_vibe_basic.t_emergency_event_type et on m.etid=et.etid
+	left join db_vibe_basic.t_emergency_user tu on m.euid=tu.id left join
+	db_vibe_monitor.t_probe as tp on m.pid=tp.id left join db_vibe_basic.t_emergency_event_grade as eg on eg.egid=m.egid where m.id=#{id}
+	</select>
+	
+	<update id="updateEmergencyMessage" parameterType="com.vibe.pojo.emergency.EmergencyMessage">
+	update db_vibe_basic.t_emergency_message as m 
+	<set>
+	<if test="description !=null">m.description=#{description},</if>
+	<if test="status !=null"> m.`status`=#{status},</if>
+	<if test="pid !=null"> m.pid=#{pid},</if>
+	<if test="euid !=null"> m.euid=#{euid},</if>
+	<if test="egid !=null">m.egid=#{egid},</if>
+	<if test="etid !=null">m.etid=#{etid},</if>
+	<if test="endTime!=null">m.endtime=#{endTime}</if>
+	</set>
+	where m.id=#{id}
+	</update>
+	
+	<delete id="deleteEmergencyMessage">
+		delete from db_vibe_basic.t_emergency_message where id=#{id}
+	</delete>
+	
+	<delete id="deleteEmergencyMessages">
+		delete from db_vibe_basic.t_emergency_message
+		<where>
+		id in
+		 <foreach collection="ids"  item="id" open="(" close=")" separator=",">
+		 #{id}
+		 </foreach>
+		</where>
+	</delete>
 </mapper>
 
 

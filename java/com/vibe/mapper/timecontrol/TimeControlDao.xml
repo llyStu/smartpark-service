@@ -1,68 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.timecontrol.TimeControlDao">
 
-    <select id="queryTimeControlList" resultType="com.vibe.scheduledtasks.statisticstask.TimeControlDaoBean">
-        select id,catlog,control_ids controlIds,state,name from db_vibe_monitor.t_time_control
-    </select>
-
-    <select id="queryTimeControlTimePointList"
-            resultType="com.vibe.scheduledtasks.statisticstask.TimeControlTimePointDaoBean">
-        select timeExpression,state,t_time_control_time_point.id,value,t_time_task_id timeTaskId,t_scheduled_task_id
-        scheduledTaskId
-        from db_vibe_monitor.t_time_control_time_point,db_vibe_monitor.t_scheduled_task where
-        t_scheduled_task.id = t_time_control_time_point.t_scheduled_task_id and t_time_control_time_point.t_time_task_id
-        = #{id}
-    </select>
-
-    <delete id="deleteTimeControl">
-        delete from db_vibe_monitor.t_time_control where id = #{id}
-    </delete>
-
-    <insert id="insertTimeControl" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.vibe.scheduledtasks.statisticstask.TimeControlDaoBean">
-        insert into db_vibe_monitor.t_time_control(catlog,control_ids,name,state)
-        values(#{catlog},#{controlIds},#{name},#{state})
-    </insert>
-
-    <insert id="insertTimeControlScheduledTask" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.vibe.scheduledtasks.ScheduledTaskBean">
-        insert into db_vibe_monitor.t_scheduled_task(type,timeExpression,className,state)
-        values(10,#{timeExpression},"com.vibe.scheduledtasks.statisticstask.TimeControlScheduledTask",#{state})
-    </insert>
-
-    <select id="queryTimeControlScheduledTask" resultType="com.vibe.scheduledtasks.ScheduledTaskBean">
-        select * from db_vibe_monitor.t_scheduled_task where id = #{id}
-    </select>
-
-    <insert id="insertTimeControlTimePoint" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.vibe.scheduledtasks.statisticstask.TimeControlTimePointDaoBean">
-        insert into db_vibe_monitor.t_time_control_time_point(t_scheduled_task_id,value,t_time_task_id)
-        values(#{scheduledTaskId},#{value},#{timeTaskId})
-    </insert>
-
-    <update id="updateTimeControl" parameterType="com.vibe.scheduledtasks.statisticstask.TimeControlDaoBean">
-        update db_vibe_monitor.t_time_control set catlog = #{catlog},control_ids = #{controlIds},name = #{name},state =
-        #{state} where id = #{id}
-    </update>
-
-    <update id="updateTimeControlTimePoint"
-            parameterType="com.vibe.scheduledtasks.statisticstask.TimeControlTimePointDaoBean">
-        update db_vibe_monitor.t_time_control_time_point set value = #{value} where id = #{id}
-    </update>
-
-    <update id="updateScheduledTask" parameterType="com.vibe.scheduledtasks.ScheduledTaskBean">
-        update db_vibe_monitor.t_scheduled_task set timeExpression = #{timeExpression},state = #{state} where id = #{id}
-    </update>
-
-    <select id="queryTimeControlLog" resultType="com.vibe.scheduledtasks.statisticstask.TimeControlLogBean">
-        select id,fullName,result,value,time,t_time_control_id timeControlId from db_vibe_monitor.t_time_control_log
-        where t_time_control_id = #{id} ORDER BY time desc
-    </select>
-
+	<select id="queryTimeControlList" resultType="com.vibe.scheduledtasks.statisticstask.TimeControlDaoBean">
+		select id,catlog,control_ids controlIds,state,name from db_vibe_monitor.t_time_control
+	</select>
+	
+	<select id="queryTimeControlTimePointList" resultType="com.vibe.scheduledtasks.statisticstask.TimeControlTimePointDaoBean">
+		select timeExpression,state,t_time_control_time_point.id,value,t_time_task_id timeTaskId,t_scheduled_task_id scheduledTaskId 
+			from db_vibe_monitor.t_time_control_time_point,db_vibe_monitor.t_scheduled_task where 
+				t_scheduled_task.id = t_time_control_time_point.t_scheduled_task_id and t_time_control_time_point.t_time_task_id = #{id}
+	</select>
+	
+	<delete id="deleteTimeControl">
+		delete from db_vibe_monitor.t_time_control where id = #{id}
+	</delete>
+	
+	<insert id="insertTimeControl" useGeneratedKeys="true" keyProperty="id" parameterType="com.vibe.scheduledtasks.statisticstask.TimeControlDaoBean">
+		insert into db_vibe_monitor.t_time_control(catlog,control_ids,name,state) values(#{catlog},#{controlIds},#{name},#{state})
+	</insert>
+	
+	<insert id="insertTimeControlScheduledTask" useGeneratedKeys="true" keyProperty="id" parameterType="com.vibe.scheduledtasks.ScheduledTaskBean">
+		insert into db_vibe_monitor.t_scheduled_task(type,timeExpression,className,state) 
+			values(10,#{timeExpression},"com.vibe.scheduledtasks.statisticstask.TimeControlScheduledTask",#{state})
+	</insert>
+	
+	<select id="queryTimeControlScheduledTask" resultType="com.vibe.scheduledtasks.ScheduledTaskBean">
+		select * from db_vibe_monitor.t_scheduled_task where id = #{id}
+	</select>
+	
+	<insert id="insertTimeControlTimePoint" useGeneratedKeys="true" keyProperty="id" parameterType="com.vibe.scheduledtasks.statisticstask.TimeControlTimePointDaoBean">
+		insert into db_vibe_monitor.t_time_control_time_point(t_scheduled_task_id,value,t_time_task_id) values(#{scheduledTaskId},#{value},#{timeTaskId})
+	</insert>
+	
+	<update id="updateTimeControl" parameterType="com.vibe.scheduledtasks.statisticstask.TimeControlDaoBean">
+		update db_vibe_monitor.t_time_control set catlog = #{catlog},control_ids = #{controlIds},name = #{name},state = #{state} where id = #{id}
+	</update>
+	
+	<update id="updateTimeControlTimePoint" parameterType="com.vibe.scheduledtasks.statisticstask.TimeControlTimePointDaoBean">
+		update db_vibe_monitor.t_time_control_time_point set value = #{value} where id = #{id}
+	</update>
+	
+	<update id="updateScheduledTask" parameterType="com.vibe.scheduledtasks.ScheduledTaskBean">
+		update db_vibe_monitor.t_scheduled_task set timeExpression = #{timeExpression},state = #{state} where id = #{id}
+	</update>
+	
+	<select id="queryTimeControlLog" resultType="com.vibe.scheduledtasks.statisticstask.TimeControlLogBean">
+		select id,fullName,result,value,time,t_time_control_id timeControlId from db_vibe_monitor.t_time_control_log where t_time_control_id = #{id} ORDER BY time desc
+	</select>
+	
 </mapper>
 
 

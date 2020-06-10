@@ -6,15 +6,15 @@ import com.vibe.pojo.Damage;
 
 
 public interface DamageService {
+	
+	public void insertDamage(Damage damage);
 
-    public void insertDamage(Damage damage);
+	public void deleteDamage(int i);
 
-    public void deleteDamage(int i);
+	public Damage queryDamage(int id);
 
-    public Damage queryDamage(int id);
+	public List<Damage> queryDamageList();
 
-    public List<Damage> queryDamageList();
-
-    public void updateDamage(Damage damage);
-
+	public void updateDamage(Damage damage);
+	
 }

@@ -31,201 +31,197 @@ import java.util.regex.Pattern;
 
 @Controller
 public class DocumentManagementController {
-    @Autowired
-    private DocumentManagementService dms;
+	@Autowired
+	private DocumentManagementService dms;
 
-    @RequestMapping("/docman/restore")
-    @ResponseBody
-    public FormJson restore(int bid) {
-        return dms.restore(bid);
-    }
+	@RequestMapping("/docman/restore")
+	@ResponseBody
+	public FormJson restore(int bid) {
+		return dms.restore(bid);
+	}
 
-    @RequestMapping("/docman/upload")
-    @ResponseBody
-    public FormJson upload(@RequestParam Integer did, @RequestParam CommonsMultipartFile[] files) {
-        return dms.upload(did, files);
-    }
+	@RequestMapping("/docman/upload")
+	@ResponseBody
+	public FormJson upload(@RequestParam Integer did, @RequestParam CommonsMultipartFile[] files) {
+		return dms.upload(did, files);
+	}
 
-    @RequestMapping("/docman/setbackuppath")
-    @ResponseBody
-    public FormJson setbackuppath(@RequestParam String path) {
-        return dms.setbackup(path);
-    }
+	@RequestMapping("/docman/setbackuppath")
+	@ResponseBody
+	public FormJson setbackuppath(@RequestParam String path) {
+		return dms.setbackup(path);
+	}
 
-    @RequestMapping("/docman/getbackuppath")
-    @ResponseBody
-    public String filebackup() {
-        return dms.getbackup().getPath();
-    }
+	@RequestMapping("/docman/getbackuppath")
+	@ResponseBody
+	public String filebackup() {
+		return dms.getbackup().getPath();
+	}
 
-    @RequestMapping("/docman/deldir")
-    @ResponseBody
-    public FormJson delete(Integer did) {
-        return dms.delete(did);
-    }
+	@RequestMapping("/docman/deldir")
+	@ResponseBody
+	public FormJson delete(Integer did) {
+		return dms.delete(did);
+	}
 
-    @RequestMapping("/docman/delCategory")
-    @ResponseBody
-    public FormJson delCategory(Integer cid) {
-        return dms.delCategory(cid);
-    }
+	@RequestMapping("/docman/delCategory")
+	@ResponseBody
+	public FormJson delCategory(Integer cid) {
+		return dms.delCategory(cid);
+	}
 
-    @RequestMapping("/docman/find")
-    @ResponseBody
-    public Page<DocumentDir> find(DocumentDirVo vo) {
-        if (vo.getPageNum() == null)
-            vo.setPageNum(1);
-        if (vo.getPageSize() == null)
-            vo.setPageSize(10);
-        return dms.findDir(vo, vo.getPageNum(), vo.getPageSize());
-    }
+	@RequestMapping("/docman/find")
+	@ResponseBody
+	public Page<DocumentDir> find(DocumentDirVo vo) {
+		if (vo.getPageNum() == null)
+			vo.setPageNum(1);
+		if (vo.getPageSize() == null)
+			vo.setPageSize(10);
+		return dms.findDir(vo, vo.getPageNum(), vo.getPageSize());
+	}
 
-    @RequestMapping("/docman/findbackup")
-    @ResponseBody
-    public Page<DocumentBackup> findbackup(DocumentBackupVo vo) {
-        if (vo.getPageNum() == null)
-            vo.setPageNum(1);
-        if (vo.getPageSize() == null)
-            vo.setPageSize(10);
-        return dms.findbackup(vo, vo.getPageNum(), vo.getPageSize());
-    }
+	@RequestMapping("/docman/findbackup")
+	@ResponseBody
+	public Page<DocumentBackup> findbackup(DocumentBackupVo vo) {
+		if (vo.getPageNum() == null)
+			vo.setPageNum(1);
+		if (vo.getPageSize() == null)
+			vo.setPageSize(10);
+		return dms.findbackup(vo, vo.getPageNum(), vo.getPageSize());
+	}
 
-    @RequestMapping("/docman/backup")
-    @ResponseBody
-    public FormJson backup(int did, String desc, HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
+	@RequestMapping("/docman/backup")
+	@ResponseBody
+	public FormJson backup(int did, String desc, HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
 
-        return dms.backup(did, user.getId(), desc);
-    }
+		return dms.backup(did, user.getId(), desc);
+	}
 
-    @RequestMapping("/docman/createCategory")
-    @ResponseBody
-    public FormJson createCategory(String name, Integer pid, HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
-        DocumentDir dir = new DocumentDir();
-        dir.setName(name);
-        dir.setPid(pid == null ? 0 : pid);
-        dir.setUid(user.getId());
-        dir.setModified(new Date());
-        dir.setVisible(true);
+	@RequestMapping("/docman/createCategory")
+	@ResponseBody
+	public FormJson createCategory(String name, Integer pid, HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		DocumentDir dir = new DocumentDir();
+		dir.setName(name);
+		dir.setPid(pid == null ? 0 : pid);
+		dir.setUid(user.getId());
+		dir.setModified(new Date());
+		dir.setVisible(true);
 
-        return dms.mkdir(dir);
-    }
+		return dms.mkdir(dir);
+	}
 
-    @RequestMapping("/docman/mkdir")
-    @ResponseBody
-    public FormJson mkdir(DocumentDir dir, HttpSession session) {
-        User user = (User) session.getAttribute("loginUser");
-        dir.setUid(user.getId());
-        dir.setVisible(false);
-        return dms.mkdir(dir);
-    }
+	@RequestMapping("/docman/mkdir")
+	@ResponseBody
+	public FormJson mkdir(DocumentDir dir, HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		dir.setUid(user.getId());
+		dir.setVisible(false);
+		return dms.mkdir(dir);
+	}
 
-    public static class MkdirAndUploadVo {
-        public DocumentDir getDir() {
-            return dir;
-        }
+	public static class MkdirAndUploadVo {
+		public DocumentDir getDir() {
+			return dir;
+		}
+		public void setDir(DocumentDir dir) {
+			this.dir = dir;
+		}
+		public CommonsMultipartFile[] getFiles() {
+			return files;
+		}
+		public void setFiles(CommonsMultipartFile[] files) {
+			this.files = files;
+		}
+		DocumentDir dir;
+		CommonsMultipartFile[] files;
+	}
 
-        public void setDir(DocumentDir dir) {
-            this.dir = dir;
-        }
+	@RequestMapping("/docman/mkdirAndUpload")
+	@ResponseBody
+	public FormJson mkdirAndUpload(MkdirAndUploadVo vo, HttpSession session) {
+		FormJson mkdir = this.mkdir(vo.dir, session);
+		if (!mkdir.isSuccess()) {
+			return mkdir;
+		}
+		int did = Integer.parseInt(mkdir.getMessage());
+		return this.upload(did, vo.files);
+	}
 
-        public CommonsMultipartFile[] getFiles() {
-            return files;
-        }
+	@RequestMapping("/docman/updatedir")
+	@ResponseBody
+	public FormJson updatedir(DocumentDir dir) {
+		if (dir.getId() == null)
+			return FormJsonBulider.fail("需要id");
+		return dms.updatedir(dir);
+	}
 
-        public void setFiles(CommonsMultipartFile[] files) {
-            this.files = files;
-        }
+	@RequestMapping("/docman/tree")
+	@ResponseBody
+	public List<DocumentDir> tree(Integer id) {
+		return dms.tree(id);
+	}
 
-        DocumentDir dir;
-        CommonsMultipartFile[] files;
-    }
-
-    @RequestMapping("/docman/mkdirAndUpload")
-    @ResponseBody
-    public FormJson mkdirAndUpload(MkdirAndUploadVo vo, HttpSession session) {
-        FormJson mkdir = this.mkdir(vo.dir, session);
-        if (!mkdir.isSuccess()) {
-            return mkdir;
-        }
-        int did = Integer.parseInt(mkdir.getMessage());
-        return this.upload(did, vo.files);
-    }
-
-    @RequestMapping("/docman/updatedir")
-    @ResponseBody
-    public FormJson updatedir(DocumentDir dir) {
-        if (dir.getId() == null)
-            return FormJsonBulider.fail("需要id");
-        return dms.updatedir(dir);
-    }
-
-    @RequestMapping("/docman/tree")
-    @ResponseBody
-    public List<DocumentDir> tree(Integer id) {
-        return dms.tree(id);
-    }
-
-    @RequestMapping("/docman/show/**")
-    @ResponseBody
-    public ResponseModel<String> show(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        try {
-            //System.out.println(req);
-            String path = getPath(req);
-            System.out.println("/docman/show/**" + path);
+	@RequestMapping("/docman/show/**")
+	@ResponseBody
+	public ResponseModel<String> show(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		try {
+			//System.out.println(req);
+			String path = getPath(req);
+			System.out.println("/docman/show/**"+path);
 //			return path;
-            ResponseModel<String> responseModel = dms.getFileIsExists(path);
-            return responseModel;
+			ResponseModel<String> responseModel= dms.getFileIsExists(path);
+			return responseModel;
 //			dms.getRequestDispatcher(path, false).forward(req, resp);
-        } catch (Exception e) {
-            e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 //			dms.defaultResourceHandler.prepare(e.getMessage()).forward(req, resp);
-        }
-        return null;
-    }
+		}
+		return null;
+	}
 
-    @RequestMapping("/docman/download/**")
-    @ResponseBody
-    public void download(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String path = getPath(req);
-        String result = dms.download(path, resp);
-        if (result != null) {
-            resp.setContentType("text/plain;charset=UTF-8");
-            resp.setCharacterEncoding("UTF-8");
-            resp.getWriter().write(result);
-        }
-        resp.flushBuffer();
-    }
+	@RequestMapping("/docman/download/**")
+	@ResponseBody
+	public void download(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		String path = getPath(req);
+		String result = dms.download(path, resp);
+		if (result != null) {
+			resp.setContentType("text/plain;charset=UTF-8");
+			resp.setCharacterEncoding("UTF-8");
+			resp.getWriter().write(result);
+		}
+		resp.flushBuffer();
+	}
 
-    @RequestMapping("/docman/resource/**")
-    public void getResource(HttpServletRequest req, HttpServletResponse resp) throws Exception {
-        String path = getPath(req);
-        dms.getRequestDispatcher(path, true).forward(req, resp);
-    }
+	@RequestMapping("/docman/resource/**")
+	public void getResource(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		String path = getPath(req);
+		dms.getRequestDispatcher(path, true).forward(req, resp);
+	}
 
-    private final Pattern pathParm = Pattern.compile("/[^/\\\\]+/docman/[^/\\\\]+(/.*)?");
+	private final Pattern pathParm = Pattern.compile("/[^/\\\\]+/docman/[^/\\\\]+(/.*)?");
 
-    private String getPath(HttpServletRequest req) throws UnsupportedEncodingException {
-        String uri = req.getRequestURI();
+	private String getPath(HttpServletRequest req) throws UnsupportedEncodingException {
+		String uri = req.getRequestURI();
 //		Matcher mat = pathParm.matcher(uri);
 //		String path = mat.find() ? mat.group(1) : null;
-        //2020年2月28日18:32:14 liujingeng修改
-        String path = null;
-        if (uri != null && uri.contains("/docman")) {
-            char[] array = uri.toCharArray();
-            int index = 2;
-            for (int i = array.length - 1; i > -1; i--) {
-                if (array[i] == '/' && --index == 0) {
-                    path = uri.substring(i);
-                }
-            }
-        }
+		//2020年2月28日18:32:14 liujingeng修改
+		String path = null;
+		if (uri != null && uri.contains("/docman")) {
+			char[] array = uri.toCharArray();
+			int index = 2;
+			for (int i = array.length - 1; i > -1; i--) {
+				if (array[i] == '/' && --index == 0) {
+					path = uri.substring(i);
+				}
+			}
+		}
 
-        if (path == null)
-            path = "/";
-        else
-            path = URLDecoder.decode(path, "utf-8");
-        return path;
-    }
+		if (path == null)
+			path = "/";
+		else
+			path = URLDecoder.decode(path, "utf-8");
+		return path;
+	}
 }

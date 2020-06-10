@@ -8,14 +8,14 @@ import java.util.List;
 @Repository
 public interface DamageDao {
 
-    public void insertDamage(Damage damage);
+	public void insertDamage(Damage damage);
 
-    public void deleteDamage(int id);
+	public void deleteDamage(int id);
 
-    public Damage queryDamage(int id);
+	public Damage queryDamage(int id);
 
-    public List<Damage> queryDamageList();
+	public List<Damage> queryDamageList();
 
-    public void updateDamage(Damage damage);
-
+	public void updateDamage(Damage damage);
+	
 }

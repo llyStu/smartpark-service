@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vibe.mapper.energy.demo.EnergyDemoMapper">
-
-
-    <!-- 按类型查询监测器的id信息 -->
-    <select id="findProbeByCatalogs" resultType="Integer">
-        select
-        id
-        from db_vibe_monitor.t_probe
-        where catalog in
-        <foreach item="item" index="index" collection="list"
-                 open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </select>
-
-
-    <!-- 按不同空间查询监测器的id信息 -->
-    <select id="findProbeBySpace" resultType="Integer">
-        select
-        id
-        from db_vibe_monitor.t_probe
-        <where>
-            <if test="catalogId != null">catalog=#{catalogId} and</if>
-            parent in
-            <foreach item="item" index="index" collection="list"
-                     open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </where>
-
-    </select>
-
-
+	
+		
+		<!-- 按类型查询监测器的id信息 -->
+	<select id="findProbeByCatalogs" resultType="Integer">
+	   select 
+	     id
+	    from db_vibe_monitor.t_probe
+		where  catalog in
+     <foreach item="item" index="index" collection="list" 
+     	open="(" separator="," close=")">
+    	 #{item}
+      </foreach>
+	</select>
+	
+	
+		<!-- 按不同空间查询监测器的id信息 -->
+	<select id="findProbeBySpace"  resultType="Integer" >
+	   select 
+	     id
+	    from db_vibe_monitor.t_probe
+	    <where>
+	    <if test="catalogId != null">catalog=#{catalogId} and</if>
+	    	   parent in
+    		 <foreach item="item" index="index" collection="list" 
+     			open="(" separator="," close=")">
+    			 #{item}
+     		 </foreach>
+	    </where>
+		 
+	</select>
+	
+	
 </mapper>

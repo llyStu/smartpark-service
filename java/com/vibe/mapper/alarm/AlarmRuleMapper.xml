@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.alarm.AlarmRuleMapper">
+
+	<resultMap type="com.vibe.pojo.event.AlarmRuleMessage" id="resultAlarmRule">
+		<id column="row_no" property="rowNo"/>
+		<result column="id" property="id" />
+		<result column="caption" property="caption"/>
+		<result column="catalog" property="catalog"/>
+		<result column="parent" property="parentId"/>
+		<result column="warn_cond" property="warnCond"/>
+		<result column="tpid" property="warnId"/>
+		<result column="singlewarncond" property="singleWarnCond"/>
+		<result column="removed" property="removed"/>
+		<association property="eventRank" javaType="com.vibe.pojo.event.EventRank">
+			<id column="rank_id" property="rankId"/>
+			<result column="rank_Name" property="rankName"/>
+		</association>
+	</resultMap>
+
+	<select id="queryAlarmRules" resultMap="resultAlarmRule">
+		select
+		tp.id,tp.parent,tp.catalog,tp.caption,tp.warn_cond,tp.removed,
+		tpwrr.id as tpid,tpwrr.warn_cond as singlewarncond,
+		ter.rank_Id,ter.rank_Name
+		from
+		db_vibe_monitor.t_probe tp
+		left join
+		db_vibe_monitor.t_probe_warn_rank_relation tpwrr
+		on tpwrr.assetId=tp.id
+		left join
+		db_vibe_monitor.t_event_rank ter
+		on tpwrr.rankId=ter.rank_Id
+		left join
+		db_vibe_monitor.t_device td
+		on td.id=tp.parent
+		<!-- left join
+        db_vibe_monitor.t_rule_notify_relation trnr
+        on tpwrr.id=trnr.warn_id -->
+		<where>
+			<if test="alarmRule.eventRank!=null and alarmRule.eventRank.rankId!=0">
+				and ter.rank_Id=#{alarmRule.eventRank.rankId}
+			</if>
+			<if test="alarmRule.removed!=null and alarmRule.removed!=''">
+				and tp.removed=#{alarmRule.removed}
+			</if>
+			<if test="alarmRule.parentCaption!=null and alarmRule.parentCaption!=''">
+				and td.caption like '%${alarmRule.parentCaption}%'
+			</if>
+
+		</where>
+	</select>
+
+	<resultMap type="com.vibe.pojo.event.EventRank" id="queryEventRank">
+		<id column="rank_id" property="rankId"/>
+		<result column="rank_Name" property="rankName"/>
+	</resultMap>
+	<select id="queryEventRanks" resultMap="queryEventRank">
+		select ter.rank_Id,ter.rank_Name from db_vibe_monitor.t_event_rank ter
+		<where>
+			<if test="rankId!=null and rankId!=''">
+				ter.rank_Id=#{rankId}
+			</if>
+		</where>
+	</select>
+
+	<update id="updateAssetEventRank">
+		update db_vibe_monitor.t_probe_warn_rank_relation tpwrr
+		<set>
+			<if test="rankId!= null and rankId!=''">
+				tpwrr.rankId=#{rankId}
+			</if>
+		</set>
+		<where>
+			and tpwrr.id in
+			<foreach item="id" index="index" collection="ids" open="("
+					 separator="," close=")">
+				#{id}
+			</foreach>
+		</where>
+	</update>
+	<delete id="deleteEventRank">
+		delete from db_vibe_monitor.t_probe_warn_rank_relation where id=#{id}
+	</delete>
+</mapper>
+
+
+

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.vibe.mapper.ptrl.PtrlConsequenceMapper">
-
-
-    <resultMap type="com.vibe.pojo.mounting.ConnMountiong" id="resultconnMoution">
-        <result column="conn_name" property="connname"/>
-        <result column="actuator" property="actuator"/>
-        <result column="dburl" property="dburl"/>
-        <result column="username" property="username"/>
-        <result column="password" property="password"/>
-    </resultMap>
-
-    <select id="findOneConn" resultMap="resultconnMoution">
-        select * from db_vibe_basic.t_dbconn_mounting
-        <where>
-            <if test="connname !=null">
-                conn_name=#{connname}
-            </if>
-        </where>
-    </select>
-
+	
+	
+	<resultMap type="com.vibe.pojo.mounting.ConnMountiong" id="resultconnMoution">
+		<result column="conn_name" property="connname"/>
+		<result column="actuator" property="actuator"/>
+		<result column="dburl" property="dburl"/>
+		<result column="username" property="username"/>
+		<result column="password" property="password"/>
+	</resultMap>
+	
+	<select id="findOneConn" resultMap="resultconnMoution">
+		select * from db_vibe_basic.t_dbconn_mounting
+		<where>
+			<if test="connname !=null">
+				conn_name=#{connname}
+			</if>
+		</where>
+	</select>
+	
 </mapper>
 
 

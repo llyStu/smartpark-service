@@ -6,16 +6,16 @@ import com.vibe.service.logAop.Syslog;
 import java.util.List;
 
 public interface LogMapper {
+	
+	public void insertLog(Syslog sysLog);
+	 
+	public List<Syslog> queryLogList(Syslog sysLog);
+	 
+	public List<RecordLog> queryRecordLogList(RecordLog log);
 
-    public void insertLog(Syslog sysLog);
+	public RecordLog queryRecordLogById(Integer id);
 
-    public List<Syslog> queryLogList(Syslog sysLog);
+	public void addRecordLog(RecordLog recordLog);
 
-    public List<RecordLog> queryRecordLogList(RecordLog log);
-
-    public RecordLog queryRecordLogById(Integer id);
-
-    public void addRecordLog(RecordLog recordLog);
-
-    public void editRecordLogById(RecordLog log);
+	public void editRecordLogById(RecordLog log);
 }

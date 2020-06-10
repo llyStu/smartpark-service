@@ -1,7 +1,6 @@
 package com.vibe.service.scene;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,38 +9,38 @@ import com.vibe.pojo.Damage;
 
 @Service
 public class DamageServiceImpl implements DamageService {
+	
+	@Autowired
+	private DamageDao damageDao;
+	
+	public void insertDamage(Damage damage) {		
 
-    @Autowired
-    private DamageDao damageDao;
+		damageDao.insertDamage(damage);
+		
+	}
 
-    public void insertDamage(Damage damage) {
+	public void deleteDamage(int id) {
+		
+		damageDao.deleteDamage(id);
+	}
 
-        damageDao.insertDamage(damage);
+	public Damage queryDamage(int id) {
+		
+		Damage d = damageDao.queryDamage(id);
+		//return damageDao.queryDamage(id);
+		return d;
+	}
 
-    }
+	@Override
+	public List<Damage> queryDamageList() {
+		
+		return damageDao.queryDamageList();
+	}
 
-    public void deleteDamage(int id) {
+	@Override
+	public void updateDamage(Damage damage) {
 
-        damageDao.deleteDamage(id);
-    }
-
-    public Damage queryDamage(int id) {
-
-        Damage d = damageDao.queryDamage(id);
-        //return damageDao.queryDamage(id);
-        return d;
-    }
-
-    @Override
-    public List<Damage> queryDamageList() {
-
-        return damageDao.queryDamageList();
-    }
-
-    @Override
-    public void updateDamage(Damage damage) {
-
-        damageDao.updateDamage(damage);
-    }
+		damageDao.updateDamage(damage);
+	}
 
 }

@@ -8,14 +8,14 @@ import java.util.List;
 @Repository
 public interface ImplimentationDao {
 
-    public void insertImplimentation(Implimentation implimentation);
+	public void insertImplimentation(Implimentation implimentation);
 
-    public void deleteImplimentation(int id);
+	public void deleteImplimentation(int id);
 
-    public Implimentation queryImplimentation(int id);
+	public Implimentation queryImplimentation(int id);
 
-    public List<Implimentation> queryImplimentationList();
+	public List<Implimentation> queryImplimentationList();
 
-    public void updateImplimentation(Implimentation implimentation);
-
+	public void updateImplimentation(Implimentation implimentation);
+	
 }

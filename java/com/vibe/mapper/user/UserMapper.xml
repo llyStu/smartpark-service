@@ -1,122 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vibe.mapper.user.UserMapper">
-    <!-- 查询 用户信息 -->
-    <select id="queryUserAndDepartment" resultType="user">
-        select
-        u.id as id,
-        u.login_id as login_id,
-        u.name as name,
-        u.mail as mail,
-        u.phone as phone,
-        u.department as department,
-        d.name as deptName
-        from t_user u left join t_department d on u.department=d.id where u.valid=1
-        order by u.id desc
-    </select>
+	<!-- 查询 用户信息 -->
+	<select id="queryUserAndDepartment" resultType="user">
+		select
+			u.id as id,
+			u.login_id as login_id,
+			u.name as name,
+			u.mail as mail,
+			u.phone as phone,
+			u.department as department,
+			d.name as deptName
+		from t_user u left join t_department d on u.department=d.id where u.valid=1
+		order by u.id desc
+	</select>
+	
+	
+	<!-- 登录功能查询 用户 -->
+	<select id="queryUser" parameterType="user" resultType="user">
+		select *
+		from t_user where valid=1 and login_id=#{login_id} and password=#{password} and
+		valid=1 limit 1
+	</select>
+	<!-- 分页查询各部门下的人数 -->
+	<select id="queryUserList" parameterType="userVo" resultType="user">
+		select * from t_user
+		<where>
+			valid=1
+			<if test="id != null and id !='' ">
+				and id=#{id}
+			</if>
+			<if test="login_id != null and login_id !='' ">
+				and login_id like "%"#{login_id}"%"
+			</if>
+			<if test="password != null and password !='' ">
+				and password=#{password}
+			</if>
+			<if test="department != null and department !='' ">
+				and FIND_IN_SET(department,getChildLst(#{department}))
+			</if>
+			<if test="name != null and name != ''">
+				and name like "%"#{name}"%"
+			</if>
+			<if test="mail != null and mail !=''">
+				and mail like "%"#{mail}"%"
+			</if>
+			<if test="phone != null and phone !=''">
+				and phone like "%"#{phone}"%"
+			</if>
+		</where>
 
+	</select>
+	<!-- 新增用户 -->
+	<insert id="addUser" parameterType="user" useGeneratedKeys="true" keyProperty="id">
+		insert into t_user (id,
+		login_id, name,password,mail,department,phone)
+		values (#{id}, #{login_id},#{name},#{password},#{mail},#{department},#{phone})
+	</insert>
+	<!-- 根据用户id，查询详情 -->
+	<select id="queryUserById" parameterType="int" resultType="user">
+		select * from t_user where valid=1 and id=#{id}
+	</select>
+	
+	<!-- 根据用户id，查询详情 -->
+	<select id="queryUserByLoginId" parameterType="string" resultType="user">
+		select * from t_user where valid=1 and login_id=#{login_id}
+	</select>
+	<!-- 更新客户 -->
+	<update id="editUserById" parameterType="user">
+		update t_user
+		<set>
+			<if test="login_id!=null">
+				login_id=#{login_id},
+			</if>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="password!=null">
+				password=#{password},
+			</if>
+			<if test="mail!=null">
+				mail=#{mail},
+			</if>
+			<if test="department!=null">
+				department=#{department},
+			</if>
+			<if test="valid!=null">
+				valid=#{valid},
+			</if>
+			<if test="sequence!=null">
+				sequence=#{sequence},
+			</if>
+			<if test="phone!=null and phone!=''">
+				phone=#{phone},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
 
-    <!-- 登录功能查询 用户 -->
-    <select id="queryUser" parameterType="user" resultType="user">
-        select *
-        from t_user where valid=1 and login_id=#{login_id} and password=#{password} and
-        valid=1 limit 1
-    </select>
-    <!-- 分页查询各部门下的人数 -->
-    <select id="queryUserList" parameterType="userVo" resultType="user">
-        select * from t_user
-        <where>
-            valid=1
-            <if test="id != null and id !='' ">
-                and id=#{id}
-            </if>
-            <if test="login_id != null and login_id !='' ">
-                and login_id like "%"#{login_id}"%"
-            </if>
-            <if test="password != null and password !='' ">
-                and password=#{password}
-            </if>
-            <if test="department != null and department !='' ">
-                and FIND_IN_SET(department,getChildLst(#{department}))
-            </if>
-            <if test="name != null and name != ''">
-                and name like "%"#{name}"%"
-            </if>
-            <if test="mail != null and mail !=''">
-                and mail like "%"#{mail}"%"
-            </if>
-            <if test="phone != null and phone !=''">
-                and phone like "%"#{phone}"%"
-            </if>
-        </where>
-
-    </select>
-    <!-- 新增用户 -->
-    <insert id="addUser" parameterType="user" useGeneratedKeys="true" keyProperty="id">
-        insert into t_user (id,
-        login_id, name,password,mail,department,phone)
-        values (#{id}, #{login_id},#{name},#{password},#{mail},#{department},#{phone})
-    </insert>
-    <!-- 根据用户id，查询详情 -->
-    <select id="queryUserById" parameterType="int" resultType="user">
-        select * from t_user where valid=1 and id=#{id}
-    </select>
-
-    <!-- 根据用户id，查询详情 -->
-    <select id="queryUserByLoginId" parameterType="string" resultType="user">
-        select * from t_user where valid=1 and login_id=#{login_id}
-    </select>
-    <!-- 更新客户 -->
-    <update id="editUserById" parameterType="user">
-        update t_user
-        <set>
-            <if test="login_id!=null">
-                login_id=#{login_id},
-            </if>
-            <if test="name!=null">
-                name=#{name},
-            </if>
-            <if test="password!=null">
-                password=#{password},
-            </if>
-            <if test="mail!=null">
-                mail=#{mail},
-            </if>
-            <if test="department!=null">
-                department=#{department},
-            </if>
-            <if test="valid!=null">
-                valid=#{valid},
-            </if>
-            <if test="sequence!=null">
-                sequence=#{sequence},
-            </if>
-            <if test="phone!=null and phone!=''">
-                phone=#{phone},
-            </if>
-        </set>
-        WHERE id=#{id}
-    </update>
-
-    <!-- 根据主键删除客户 -->
-    <!-- <delete id="deleteCustomerById" parameterType="int"> delete from customer
-        where cust_id = #{cust_id} </delete> -->
-    <!-- 查询该id角色下的用户集合 -->
-    <select id="queryUserListByRoleId" parameterType="integer" resultType="user">
-        select u.id,u.login_id,u.name,u.mail,u.phone,u.department,u.valid
-        from db_vibe_basic.t_user_role ur
-        left join db_vibe_basic.t_user u
-        on ur.uid = u.id
-        where u.valid=1 and ur.rid = #{id};
-    </select>
-    <select id="selectOldUserByUserAndPass" resultType="com.vibe.pojo.user.User">
-        select
-        id,login_id,`name`,`password`,mail,phone,department,valid,sequence
-        from
-        db_vibe_basic.t_user
-        where
-        office_id = #{userId}
-    </select>
+	<!-- 根据主键删除客户 -->
+	<!-- <delete id="deleteCustomerById" parameterType="int"> delete from customer 
+		where cust_id = #{cust_id} </delete> -->
+	<!-- 查询该id角色下的用户集合 -->
+	<select id="queryUserListByRoleId" parameterType="integer" resultType="user">
+		select u.id,u.login_id,u.name,u.mail,u.phone,u.department,u.valid
+		 	from db_vibe_basic.t_user_role  ur 
+			left join  db_vibe_basic.t_user u 
+			on ur.uid = u.id 
+			where u.valid=1 and ur.rid = #{id}; 
+	</select>
+	<select id="selectOldUserByUserAndPass" resultType="com.vibe.pojo.user.User">
+		select
+			id,login_id,`name`,`password`,mail,phone,department,valid,sequence
+		from
+			db_vibe_basic.t_user
+		where
+			office_id = #{userId}
+	</select>
 </mapper>

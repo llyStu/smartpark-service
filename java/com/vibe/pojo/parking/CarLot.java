@@ -10,10 +10,11 @@ import lombok.Data;
  * @Author lxx-nice@163.com
  * @Create 2020/03/31
  * @Module 智慧园区
+ *
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CarLot {
+public class CarLot{
     /**
      * id
      */

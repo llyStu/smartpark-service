@@ -8,14 +8,14 @@ import java.util.List;
 @Repository
 public interface OthersDao {
 
-    public void insertOthers(Others others);
+	public void insertOthers(Others others);
 
-    public void deleteOthers(int id);
+	public void deleteOthers(int id);
 
-    public Others queryOthers(int id);
+	public Others queryOthers(int id);
 
-    public List<Others> queryOthersList();
+	public List<Others> queryOthersList();
 
-    public void updateOthers(Others others);
-
+	public void updateOthers(Others others);
+	
 }

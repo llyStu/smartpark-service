@@ -14,19 +14,18 @@ import com.vibe.utils.Page;
 @Controller
 public class PtrlConsequenceController {
 
-    @Autowired
-    private PtrlConsequenceService pcs;
-
-    @RequestMapping("/ptrl/patrollingRecord")
-    @ResponseBody
-    public Page<PtrlRecord> patrollingRecord(@RequestParam(defaultValue = "0") int page,
-                                             @RequestParam(defaultValue = "10") int rows) {
-        return pcs.patrollingRecord(page, rows);
-    }
-
-    @RequestMapping("/Electronic_Patrol")
-    public String ElectronicPatro() {
-        return "polling/ElectronicPatrol/ElectronicPatrol";
-    }
-
+	@Autowired
+	private PtrlConsequenceService pcs;
+	
+	@RequestMapping("/ptrl/patrollingRecord")
+	@ResponseBody
+	public Page<PtrlRecord> patrollingRecord(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "10") int rows){
+		 return pcs.patrollingRecord(page,rows);
+	}
+	@RequestMapping("/Electronic_Patrol")
+	public String ElectronicPatro(){
+		return "polling/ElectronicPatrol/ElectronicPatrol";
+	}
+	
 }

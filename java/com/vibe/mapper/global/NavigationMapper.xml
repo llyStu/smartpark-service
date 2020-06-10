@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.global.NavigationMapper">
-
-
-    <select id="queryCodeLocationByCode" resultType="com.vibe.service.global.navigation.Navigat">
-        select name,class className,key_value keyValue ,menu
-        from db_vibe_basic.t_code_location where menu=#{menu}
-    </select>
-
-    <select id="queryCodeLocationList" resultType="com.vibe.service.global.navigation.Navigat">
-        select key_value keyValue ,menu from db_vibe_basic.t_code_location
-    </select>
-
-    <select id="querySpaceTreeData" resultType="assetVo">
-        select id ,name,parent,caption,seqence
-        from db_vibe_monitor.t_space
-        where parent=#{id}
-    </select>
-    <select id="queryElevatorList" resultType="com.vibe.monitor.asset.Device">
-        select id ,name,parent,caption from db_vibe_monitor.t_device where catalog = #{catalog}
-    </select>
+	 
+	
+	<select id="queryCodeLocationByCode"   resultType="com.vibe.service.global.navigation.Navigat">
+		select name,class className,key_value keyValue ,menu
+		from db_vibe_basic.t_code_location where menu=#{menu}
+	</select>
+	
+	<select id="queryCodeLocationList"   resultType="com.vibe.service.global.navigation.Navigat">
+		select key_value keyValue ,menu from db_vibe_basic.t_code_location 
+	</select>
+	
+	<select id="querySpaceTreeData"  resultType="assetVo">
+		select id ,name,parent,caption,seqence
+		from db_vibe_monitor.t_space
+		where parent=#{id} 
+	</select>
+	<select id="queryElevatorList"   resultType="com.vibe.monitor.asset.Device">
+		select id ,name,parent,caption from db_vibe_monitor.t_device where catalog = #{catalog}
+	</select>
 </mapper>
 
 

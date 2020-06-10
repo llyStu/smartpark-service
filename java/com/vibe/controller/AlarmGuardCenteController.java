@@ -12,13 +12,13 @@ import com.vibe.service.guardcente.AlarmGuardCenteService;
 
 @RestController
 public class AlarmGuardCenteController {
-
-    @Autowired
-    private AlarmGuardCenteService alarmGuardCenteService;
-
-    @RequestMapping(value = "guardcente/acquireAlarm", method = RequestMethod.POST, consumes = "application/json")
-    public void acquireAlarm(@RequestBody CallbackGeneralMsg alarmGuardCenteMsg) {
-        //System.out.println(alarmGuardCenteMsg.toString());
-        alarmGuardCenteService.acquireAlarm(alarmGuardCenteMsg);
-    }
+	
+	@Autowired
+	private AlarmGuardCenteService alarmGuardCenteService;
+	
+	@RequestMapping(value="guardcente/acquireAlarm",method=RequestMethod.POST,consumes="application/json")
+	public void acquireAlarm(@RequestBody CallbackGeneralMsg alarmGuardCenteMsg){
+		//System.out.println(alarmGuardCenteMsg.toString());
+		alarmGuardCenteService.acquireAlarm(alarmGuardCenteMsg);
+	}
 }

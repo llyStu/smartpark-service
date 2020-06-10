@@ -36,60 +36,58 @@ import java.util.List;
 
 @Controller
 public class DeviceController {
-    @Autowired
-    private AssetService assetService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private DeviceService deviceService;
+					@Autowired
+					private AssetService assetService;
+					@Autowired
+					private UserService userService;
+					@Autowired
+					private DeviceService deviceService;
 
-    /*
-     * 移动端通过扫描二维码，获取该设备的详细信息
-     *
-     */
-    @RequestMapping("device/findDevice")
-    public @ResponseBody
-    AssetVo findDevice(@RequestParam(value = "id") String id) throws AssetException {
-        AssetVo vo = new AssetVo();
-        if (id != null) {
-            Integer assetId = Integer.parseInt(id);
-            vo.setId(assetId);
-        }
-        AssetVo assetVo = assetService.findDevice(vo);
-        if (assetVo != null) {
-            Integer location = assetVo.getLocation();
-            if (location != null) {
-                Asset<?> asset = assetService.findAssetByID(location, AssetKind.SPACE.toString());
-                Space space = (Space) asset;
-                assetVo.setSpaceCaption(space.getCaption());
-            }
-            User user = assetVo.getKeepers();
-            if (user != null) {
-                Integer uid = user.getId();
-                User user2 = userService.queryUserById(uid);
-                if (user2 != null) {
-                    assetVo.setUserName(user2.getName());
-                }
-            }
-        }
-        return assetVo;
-    }
-
-    //
-    @GetMapping("/device/printOutDevice")
-    @ResponseBody
-    public ResponseEntity<byte[]> printOutDevice(String ids) {
-        //test
-        try {
-            return deviceService.printDevice(ids);
+					/*
+					 * 移动端通过扫描二维码，获取该设备的详细信息
+					 *
+					 */
+					@RequestMapping("device/findDevice")
+					public @ResponseBody AssetVo findDevice(@RequestParam(value="id") String id) throws AssetException{
+						AssetVo vo = new AssetVo();
+						if(id !=null){
+							Integer assetId=Integer.parseInt(id);
+							vo.setId(assetId);
+						}
+						AssetVo assetVo=assetService.findDevice(vo);
+						if(assetVo != null){
+							Integer location = assetVo.getLocation();
+							if(location != null){
+								Asset<?> asset = assetService.findAssetByID(location,AssetKind.SPACE.toString());
+								Space space=(Space)asset;
+				assetVo.setSpaceCaption(space.getCaption());
+			}
+			User user = assetVo.getKeepers();
+			if(user != null){
+				Integer uid = user.getId();
+				User user2 = userService.queryUserById(uid);
+				if(user2 !=null){
+					assetVo.setUserName(user2.getName());
+				}
+			}
+		}
+		return assetVo;
+	}
+	//
+	@GetMapping("/device/printOutDevice")
+	@ResponseBody
+	public ResponseEntity<byte[]> printOutDevice(String ids) {
+		//test
+		try {
+			return deviceService.printDevice(ids);
 //			ResponseEntity<byte[]> filebyte = new ResponseEntity<byte[]>(out.toByteArray(),headers1, HttpStatus.OK);
 //			return ResponseModel.success(filebyte).code(ResultCode.SUCCESS);
-        } catch (Exception e) {
-            e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 //			return ResponseModel.failure("错误" + e.getMessage()).code(ResultCode.ERROR);
-        }
-        return null;
-    }
+		}
+		return null;
+	}
 
 	/*@GetMapping("/findAsset/printQrcode")
 	@ResponseBody

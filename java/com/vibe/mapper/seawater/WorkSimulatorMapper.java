@@ -10,30 +10,30 @@ import java.util.List;
 @Repository
 public interface WorkSimulatorMapper {
 
-    int insertSimulatorWork(WorkPattern workpattern);
+	int insertSimulatorWork(WorkPattern workpattern);
 
-    List<WorkPattern> findAllSimulatorWork(WorkPattern workpattern);
+	List<WorkPattern> findAllSimulatorWork(WorkPattern workpattern);
 
-    int updateSimulatorWork(WorkPattern workpattern);
+	int updateSimulatorWork(WorkPattern workpattern);
 
-    int delSimulatorWork(@Param("ids") int[] ids);
+	int delSimulatorWork(@Param("ids") int[] ids);
 
-    List<WorkPattern> findSimulatorWork(@Param("ids") Integer[] ids);
+	List<WorkPattern> findSimulatorWork(@Param("ids") Integer[] ids);
 
-    List<WorkPeriod> findAllWorkPeriod(WorkPeriod workPeriod);
+	List<WorkPeriod> findAllWorkPeriod(WorkPeriod workPeriod);
 
-    int delWorkPeriod(@Param("ids") int[] ids, @Param("falg") int falg);
+	int delWorkPeriod(@Param("ids") int[] ids, @Param("falg") int falg);
 
-    List<WorkPattern> findAllWorkPatternName(@Param("userId") Integer userId, @Param("delFalg") int delFalg);
+	List<WorkPattern> findAllWorkPatternName(@Param("userId") Integer userId, @Param("delFalg") int delFalg);
 
-    int delWorkTemplateId(@Param("ids") int[] ids);
+	int delWorkTemplateId(@Param("ids") int[] ids);
 
-    List<WorkPattern> findNameSimulatorWork(@Param("userId") Integer userId, @Param("name") String name, @Param("delFalg") int delFalg);
+	List<WorkPattern> findNameSimulatorWork(@Param("userId") Integer userId, @Param("name") String name, @Param("delFalg") int delFalg);
 
-    int insertWorkPeriod(WorkPeriod period);
+	int insertWorkPeriod(WorkPeriod period);
 
-    int updateWorkPeriod(WorkPeriod period);
+	int updateWorkPeriod(WorkPeriod period);
 
-    List<WorkPattern> findWorkPatternCheckId(@Param("ids") int[] ids);
+	List<WorkPattern> findWorkPatternCheckId(@Param("ids") int[] ids);
 
 }

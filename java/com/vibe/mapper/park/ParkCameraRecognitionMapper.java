@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface ParkCameraRecognitionMapper {
 
-    List<CameraRecognitionData> findCameraRecognitionLog(CameraRecognitionData data);
+	List<CameraRecognitionData> findCameraRecognitionLog(CameraRecognitionData data);
 
-    int delCameraRecognitionlog(@Param("ids") int[] ids);
+	int delCameraRecognitionlog(@Param("ids") int[] ids);
 
 }

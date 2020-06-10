@@ -1,707 +1,705 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vibe.mapper.monitor.AssetRepeatMapper">
 
 
-    <!-- 新增控制器 -->
-    <insert id="addnewControl" parameterType="com.vibe.monitor.asset.Asset">
-        insert into
-        db_vibe_monitor.t_control (id,parent,type,catalog,name,caption,source
-        ,time_interval,transform,refresh_delay,warn_cond,memo)values(#{id},#{parentId},#{type.name},#{monitorKind},#{name},#{caption},#{source.id}
-        ,#{timeInterval},#{transform},#{refreshDelay},#{warnCond},#{desc}
-        )
-    </insert>
-    <!-- 新增监测器 -->
-    <insert id="addProbe" parameterType="com.vibe.monitor.asset.Asset">
-        insert into
-        db_vibe_monitor.t_probe
-        (id,parent,type,catalog,name,caption,source,time_interval,saving_interval
-        ,transform,warn_cond,memo
-        )values(#{id},#{parentId},#{type.name},#{monitorKind},#{name},#{caption},#{source.id},#{timeInterval},#{saveInterval}
-        ,#{transform},#{warnCond},#{desc}
-        )
-    </insert>
-    <!-- 新增服务 -->
-    <insert id="addService" parameterType="com.vibe.monitor.asset.Asset">
-        insert into
-        db_vibe_monitor.t_service (id,parent,type,name,caption,memo )
-        values
-        (#{id},#{parentId},#{type.name},#{name},#{caption},#{desc}
-        )
-    </insert>
-    <!-- 新增空间 -->
-    <insert id="addSpace" parameterType="com.vibe.monitor.asset.Asset">
-        insert into
-        db_vibe_monitor.t_space (id,parent, type,name,caption,memo )
-        values
-        (#{id},#{parentId},#{type.name},#{name},#{caption},#{desc}
-        )
 
-    </insert>
-    <!-- 新增设备 -->
-    <insert id="addDevice" parameterType="com.vibe.monitor.asset.Asset">
-        insert into db_vibe_monitor.t_device
-        (id,parent,type,catalog,name,caption,vendor,purchase_date
-        ,warranty_date,memo,show_in_client)values
-        (#{id},#{parentId},#{type.name},#{catalog},#{name},#{caption},#{vendor},#{purchase}
-        ,#{warranty},#{desc},#{show_in_client}
-        )
-    </insert>
-    <!-- 新增设备属性 -->
-    <insert id="addDeviceDetail" parameterType="com.vibe.monitor.asset.Asset">
-        insert into db_vibe_monitor.t_device_detail (id
-        ,specification,models,increse_way,international_code
-        ,detail_config,production_date,using_department,using_state
-        ,device_type,location,keepers,quantity
-        ,unit,price,amount,enabing_date
-        ,original_value,use_year,salvage
-        ,salvage_value,depreciation_method
-        ,maintenance_interval
-        <if test="scrap!=null">
-            ,scrap
-        </if>
-        <if test="is_using!=null">
-            ,is_using
-        </if>
-        ) values (#{id}
-        ,#{specification},#{models},#{increse_way},#{international_code}
-        ,#{detail_config},#{production},#{using_department},#{using_state}
-        ,#{device_type},#{location},#{keepers},#{quantity}
-        ,#{deviceUnit},#{price},#{amount},#{enabing}
-        ,#{original_value},#{use_year},#{salvage}
-        ,#{salvage_value},#{depreciation_method}
-        ,#{maintenance_interval}
-        <if test="scrap!=null">
-            ,#{scrap}
-        </if>
-        <if test="is_using!=null">
-            ,#{is_using}
-        </if>
+	<!-- 新增控制器 -->
+	<insert id="addnewControl" parameterType="com.vibe.monitor.asset.Asset">
+		insert into
+		db_vibe_monitor.t_control (id,parent,type,catalog,name,caption,source
+		,time_interval,transform,refresh_delay,warn_cond,memo)values(#{id},#{parentId},#{type.name},#{monitorKind},#{name},#{caption},#{source.id}
+		,#{timeInterval},#{transform},#{refreshDelay},#{warnCond},#{desc}
+		)
+	</insert>
+	<!-- 新增监测器 -->
+	<insert id="addProbe" parameterType="com.vibe.monitor.asset.Asset">
+		insert into
+		db_vibe_monitor.t_probe
+		(id,parent,type,catalog,name,caption,source,time_interval,saving_interval
+		,transform,warn_cond,memo
+		)values(#{id},#{parentId},#{type.name},#{monitorKind},#{name},#{caption},#{source.id},#{timeInterval},#{saveInterval}
+		,#{transform},#{warnCond},#{desc}
+		)
+	</insert>
+	<!-- 新增服务 -->
+	<insert id="addService" parameterType="com.vibe.monitor.asset.Asset">
+		insert into
+		db_vibe_monitor.t_service (id,parent,type,name,caption,memo )
+		values
+		(#{id},#{parentId},#{type.name},#{name},#{caption},#{desc}
+		)
+	</insert>
+	<!-- 新增空间 -->
+	<insert id="addSpace" parameterType="com.vibe.monitor.asset.Asset">
+		insert into
+		db_vibe_monitor.t_space (id,parent, type,name,caption,memo )
+		values
+		(#{id},#{parentId},#{type.name},#{name},#{caption},#{desc}
+		)
 
-        )
-    </insert>
-    <!-- 新增资产属性 -->
-    <insert id="addAssetProperty" parameterType="com.vibe.monitor.asset.AssetProperty">
-        insert into db_vibe_monitor.t_asset_prop (asset,name,value)
-        values(#{asset},#{name},#{value})
-    </insert>
-    <!-- 更新监测器 -->
-    <update id="editProbeById" parameterType="com.vibe.monitor.asset.Asset">
-        update db_vibe_monitor.t_probe
-        <set>
-            <if test="parentId!=null">
-                parent=#{parentId},
-            </if>
-            <if test="type !=null and type.name!=null">
-                type=#{type.name},
-            </if>
-            <if test="name!=null">
-                name=#{name},
-            </if>
-            <if test="caption!=null">
-                caption=#{caption},
-            </if>
-            <if test="source!=null and source.id!=null">
-                source=#{source.id},
-            </if>
-            <if test="timeInterval!=null">
-                time_interval=#{timeInterval},
-            </if>
-            <if test="warnCond!=null">
-                warn_cond=#{warnCond},
-            </if>
-            <if test="desc!=null">
-                memo=#{desc},
-            </if>
-            <if test="enabled!=null">
-                enabled=#{enabled},
-            </if>
+	</insert>
+	<!-- 新增设备 -->
+	<insert id="addDevice" parameterType="com.vibe.monitor.asset.Asset">
+		insert into db_vibe_monitor.t_device
+		(id,parent,type,catalog,name,caption,vendor,purchase_date
+		,warranty_date,memo,show_in_client)values
+		(#{id},#{parentId},#{type.name},#{catalog},#{name},#{caption},#{vendor},#{purchase}
+		,#{warranty},#{desc},#{show_in_client}
+		)
+	</insert>
+	<!-- 新增设备属性 -->
+	<insert id="addDeviceDetail" parameterType="com.vibe.monitor.asset.Asset">
+		insert into db_vibe_monitor.t_device_detail (id
+		,specification,models,increse_way,international_code
+		,detail_config,production_date,using_department,using_state
+		,device_type,location,keepers,quantity
+		,unit,price,amount,enabing_date
+		,original_value,use_year,salvage
+		,salvage_value,depreciation_method
+		,maintenance_interval
+		<if test="scrap!=null">
+			,scrap
+		</if>
+		<if test="is_using!=null">
+			,is_using
+		</if>
+		) values (#{id}
+		,#{specification},#{models},#{increse_way},#{international_code}
+		,#{detail_config},#{production},#{using_department},#{using_state}
+		,#{device_type},#{location},#{keepers},#{quantity}
+		,#{deviceUnit},#{price},#{amount},#{enabing}
+		,#{original_value},#{use_year},#{salvage}
+		,#{salvage_value},#{depreciation_method}
+		,#{maintenance_interval}
+		<if test="scrap!=null">
+			,#{scrap}
+		</if>
+		<if test="is_using!=null">
+			,#{is_using}
+		</if>
 
-            <if test="removed!=null">
-                removed=#{removed}
-            </if>
+		)
+	</insert>
+	<!-- 新增资产属性 -->
+	<insert id="addAssetProperty" parameterType="com.vibe.monitor.asset.AssetProperty">
+		insert into db_vibe_monitor.t_asset_prop (asset,name,value)
+		values(#{asset},#{name},#{value})
+	</insert>
+	<!-- 更新监测器 -->
+	<update id="editProbeById" parameterType="com.vibe.monitor.asset.Asset">
+		update db_vibe_monitor.t_probe
+		<set>
+			<if test="parentId!=null">
+				parent=#{parentId},
+			</if>
+			<if test="type !=null and type.name!=null">
+				type=#{type.name},
+			</if>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="caption!=null">
+				caption=#{caption},
+			</if>
+			<if test="source!=null and source.id!=null">
+				source=#{source.id},
+			</if>
+			<if test="timeInterval!=null">
+				time_interval=#{timeInterval},
+			</if>
+			<if test="warnCond!=null">
+				warn_cond=#{warnCond},
+			</if>
+			<if test="desc!=null">
+				memo=#{desc},
+			</if>
+			<if test="enabled!=null">
+				enabled=#{enabled},
+			</if>
 
-        </set>
-        WHERE id=#{id}
-    </update>
-    <!-- 更新设备 -->
-    <update id="editDeviceById" parameterType="com.vibe.monitor.asset.Asset">
-        update db_vibe_monitor.t_device
-        <set>
-            <if test="parentId!=null">
-                parent=#{parentId},
-            </if>
-            <if test="type!=null and type.name!=null">
-                type=#{type.name},
-            </if>
-            <if test="name!=null">
-                name=#{name},
-            </if>
-            <if test="caption!=null">
-                caption=#{caption},
-            </if>
-            <if test="vendor!=null">
-                vendor=#{vendor},
-            </if>
-            <if test="purchase!=null">
-                purchase_date=#{purchase},
-            </if>
-            <if test="warranty!=null">
-                warranty_date=#{warranty},
-            </if>
-            <if test="desc!=null">
-                memo=#{desc},
-            </if>
+			<if test="removed!=null">
+				removed=#{removed}
+			</if>
 
-            <if test="removed!=null">
-                removed=#{removed},
-            </if>
-            <if test="qrcode!=null">
-                qrcode=#{qrcode}
-            </if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	<!-- 更新设备 -->
+	<update id="editDeviceById" parameterType="com.vibe.monitor.asset.Asset">
+		update db_vibe_monitor.t_device
+		<set>
+			<if test="parentId!=null">
+				parent=#{parentId},
+			</if>
+			<if test="type!=null and type.name!=null">
+				type=#{type.name},
+			</if>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="caption!=null">
+				caption=#{caption},
+			</if>
+			<if test="vendor!=null">
+				vendor=#{vendor},
+			</if>
+			<if test="purchase!=null">
+				purchase_date=#{purchase},
+			</if>
+			<if test="warranty!=null">
+				warranty_date=#{warranty},
+			</if>
+			<if test="desc!=null">
+				memo=#{desc},
+			</if>
 
-        </set>
-        WHERE id=#{id}
-    </update>
-    <!-- 更新设备 -->
+			<if test="removed!=null">
+				removed=#{removed},
+			</if>
+			<if test="qrcode!=null">
+				qrcode=#{qrcode}
+			</if>
 
-    <update id="editDeviceDetailById" parameterType="com.vibe.monitor.asset.Asset">
-        update db_vibe_monitor.t_device_detail
-        <set>
-            <if test="specification!=null">
-                specification=#{specification},
-            </if>
-            <if test="models!=null">
-                models=#{models},
-            </if>
-            <if test="increse_way!=null">
-                increse_way=#{increse_way},
-            </if>
-            <if test="international_code!=null">
-                international_code=#{international_code},
-            </if>
-            <if test="detail_config!=null">
-                detail_config=#{detail_config},
-            </if>
-            <if test="production!=null">
-                production_date=#{production},
-            </if>
-            <if test="using_department!=null">
-                using_department=#{using_department},
-            </if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	<!-- 更新设备 -->
 
-            <if test="maintenance_interval!=null">
-                maintenance_interval=#{maintenance_interval},
-            </if>
-            <if test="using_state!=null">
-                using_state=#{using_state},
-            </if>
-            <if test="device_type!=null">
-                device_type=#{device_type},
-            </if>
-            <if test="location!=null">
-                location=#{location},
-            </if>
-            <if test="keepers!=null">
-                keepers=#{keepers},
-            </if>
-            <if test="quantity!=null">
-                quantity=#{quantity},
-            </if>
-            <if test="deviceUnit!=null">
-                unit=#{deviceUnit},
-            </if>
-            <if test="price!=null">
-                price=#{price},
-            </if>
-            <if test="amount!=null">
-                amount=#{amount},
-            </if>
-            <if test="enabing!=null">
-                enabing_date=#{enabing},
-            </if>
+	<update id="editDeviceDetailById" parameterType="com.vibe.monitor.asset.Asset">
+		update db_vibe_monitor.t_device_detail
+		<set>
+			<if test="specification!=null">
+				specification=#{specification},
+			</if>
+			<if test="models!=null">
+				models=#{models},
+			</if>
+			<if test="increse_way!=null">
+				increse_way=#{increse_way},
+			</if>
+			<if test="international_code!=null">
+				international_code=#{international_code},
+			</if>
+			<if test="detail_config!=null">
+				detail_config=#{detail_config},
+			</if>
+			<if test="production!=null">
+				production_date=#{production},
+			</if>
+			<if test="using_department!=null">
+				using_department=#{using_department},
+			</if>
 
-            <if test="original_value!=null">
-                original_value=#{original_value},
-            </if>
-            <if test="use_year!=null">
-                use_year=#{use_year},
-            </if>
-            <if test="salvage!=null">
-                salvage=#{salvage},
-            </if>
-            <if test="salvage_value!=null">
-                salvage_value=#{salvage_value},
-            </if>
-            <if test="depreciation_method!=null">
-                depreciation_method=#{depreciation_method},
-            </if>
-            <if test="scrap!=null">
-                scrap=#{scrap},
-            </if>
-            <if test="is_using!=null">
-                is_using=#{is_using},
-            </if>
-        </set>
-        WHERE id=#{id}
-    </update>
-    <!-- 更新控制器 -->
-    <update id="editControlById" parameterType="com.vibe.monitor.asset.Asset">
-        update db_vibe_monitor.t_control
-        <set>
-            <if test="parentId!=null">
-                parent=#{parentId},
-            </if>
-            <if test="type!=null and type.name!=null">
-                type=#{type.name},
-            </if>
-            <if test="name!=null">
-                name=#{name},
-            </if>
-            <if test="caption!=null">
-                caption=#{caption},
-            </if>
-            <if test="source !=null and source.id!=null">
-                source=#{source.id},
-            </if>
-            <if test="timeInterval!=null">
-                time_interval=#{timeInterval},
-            </if>
-            <if test="refreshDelay!=null">
-                refresh_delay=#{refreshDelay},
-            </if>
-            <if test="warnCond!=null">
-                warn_cond=#{warnCond},
-            </if>
-            <if test="desc!=null">
-                memo=#{desc},
-            </if>
+			<if test="maintenance_interval!=null">
+				maintenance_interval=#{maintenance_interval},
+			</if>
+			<if test="using_state!=null">
+				using_state=#{using_state},
+			</if>
+			<if test="device_type!=null">
+				device_type=#{device_type},
+			</if>
+			<if test="location!=null">
+				location=#{location},
+			</if>
+			<if test="keepers!=null">
+				keepers=#{keepers},
+			</if>
+			<if test="quantity!=null">
+				quantity=#{quantity},
+			</if>
+			<if test="deviceUnit!=null">
+				unit=#{deviceUnit},
+			</if>
+			<if test="price!=null">
+				price=#{price},
+			</if>
+			<if test="amount!=null">
+				amount=#{amount},
+			</if>
+			<if test="enabing!=null">
+				enabing_date=#{enabing},
+			</if>
 
-            <if test="removed!=null">
-                removed=#{removed}
-            </if>
+			<if test="original_value!=null">
+				original_value=#{original_value},
+			</if>
+			<if test="use_year!=null">
+				use_year=#{use_year},
+			</if>
+			<if test="salvage!=null">
+				salvage=#{salvage},
+			</if>
+			<if test="salvage_value!=null">
+				salvage_value=#{salvage_value},
+			</if>
+			<if test="depreciation_method!=null">
+				depreciation_method=#{depreciation_method},
+			</if>
+			<if test="scrap!=null">
+				scrap=#{scrap},
+			</if>
+			<if test="is_using!=null">
+				is_using=#{is_using},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	<!-- 更新控制器 -->
+	<update id="editControlById" parameterType="com.vibe.monitor.asset.Asset">
+		update db_vibe_monitor.t_control
+		<set>
+			<if test="parentId!=null">
+				parent=#{parentId},
+			</if>
+			<if test="type!=null and type.name!=null">
+				type=#{type.name},
+			</if>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="caption!=null">
+				caption=#{caption},
+			</if>
+			<if test="source !=null and source.id!=null">
+				source=#{source.id},
+			</if>
+			<if test="timeInterval!=null">
+				time_interval=#{timeInterval},
+			</if>
+			<if test="refreshDelay!=null">
+				refresh_delay=#{refreshDelay},
+			</if>
+			<if test="warnCond!=null">
+				warn_cond=#{warnCond},
+			</if>
+			<if test="desc!=null">
+				memo=#{desc},
+			</if>
 
-        </set>
-        WHERE id=#{id}
-    </update>
-    <!-- 更新服务 -->
-    <update id="editServiceById" parameterType="com.vibe.monitor.asset.Asset">
-        update db_vibe_monitor.t_service
-        <set>
-            <if test="parentId!=null">
-                parent=#{parentId},
-            </if>
-            <if test="type!=null and type.name!=null">
-                type=#{type.name},
-            </if>
-            <if test="name!=null">
-                name=#{name},
-            </if>
-            <if test="caption!=null">
-                caption=#{caption},
-            </if>
+			<if test="removed!=null">
+				removed=#{removed}
+			</if>
 
-            <if test="desc!=null">
-                memo=#{desc},
-            </if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	<!-- 更新服务 -->
+	<update id="editServiceById" parameterType="com.vibe.monitor.asset.Asset">
+		update db_vibe_monitor.t_service
+		<set>
+			<if test="parentId!=null">
+				parent=#{parentId},
+			</if>
+			<if test="type!=null and type.name!=null">
+				type=#{type.name},
+			</if>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="caption!=null">
+				caption=#{caption},
+			</if>
 
-            <if test="removed!=null">
-                removed=#{removed}
-            </if>
+			<if test="desc!=null">
+				memo=#{desc},
+			</if>
 
-        </set>
-        WHERE id=#{id}
-    </update>
-    <!-- 更新空间 -->
-    <update id="editSpaceById" parameterType="com.vibe.monitor.asset.Asset">
-        update db_vibe_monitor.t_space
-        <set>
-            <if test="parentId!=null">
-                parent=#{parentId},
-            </if>
-            <if test="type!=null and type.name!=null">
-                type=#{type.name},
-            </if>
-            <if test="name!=null">
-                name=#{name},
-            </if>
-            <if test="caption!=null">
-                caption=#{caption},
-            </if>
+			<if test="removed!=null">
+				removed=#{removed}
+			</if>
 
-            <if test="desc!=null">
-                memo=#{desc},
-            </if>
-            <if test="enabled!=null">
-                enabled=#{enabled},
-            </if>
-            <if test="removed!=null">
-                removed=#{removed}
-            </if>
-        </set>
-        WHERE id=#{id}
-    </update>
+		</set>
+		WHERE id=#{id}
+	</update>
+	<!-- 更新空间 -->
+	<update id="editSpaceById" parameterType="com.vibe.monitor.asset.Asset">
+		update db_vibe_monitor.t_space
+		<set>
+			<if test="parentId!=null">
+				parent=#{parentId},
+			</if>
+			<if test="type!=null and type.name!=null">
+				type=#{type.name},
+			</if>
+			<if test="name!=null">
+				name=#{name},
+			</if>
+			<if test="caption!=null">
+				caption=#{caption},
+			</if>
 
-    <!-- 修改时调用存储过程 -->
-    <select id="editAssetPropertyById" parameterType="com.vibe.monitor.asset.AssetProperty"
-            statementType="CALLABLE">
-        <![CDATA[
+			<if test="desc!=null">
+				memo=#{desc},
+			</if>
+			<if test="enabled!=null">
+				enabled=#{enabled},
+			</if>
+			<if test="removed!=null">
+				removed=#{removed}
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
 
-                 {call db_vibe_monitor.sp_update_asset_prop(#{asset,mode=IN,jdbcType=INTEGER},#{name,mode=IN,jdbcType=VARCHAR},#{value,mode=IN,jdbcType=VARCHAR})}
+	<!-- 修改时调用存储过程 -->
+	<select id="editAssetPropertyById" parameterType="com.vibe.monitor.asset.AssetProperty"
+		statementType="CALLABLE">
+     <![CDATA[
+         {call db_vibe_monitor.sp_update_asset_prop(#{asset,mode=IN,jdbcType=INTEGER},#{name,mode=IN,jdbcType=VARCHAR},#{value,mode=IN,jdbcType=VARCHAR})}
+     ]]>
+	</select>
+	<!-- 根据类型查询，服务列表 -->
 
-        ]]>
-    </select>
-    <!-- 根据类型查询，服务列表 -->
-
-    <select id="findServiceByType" parameterType="string"
-            resultType="com.vibe.monitor.drivers.modbus.service.ModbusTcpMaster">
-        select * from db_vibe_monitor.t_service where type=#{name}<!--  and (id >> 16) =
+	<select id="findServiceByType" parameterType="string"
+		resultType="com.vibe.monitor.drivers.modbus.service.ModbusTcpMaster">
+		select * from db_vibe_monitor.t_service where type=#{name}<!--  and (id >> 16) =
 		#{siteId} -->
-    </select>
-    <select id="findDeviceById" parameterType="int"
-            resultType="com.vibe.monitor.asset.Device">
-        select * from db_vibe_monitor.t_device where id=#{id}
-    </select>
-    <!-- 根据服务id,查询服务实例 -->
+	</select>
+	<select id="findDeviceById" parameterType="int"
+		resultType="com.vibe.monitor.asset.Device">
+		select * from db_vibe_monitor.t_device where id=#{id}
+	</select>
+	<!-- 根据服务id,查询服务实例 -->
 
-    <select id="findServiceById" parameterType="int"
-            resultType="com.vibe.monitor.asset.Asset">
-        select * from db_vibe_monitor.t_service where id=#{source}
-    </select>
-    <sql id="select_where">
-        t1.removed=0 <!-- and (t1.id >> 16) = #{siteId} -->
-        <if test="id!=null">
-            and t1.id=#{id}
-        </if>
-        <if test="parentId!=null">
-            and t1.parent=#{parentId}
-        </if>
-        <if test="typeName!=null and typeName!=''">
-            and t1.type=#{typeName}
-        </if>
-        <if test="name!=null">
-            and t1.name like "%"#{name}"%"
-        </if>
+	<select id="findServiceById" parameterType="int"
+		resultType="com.vibe.monitor.asset.Asset">
+		select * from db_vibe_monitor.t_service where id=#{source}
+	</select>
+	<sql id="select_where">
+		t1.removed=0 <!-- and (t1.id >> 16) = #{siteId} -->
+		<if test="id!=null">
+			and t1.id=#{id}
+		</if>
+		<if test="parentId!=null">
+			and t1.parent=#{parentId}
+		</if>
+		<if test="typeName!=null and typeName!=''">
+			and t1.type=#{typeName}
+		</if>
+		<if test="name!=null">
+			and t1.name like "%"#{name}"%"
+		</if>
+		
+		<if test="caption!=null">
+			and t1.caption like "%"#{caption}"%"
+		</if>
+		<if test="memo!=null and memo!=''">
+			and t1.memo like "%"#{memo}"%"
+		</if>
 
-        <if test="caption!=null">
-            and t1.caption like "%"#{caption}"%"
-        </if>
-        <if test="memo!=null and memo!=''">
-            and t1.memo like "%"#{memo}"%"
-        </if>
+	</sql>
 
-    </sql>
+	<select id="findSpace" parameterType="assetVo" resultType="assetVo">
+		SELECT
+		t1.id
+		,t1.seqence
+		,t1.parent parentId
+		,t1.type typeName
+		,t1.name
+		,t1.caption
+		,t1.memo
+		,t1.enabled
+		,t1.removed
+		,t2.caption parentCaption
+		FROM db_vibe_monitor.t_space t1
+		LEFT JOIN db_vibe_monitor.t_space t2 ON t1.parent = t2.id
+		<where>
+			<include refid="select_where"></include>
 
-    <select id="findSpace" parameterType="assetVo" resultType="assetVo">
-        SELECT
-        t1.id
-        ,t1.seqence
-        ,t1.parent parentId
-        ,t1.type typeName
-        ,t1.name
-        ,t1.caption
-        ,t1.memo
-        ,t1.enabled
-        ,t1.removed
-        ,t2.caption parentCaption
-        FROM db_vibe_monitor.t_space t1
-        LEFT JOIN db_vibe_monitor.t_space t2 ON t1.parent = t2.id
-        <where>
-            <include refid="select_where"></include>
+		</where>
+		order by t1.id desc
+	</select>
 
-        </where>
-        order by t1.id desc
-    </select>
+	<!-- 搜索service -->
+	<select id="findService" parameterType="assetVo" resultType="assetVo">
+		SELECT t1.id,t1.parent parentId,t1.type
+		typeName,t1.name,t1.caption,t1.memo,t1.enabled FROM
+		db_vibe_monitor.t_service t1
+		<where>
+			<include refid="select_where"></include>
+		</where>
+		order by t1.id desc
+	</select>
+	<!-- 查询device其他属性 -->
+	<select id="findDeviceDetail" parameterType="int" resultType="assetVo">
+		SELECT id,specification
+		,models
+		,increse_way
+		,international_code
+		,detail_config
+		,production_date
+		,using_department departId
+		,using_state
+		,device_type
+		,location
+		,keepers userId
+		,quantity
+		,unit deviceUnit
+		,price
+		,amount
+		,enabing_date
 
-    <!-- 搜索service -->
-    <select id="findService" parameterType="assetVo" resultType="assetVo">
-        SELECT t1.id,t1.parent parentId,t1.type
-        typeName,t1.name,t1.caption,t1.memo,t1.enabled FROM
-        db_vibe_monitor.t_service t1
-        <where>
-            <include refid="select_where"></include>
-        </where>
-        order by t1.id desc
-    </select>
-    <!-- 查询device其他属性 -->
-    <select id="findDeviceDetail" parameterType="int" resultType="assetVo">
-        SELECT id,specification
-        ,models
-        ,increse_way
-        ,international_code
-        ,detail_config
-        ,production_date
-        ,using_department departId
-        ,using_state
-        ,device_type
-        ,location
-        ,keepers userId
-        ,quantity
-        ,unit deviceUnit
-        ,price
-        ,amount
-        ,enabing_date
-
-        ,original_value
-        ,use_year
-        ,salvage
-        ,salvage_value
-        ,depreciation_method
-        ,maintenance_interval
-        ,scrap
-        ,is_using FROM db_vibe_monitor.t_device_detail where id=#{id}
-    </select>
-    <!-- 搜索device -->
-    <select id="findDevice" parameterType="assetVo" resultType="assetVo">
-        SELECT t1.id,t1.parent parentId,t1.type
-        typeName,t1.name,t1.caption,t1.memo,t1.enabled
-        ,d1.specification
-        ,d1.models
-        ,d1.increse_way
-        ,d1.international_code
-        ,d1.detail_config
-        ,d1.production_date
-        ,d1.using_department departId
-        ,d1.using_state
-        ,d1.device_type
-        ,d1.location
-        ,d1.keepers userId
-        ,d1.quantity
-        ,d1.unit deviceUnit
-        ,d1.price
-        ,d1.amount
-        ,d1.enabing_date
-        ,d1.original_value
-        ,d1.use_year
-        ,d1.salvage
-        ,d1.salvage_value
-        ,d1.depreciation_method
-        ,t1.qrcode
-        ,t1.vendor
-        ,t1.purchase_date purchaseDate
-        ,d1.maintenance_interval
-        ,d1.scrap
-        ,d1.is_using
-        FROM db_vibe_monitor.t_device t1
-        LEFT JOIN db_vibe_monitor.t_device_detail d1
-        ON t1.id=d1.id
+		,original_value
+		,use_year
+		,salvage
+		,salvage_value
+		,depreciation_method
+		,maintenance_interval
+		,scrap
+		,is_using FROM db_vibe_monitor.t_device_detail where id=#{id}
+	</select>
+	<!-- 搜索device -->
+	<select id="findDevice" parameterType="assetVo" resultType="assetVo">
+		SELECT t1.id,t1.parent parentId,t1.type
+		typeName,t1.name,t1.caption,t1.memo,t1.enabled
+		,d1.specification
+		,d1.models
+		,d1.increse_way
+		,d1.international_code
+		,d1.detail_config
+		,d1.production_date
+		,d1.using_department departId
+		,d1.using_state
+		,d1.device_type
+		,d1.location
+		,d1.keepers userId
+		,d1.quantity
+		,d1.unit deviceUnit
+		,d1.price
+		,d1.amount
+		,d1.enabing_date
+		,d1.original_value
+		,d1.use_year
+		,d1.salvage
+		,d1.salvage_value
+		,d1.depreciation_method
+		,t1.qrcode
+		,t1.vendor
+		,t1.purchase_date purchaseDate
+		,d1.maintenance_interval
+		,d1.scrap
+		,d1.is_using
+		FROM db_vibe_monitor.t_device t1
+		LEFT JOIN db_vibe_monitor.t_device_detail d1
+		ON t1.id=d1.id
 
 
-        <where>
-            <include refid="select_where"></include>
+		<where>
+			<include refid="select_where"></include>
 
-            <if test="vendor!=null and vendor!=''">
-                and t1.vendor =#{vendor}
-            </if>
-            <if test="purchase_date!=null and purchase_date!=''">
-                and t1.purchase_date =#{purchase_date}
-            </if>
-            <if test="warranty_date!=null and warranty_date!=''">
-                and t1.warranty_date =#{warranty_date}
-            </if>
-            <if test="specification!=null and specification!=''">
-                and d1.specification =#{specification}
-            </if>
-            <if test="models!=null and models!=''">
-                and d1.models =#{models}
-            </if>
-            <if test="increse_way!=null and increse_way!=''">
-                and d1.increse_way =#{increse_way}
-            </if>
-            <if test="international_code!=null and international_code!=''">
-                and d1.international_code =#{international_code}
-            </if>
-            <if test="detail_config!=null and detail_config!=''">
-                and d1.detail_config =#{detail_config}
-            </if>
-            <if test="production_date!=null and production_date!=''">
-                and d1.production_date =#{production_date}
-            </if>
-            <if test="using_department!=null and using_department.did !=null">
-                and d1.using_department =#{using_department.did}
-            </if>
-            <if test="using_state!=null and using_state!=''">
-                and d1.using_state =#{using_state}
-            </if>
-            <if test="location!=null and location!=''">
-                and d1.location =#{location}
-            </if>
-            <if test="keepers!=null and keepers.id!=null">
-                and d1.keepers =#{keepers.id}
-            </if>
-            <if test="scrap!=null and scrap!=''">
-                and d1.scrap =#{scrap}
-            </if>
-            <if test="is_using!=null and is_using!=''">
-                and d1.is_using =#{is_using}
-            </if>
-            <if test="catalogId!=null and catalogId!=''">
-                and t1.catalog =#{catalogId}
-            </if>
-        </where>
-        order by t1.id desc
-    </select>
-    <!-- 搜索Control -->
-    <select id="findControl" parameterType="assetVo" resultType="assetVo">
-        SELECT t1.id,t1.parent parentId,t1.type
-        typeName,t1.name,t1.caption,t1.memo FROM db_vibe_monitor.t_control t1
-        <where>
-            <include refid="select_where"></include>
-        </where>
-        order by t1.id desc
-    </select>
-    <!-- 搜索Probe -->
-    <select id="findProbe" parameterType="assetVo" resultType="assetVo">
-        SELECT t1.id,t1.parent parentId,t1.type
-        typeName,t1.name,t1.caption,t1.memo FROM db_vibe_monitor.t_probe t1
-        <where>
-            <include refid="select_where"></include>
-        </where>
-        order by t1.id desc
-    </select>
-    <!-- 查询要打印的设备信息 -->
-    <select id="findDeviceByIds" resultType="assetVo">
-        select
-        d.id
-        ,d.name
-        ,d.caption
-        ,d.vendor
-        ,t.production_date
-        ,d.memo
-        ,t.specification
-        ,t.models
-        ,t.increse_way
-        ,t.international_code
-        ,t.detail_config
-        ,t.using_department departId
-        ,t.using_state
-        ,t.device_type
-        ,t.location
-        ,t.keepers userId
-        ,t.quantity
-        ,t.unit deviceUnit
-        ,t.price
-        ,t.amount
-        ,t.enabing_date
-        ,t.original_value
-        ,t.use_year
-        ,t.salvage
-        ,t.salvage_value
-        ,t.depreciation_method
-        ,d.purchase_date
-        ,t.maintenance_interval
-        ,t.scrap
+			<if test="vendor!=null and vendor!=''">
+				and t1.vendor =#{vendor}
+			</if>
+			<if test="purchase_date!=null and purchase_date!=''">
+				and t1.purchase_date =#{purchase_date}
+			</if>
+			<if test="warranty_date!=null and warranty_date!=''">
+				and t1.warranty_date =#{warranty_date}
+			</if>
+			<if test="specification!=null and specification!=''">
+				and d1.specification =#{specification}
+			</if>
+			<if test="models!=null and models!=''">
+				and d1.models =#{models}
+			</if>
+			<if test="increse_way!=null and increse_way!=''">
+				and d1.increse_way =#{increse_way}
+			</if>
+			<if test="international_code!=null and international_code!=''">
+				and d1.international_code =#{international_code}
+			</if>
+			<if test="detail_config!=null and detail_config!=''">
+				and d1.detail_config =#{detail_config}
+			</if>
+			<if test="production_date!=null and production_date!=''">
+				and d1.production_date =#{production_date}
+			</if>
+			<if test="using_department!=null and using_department.did !=null">
+				and d1.using_department =#{using_department.did}
+			</if>
+			<if test="using_state!=null and using_state!=''">
+				and d1.using_state =#{using_state}
+			</if>
+			<if test="location!=null and location!=''">
+				and d1.location =#{location}
+			</if>
+			<if test="keepers!=null and keepers.id!=null">
+				and d1.keepers =#{keepers.id}
+			</if>
+			<if test="scrap!=null and scrap!=''">
+				and d1.scrap =#{scrap}
+			</if>
+			<if test="is_using!=null and is_using!=''">
+				and d1.is_using =#{is_using}
+			</if>
+			<if test="catalogId!=null and catalogId!=''">
+				and t1.catalog =#{catalogId}
+			</if>
+		</where>
+		order by t1.id desc
+	</select>
+	<!-- 搜索Control -->
+	<select id="findControl" parameterType="assetVo" resultType="assetVo">
+		SELECT t1.id,t1.parent parentId,t1.type
+		typeName,t1.name,t1.caption,t1.memo FROM db_vibe_monitor.t_control t1
+		<where>
+			<include refid="select_where"></include>
+		</where>
+		order by t1.id desc
+	</select>
+	<!-- 搜索Probe -->
+	<select id="findProbe" parameterType="assetVo" resultType="assetVo">
+		SELECT t1.id,t1.parent parentId,t1.type
+		typeName,t1.name,t1.caption,t1.memo FROM db_vibe_monitor.t_probe t1
+		<where>
+			<include refid="select_where"></include>
+		</where>
+		order by t1.id desc
+	</select>
+	<!-- 查询要打印的设备信息 -->
+	<select id="findDeviceByIds" resultType="assetVo">
+		select
+		d.id
+		,d.name
+		,d.caption
+		,d.vendor
+		,t.production_date
+		,d.memo
+		,t.specification
+		,t.models
+		,t.increse_way
+		,t.international_code
+		,t.detail_config
+		,t.using_department departId
+		,t.using_state
+		,t.device_type
+		,t.location
+		,t.keepers userId
+		,t.quantity
+		,t.unit deviceUnit
+		,t.price
+		,t.amount
+		,t.enabing_date
+		,t.original_value
+		,t.use_year
+		,t.salvage
+		,t.salvage_value
+		,t.depreciation_method
+		,d.purchase_date
+		,t.maintenance_interval
+		,t.scrap
+	
+		from db_vibe_monitor.t_device d
+		left join db_vibe_monitor.t_device_detail t
+		on d.id=t.id
+		where d.id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
 
-        from db_vibe_monitor.t_device d
-        left join db_vibe_monitor.t_device_detail t
-        on d.id=t.id
-        where d.id in
-        <foreach item="item" index="index" collection="list" open="("
-                 separator="," close=")">
-            #{item}
-        </foreach>
-    </select>
-
-    <select id="findAssetGroup" resultType="Integer">
-        select code_id from db_vibe_monitor.t_asset_group where asset_id = #{assetId} and catalog = #{codeCatalogId}
-    </select>
-
-    <select id="findDeviceLikeNameAndCaption" resultType="Integer">
-        select td.id from db_vibe_monitor.t_device td
-        <where>
-            <if test="name!=null and name!=''">
-                and td.name like "%"#{name}"%"
-            </if>
-            <if test="caption!=null and caption!=''">
-                and td.caption like "%"#{caption}"%"
-            </if>
-        </where>
-    </select>
-    <select id="findProbeLikeNameAndCaption" resultType="Integer">
-        select tp.id from db_vibe_monitor.t_probe tp
-        <where>
-            <if test="name!=null and name!=''">
-                and tp.name like "%"#{name}"%"
-            </if>
-            <if test="caption!=null and caption!=''">
-                and tp.caption like "%"#{caption}"%"
-            </if>
-        </where>
-    </select>
-
-    <select id="findProbeEnergyItemizeType" parameterType="com.vibe.pojo.DeviceCatalogSpace"
-            resultType="java.lang.String">
-        select concat_ws(',',itemize_type,meter_type) from db_vibe_monitor.t_probe_energy where probe_id=#{id}
-    </select>
-    <select id="findDeviceByCatalogsAndSpaces" resultType="assetVo">
-        SELECT t1.id,t1.parent parentId,t1.type
-        typeName,t1.name,t1.caption,t1.memo,t1.enabled
-        ,d1.specification
-        ,d1.models
-        ,d1.increse_way
-        ,d1.international_code
-        ,d1.detail_config
-        ,d1.production_date
-        ,d1.using_department departId
-        ,d1.using_state
-        ,d1.device_type
-        ,d1.location
-        ,d1.keepers userId
-        ,d1.quantity
-        ,d1.unit deviceUnit
-        ,d1.price
-        ,d1.amount
-        ,d1.enabing_date
-        ,d1.original_value
-        ,d1.use_year
-        ,d1.salvage
-        ,d1.salvage_value
-        ,d1.depreciation_method
-        ,t1.qrcode
-        ,t1.vendor
-        ,t1.purchase_date purchaseDate
-        ,d1.maintenance_interval
-        ,d1.scrap
-        ,d1.is_using
-        FROM db_vibe_monitor.t_device t1
-        LEFT JOIN db_vibe_monitor.t_device_detail d1
-        ON t1.id=d1.id
-        <where>
-            t1.removed=0 <!-- and (t1.id >> 16) = #{siteId} -->
-            <if test="assetVo.id!=null">
-                and t1.id=#{assetVo.id}
-            </if>
-            <if test="assetVo.typeName!=null and assetVo.typeName!=''">
-                and t1.type=#{assetVo.typeName}
-            </if>
-            <if test="assetVo.name!=null">
-                and t1.name like "%"#{assetVo.name}"%"
-            </if>
-
-            <if test="assetVo.caption!=null">
-                and t1.caption like "%"#{assetVo.caption}"%"
-            </if>
-            <if test="assetVo.memo!=null and assetVo.memo!=''">
-                and t1.memo like "%"#{assetVo.memo}"%"
-            </if>
-            <if test="catalogs!=null">
-                and t1.catalog in
-                <foreach item="catalogid" index="index" collection="catalogs" open="("
-                         separator="," close=")">
-                    #{catalogid}
-                </foreach>
-            </if>
-            <if test="spaceIds!=null">
-                and t1.parent in
-                <foreach item="spaceId" index="index" collection="spaceIds" open="("
-                         separator="," close=")">
-                    #{spaceId}
-                </foreach>
-            </if>
-
-        </where>
-        order by t1.id desc
-    </select>
+	<select id="findAssetGroup" resultType="Integer">
+		select code_id from db_vibe_monitor.t_asset_group where asset_id = #{assetId} and catalog = #{codeCatalogId}
+	</select>
+	
+	<select id="findDeviceLikeNameAndCaption" resultType="Integer">
+		select td.id from db_vibe_monitor.t_device td 
+		<where>
+			<if test="name!=null and name!=''">
+				and td.name like "%"#{name}"%"
+			</if>
+			<if test="caption!=null and caption!=''">
+				and td.caption like "%"#{caption}"%"
+			</if>
+		</where>
+	</select>
+	<select id="findProbeLikeNameAndCaption" resultType="Integer">
+		select tp.id from db_vibe_monitor.t_probe tp 
+		<where>
+		<if test="name!=null and name!=''">
+				and tp.name like "%"#{name}"%"
+			</if>
+			<if test="caption!=null and caption!=''">
+				and tp.caption like "%"#{caption}"%"
+			</if>
+		</where>
+	</select>
+	
+	<select id="findProbeEnergyItemizeType" parameterType="com.vibe.pojo.DeviceCatalogSpace" resultType="java.lang.String">
+		select concat_ws(',',itemize_type,meter_type) from db_vibe_monitor.t_probe_energy where probe_id=#{id}
+	</select>
+		<select id="findDeviceByCatalogsAndSpaces"  resultType="assetVo">
+		SELECT t1.id,t1.parent parentId,t1.type
+		typeName,t1.name,t1.caption,t1.memo,t1.enabled
+		,d1.specification
+		,d1.models
+		,d1.increse_way
+		,d1.international_code
+		,d1.detail_config
+		,d1.production_date
+		,d1.using_department departId
+		,d1.using_state
+		,d1.device_type
+		,d1.location
+		,d1.keepers userId
+		,d1.quantity
+		,d1.unit deviceUnit
+		,d1.price
+		,d1.amount
+		,d1.enabing_date
+		,d1.original_value
+		,d1.use_year
+		,d1.salvage
+		,d1.salvage_value
+		,d1.depreciation_method
+		,t1.qrcode
+		,t1.vendor
+		,t1.purchase_date purchaseDate
+		,d1.maintenance_interval
+		,d1.scrap
+		,d1.is_using
+		FROM db_vibe_monitor.t_device t1
+		LEFT JOIN db_vibe_monitor.t_device_detail d1
+		ON t1.id=d1.id
+		<where>
+			t1.removed=0 <!-- and (t1.id >> 16) = #{siteId} -->
+		<if test="assetVo.id!=null">
+			and t1.id=#{assetVo.id}
+		</if>
+		<if test="assetVo.typeName!=null and assetVo.typeName!=''">
+			and t1.type=#{assetVo.typeName}
+		</if>
+		<if test="assetVo.name!=null">
+			and t1.name like "%"#{assetVo.name}"%"
+		</if>
+		
+		<if test="assetVo.caption!=null">
+			and t1.caption like "%"#{assetVo.caption}"%"
+		</if>
+		<if test="assetVo.memo!=null and assetVo.memo!=''">
+			and t1.memo like "%"#{assetVo.memo}"%"
+		</if>
+		<if test="catalogs!=null">
+		and t1.catalog in
+			<foreach item="catalogid" index="index" collection="catalogs" open="("
+				separator="," close=")">
+				#{catalogid}
+			</foreach>
+		</if>
+		<if test="spaceIds!=null">
+		and t1.parent in
+		<foreach item="spaceId" index="index" collection="spaceIds" open="("
+			separator="," close=")">
+			#{spaceId}
+		</foreach>
+		</if>
+		
+		</where>
+		order by t1.id desc
+	</select>
 </mapper>

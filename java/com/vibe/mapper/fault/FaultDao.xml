@@ -1,131 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.fault.FaultDao">
 
+	
+	<insert id="insertFault" parameterType="DailyCheck">
+		    insert into db_vibe_monitor.t_fault (id, fault_type_id, person, fault_desc, editor_time,photo
+		     )values (#{id,jdbcType=INTEGER}, #{checkType,jdbcType=INTEGER}, #{person,jdbcType=INTEGER},
+			   #{description,jdbcType=VARCHAR},#{date},#{photo,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="insertFaultDevice" parameterType="DailyCheck">
+		    insert into db_vibe_monitor.t_device_fault (fault_id, device_id
+		     )values (#{id,jdbcType=INTEGER}, #{deviceId,jdbcType=INTEGER})
+	</insert>
+	
+	<delete id="deleteFault" parameterType="int">
+		delete from db_vibe_monitor.t_fault 
+			where id = #{id}
+	</delete>
 
-    <insert id="insertFault" parameterType="DailyCheck">
-        insert into db_vibe_monitor.t_fault (id, fault_type_id, person, fault_desc, editor_time,photo
-        )values (#{id,jdbcType=INTEGER}, #{checkType,jdbcType=INTEGER}, #{person,jdbcType=INTEGER},
-        #{description,jdbcType=VARCHAR},#{date},#{photo,jdbcType=VARCHAR})
-    </insert>
-
-    <insert id="insertFaultDevice" parameterType="DailyCheck">
-        insert into db_vibe_monitor.t_device_fault (fault_id, device_id
-        )values (#{id,jdbcType=INTEGER}, #{deviceId,jdbcType=INTEGER})
-    </insert>
-
-    <delete id="deleteFault" parameterType="int">
-        delete from db_vibe_monitor.t_fault
-        where id = #{id}
-    </delete>
-
-    <update id="updateFault" parameterType="DailyCheck">
-        update db_vibe_monitor.t_fault
-        <set>
-            <if test="checkType != null">
-                fault_type_id = #{checkType},
-            </if>
-            <if test="date != '' and date !=null">
-                editor_time = #{date},
-            </if>
-            <if test="photo != null">
-                photo = #{photo},
-            </if>
-            <if test="description != null">
-                fault_desc = #{description},
-            </if>
-            <if test="person != null">
-                person = #{person}
-            </if>
-            <!-- <if test="result != null" >
-              result = #{result},
-            </if> -->
-            <!-- <if test="state != null" >
-              state = #{state},
-            </if> -->
-
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-
-    <select id="queryFaultList" resultType="DailyCheck">
-        select fa.id id
-        ,fault_type_id checkType
-        ,tdf.device_id deviceId
-        ,devi.caption deviceName
-        ,co.name typeStr
-        , fa.person person
-        , fault_desc description
-        , editor_time date
-        ,photo
-        ,ta.state state
-        ,us.name zhiPaiUserName
-        from db_vibe_monitor.t_fault as fa left join db_vibe_monitor.t_task as ta on fa.id = ta.task_id left join
-        db_vibe_basic.t_user as us on ta.executePerson = us.id left join db_vibe_basic.t_code as co on fa.fault_type_id
-        = co.id left join db_vibe_monitor.t_device_fault as tdf on fa.id = tdf.fault_id left join
-        db_vibe_monitor.t_device as devi on tdf.device_id = devi.id order BY fa.id DESC
-    </select>
-
-    <select id="queryFault" parameterType="int" resultType="DailyCheck">
-        select
-        f.id
-        ,f.fault_type_id checkType
-        ,f.person
-        ,f.fault_desc description
-        ,f.editor_time date
-        ,f.photo
-        ,df.device_id deviceId
-        ,devi.caption deviceName
-        from db_vibe_monitor.t_fault f left join db_vibe_monitor.t_device_fault df on f.id=df.fault_id left join
-        db_vibe_monitor.t_device as devi on df.device_id = devi.id
-        where f.id = #{id}
-    </select>
-    <insert id="insertDeviceFault" parameterType="DailyCheck">
-
-        insert into db_vibe_monitor.t_device_fault (fault_id,device_id)values
-        (#{id,jdbcType=INTEGER},#{deviceId,jdbcType=INTEGER} )
-    </insert>
-
-    <!-- <insert id="despatchTo">
-
-            insert into db_vibe_monitor.t_mission(t_task_id,user_id) values(#{id},#{personId})
-    </insert> -->
-
-    <select id="queryDespatchList" resultType="DailyCheck">
-        select fa.id id
-        ,tdf.device_id deviceId
-        ,devi.caption deviceName
-        ,fault_type_id checkType
-        ,co.name typeStr
-        , person
-        , fault_desc description
-        , editor_time date
-        ,photo
-        ,state
-        ,us.name zhiPaiUserName
-        from db_vibe_monitor.t_fault as fa left join db_vibe_monitor.t_task as ta on fa.id = ta.task_id and state != 0
-        left join db_vibe_basic.t_user as us on ta.executePerson = us.id left join db_vibe_basic.t_code as co on
-        fa.fault_type_id = co.id left join db_vibe_monitor.t_device_fault as tdf on fa.id = tdf.fault_id left join
-        db_vibe_monitor.t_device as devi on tdf.device_id = devi.id where us.name = #{username} order BY fa.id DESC
-    </select>
-
-    <select id="queryUnFinishCount" resultType="Integer">
-        select count(*) from db_vibe_monitor.t_fault as fa,db_vibe_monitor.t_task as tm where fa.id = tm.task_id and
-        state != 6 and tm.user_id = #{person}
-    </select>
-
-    <select id="queryMonthCount" resultType="Integer">
-        select count(*) from db_vibe_monitor.t_fault as fa,db_vibe_monitor.t_task as tm where fa.id = tm.task_id and
-        state = 6 and tm.user_id = #{person} and DATE_FORMAT( editor_time, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
-    </select>
-
-    <select id="queryTodayCount" resultType="Integer">
-        select count(*) from db_vibe_monitor.t_fault as fa,db_vibe_monitor.t_task as tm where fa.id = tm.task_id and
-        state = 6 and tm.user_id = #{person} and to_days(editor_time) = to_days(now())
-    </select>
+	<update id="updateFault" parameterType="DailyCheck">
+			update db_vibe_monitor.t_fault
+	    <set>	   	     
+	      <if test="checkType != null" >
+	        fault_type_id = #{checkType},
+	      </if>
+	      <if test="date != '' and date !=null" >
+	        editor_time = #{date},
+	      </if>
+	      <if test="photo != null" >
+	        photo = #{photo},
+	      </if>
+	      <if test="description != null" >
+	        fault_desc = #{description},
+	      </if>
+	      <if test="person != null" >
+	        person = #{person}
+	      </if>
+	      <!-- <if test="result != null" >
+	        result = #{result},
+	      </if> -->
+	      <!-- <if test="state != null" >
+	        state = #{state},
+	      </if> -->
+	         
+	    </set>
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<select id="queryFaultList" resultType="DailyCheck">
+		select fa.id id
+		,fault_type_id checkType
+		,tdf.device_id deviceId
+		,devi.caption deviceName
+		,co.name typeStr
+		, fa.person person
+		, fault_desc description
+		, editor_time date
+		,photo 
+		,ta.state state
+		,us.name zhiPaiUserName
+		 from db_vibe_monitor.t_fault as fa left join db_vibe_monitor.t_task as ta on fa.id = ta.task_id left join db_vibe_basic.t_user as us on ta.executePerson = us.id left join db_vibe_basic.t_code as co on fa.fault_type_id = co.id left join db_vibe_monitor.t_device_fault as tdf on fa.id = tdf.fault_id left join db_vibe_monitor.t_device as devi on tdf.device_id = devi.id order BY fa.id DESC
+	</select>
+	 
+	<select id="queryFault" parameterType="int" resultType="DailyCheck">
+		select 
+		f.id 
+		,f.fault_type_id checkType
+		,f.person
+		,f.fault_desc description
+		,f.editor_time date
+		,f.photo 
+		,df.device_id deviceId
+		,devi.caption deviceName
+		from db_vibe_monitor.t_fault f left join  db_vibe_monitor.t_device_fault df on f.id=df.fault_id left join db_vibe_monitor.t_device as devi on df.device_id = devi.id
+			where f.id = #{id}
+	</select>
+	<insert id="insertDeviceFault" parameterType="DailyCheck">
+		
+		    insert into db_vibe_monitor.t_device_fault (fault_id,device_id)values (#{id,jdbcType=INTEGER},#{deviceId,jdbcType=INTEGER} )
+	</insert>
+	
+	<!-- <insert id="despatchTo">
+		
+		    insert into db_vibe_monitor.t_mission(t_task_id,user_id) values(#{id},#{personId})
+	</insert> -->
+	
+	<select id="queryDespatchList" resultType="DailyCheck">
+		select fa.id id
+		,tdf.device_id deviceId
+		,devi.caption deviceName
+		,fault_type_id checkType
+		,co.name typeStr
+		, person
+		, fault_desc description
+		, editor_time date
+		,photo 
+		,state
+		,us.name zhiPaiUserName
+		 from db_vibe_monitor.t_fault as fa left join db_vibe_monitor.t_task as ta on fa.id = ta.task_id and state != 0 left join db_vibe_basic.t_user as us on ta.executePerson = us.id left join db_vibe_basic.t_code as co on fa.fault_type_id = co.id left join db_vibe_monitor.t_device_fault as tdf on fa.id = tdf.fault_id left join db_vibe_monitor.t_device as devi on tdf.device_id = devi.id where us.name = #{username} order BY fa.id DESC
+	</select>
+	
+	<select id="queryUnFinishCount" resultType="Integer">
+		select count(*) from db_vibe_monitor.t_fault as fa,db_vibe_monitor.t_task as tm where fa.id = tm.task_id and state != 6 and tm.user_id = #{person}
+	</select>
+	
+	<select id="queryMonthCount" resultType="Integer">
+		select count(*) from db_vibe_monitor.t_fault as fa,db_vibe_monitor.t_task as tm where fa.id = tm.task_id and state = 6 and tm.user_id = #{person} and DATE_FORMAT( editor_time, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+	</select>
+	
+	<select id="queryTodayCount" resultType="Integer">
+		select count(*) from db_vibe_monitor.t_fault as fa,db_vibe_monitor.t_task as tm where fa.id = tm.task_id and state = 6 and tm.user_id = #{person} and to_days(editor_time) = to_days(now())
+	</select>
 </mapper>
 
 

@@ -9,14 +9,14 @@ import com.vibe.utils.EasyUIJson;
 
 public interface LinkageService {
 
-    public void insertLinkageRule(LinkageRuleBean linkageRuleBean);
+	public void insertLinkageRule(LinkageRuleBean linkageRuleBean);
+	
+	public EasyUIJson queryLinkageLogListByTime(int pageNum, int pageCount, String start, String end);
 
-    public EasyUIJson queryLinkageLogListByTime(int pageNum, int pageCount, String start, String end);
-
-    public List<LinkageRule> queryLinkageList();
-
-    public void deleteLinkageRuleCause(String linkageIds);
-
-    public void updateLinkage(LinkageRuleBean linkageRuleBean);
-
+	public List<LinkageRule> queryLinkageList();
+	
+	public void deleteLinkageRuleCause(String linkageIds);
+	
+	public void updateLinkage(LinkageRuleBean linkageRuleBean);
+	
 }

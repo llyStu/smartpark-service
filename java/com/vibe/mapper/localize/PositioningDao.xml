@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.localize.PositioningDao">
-
-    <select id="queryApLocation" resultType="com.vibe.pojo.ApLocation">
-        select * from db_vibe_monitor.t_ap_location
-    </select>
-    <select id="getUsersCurrentLocation" resultType="com.vibe.pojo.user.UserLocationData">
-        select u.name,a.longitude,a.latitude,a.time,a.username,c.* from db_vibe_data.t_user_location_data as
-        a,db_vibe_monitor.t_ap_location as c,db_vibe_basic.t_user as u where a.location_id = c.id and a.id in(select
-        max(id) from db_vibe_data.t_user_location_data group by username) and a.username = u.login_id
-    </select>
-    <select id="getUserLocation" resultType="com.vibe.pojo.user.UserLocationData">
-        select * from db_vibe_data.t_user_location_data as a,db_vibe_monitor.t_ap_location as b where username =
-        #{username} and time >= #{start} and time &lt;= #{end} and a.location_id = b.id
-    </select>
-    <insert id="uploadUserLocation">
-        insert into db_vibe_data.t_user_location_data(username,location_id,longitude,latitude,time)
-        values(#{username},(select id from db_vibe_monitor.t_ap_location where mac =
-        #{mac}),#{longitude},#{latitude},#{time})
-    </insert>
+	 
+	<select id="queryApLocation" resultType="com.vibe.pojo.ApLocation">
+		select * from db_vibe_monitor.t_ap_location
+	</select>
+	<select id="getUsersCurrentLocation" resultType="com.vibe.pojo.user.UserLocationData">
+		select u.name,a.longitude,a.latitude,a.time,a.username,c.* from db_vibe_data.t_user_location_data as a,db_vibe_monitor.t_ap_location as c,db_vibe_basic.t_user as u where a.location_id = c.id and a.id in(select max(id) from db_vibe_data.t_user_location_data group by username) and a.username = u.login_id
+	</select>
+	<select id="getUserLocation" resultType="com.vibe.pojo.user.UserLocationData">
+		select * from db_vibe_data.t_user_location_data as a,db_vibe_monitor.t_ap_location as b where username = #{username} and time >= #{start} and time &lt;= #{end} and a.location_id = b.id 
+	</select>
+	<insert id="uploadUserLocation">
+		insert into db_vibe_data.t_user_location_data(username,location_id,longitude,latitude,time) values(#{username},(select id from db_vibe_monitor.t_ap_location where mac = #{mac}),#{longitude},#{latitude},#{time})
+	</insert>
 </mapper>
 
 

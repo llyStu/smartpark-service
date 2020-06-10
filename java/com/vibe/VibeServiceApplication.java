@@ -11,28 +11,29 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 /**
- * u@Description:
- *
- * @author zhousili
+ * @Description: 
+ * 
  * @ClassName Main
- * @Date 2019年7月17日
+ * @author zhousili
+ * @Date   2019年7月17日
  */
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-@MapperScan(basePackages = {"com.vibe.mapper.**", "com.vibe.monitor.db.**", "com.vibe.common.db.**"})
+//@ComponentScan(basePackages = {"com.vibe.monitor.server","com.vibe.common"})
+//@ImportResource(locations = "classpath*:config/spring/beans.xml")
+@MapperScan(basePackages = {"com.vibe.mapper.**","com.vibe.monitor.db.**","com.vibe.common.db.**"})
 @EnableScheduling
 public class VibeServiceApplication {
 
-    public static final Logger logger = LoggerFactory.getLogger(VibeServiceApplication.class);
+	public static final Logger logger = LoggerFactory.getLogger(VibeServiceApplication.class);
+	public static void main(String[] args) {
+		logger.info("Spring Boot Beginning ...");
+		SpringApplication.run(VibeServiceApplication.class, args);
+	}
 
-    public static void main(String[] args) {
-        logger.info("Spring Boot Beginning ...");
-        SpringApplication.run(VibeServiceApplication.class, args);
-    }
 
-
-    // 配置mybatis的分页插件pageHelper
+	// 配置mybatis的分页插件pageHelper
 	/*@Bean
 	public PageHelper pageHelper() {
 		PageHelper pageHelper = new PageHelper();

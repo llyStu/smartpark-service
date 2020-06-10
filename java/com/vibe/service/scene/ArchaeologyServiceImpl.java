@@ -9,38 +9,38 @@ import com.vibe.pojo.Archaeology;
 
 @Service
 public class ArchaeologyServiceImpl implements ArchaeologyService {
+	
+	@Autowired
+	private ArchaeologyDao archaeologyDao;
+	
+	public void insertArchaeology(Archaeology archaeology) {		
 
-    @Autowired
-    private ArchaeologyDao archaeologyDao;
+		archaeologyDao.insertArchaeology(archaeology);
+		
+	}
 
-    public void insertArchaeology(Archaeology archaeology) {
+	public void deleteArchaeology(int id) {
+		
+		archaeologyDao.deleteArchaeology(id);
+	}
 
-        archaeologyDao.insertArchaeology(archaeology);
+	public Archaeology queryArchaeology(int id) {
+		
+		Archaeology d = archaeologyDao.queryArchaeology(id);
+		//return archaeologyDao.queryArchaeology(id);
+		return d;
+	}
 
-    }
+	@Override
+	public List<Archaeology> queryArchaeologyList() {
+		
+		return archaeologyDao.queryArchaeologyList();
+	}
 
-    public void deleteArchaeology(int id) {
+	@Override
+	public void updateArchaeology(Archaeology archaeology) {
 
-        archaeologyDao.deleteArchaeology(id);
-    }
-
-    public Archaeology queryArchaeology(int id) {
-
-        Archaeology d = archaeologyDao.queryArchaeology(id);
-        //return archaeologyDao.queryArchaeology(id);
-        return d;
-    }
-
-    @Override
-    public List<Archaeology> queryArchaeologyList() {
-
-        return archaeologyDao.queryArchaeologyList();
-    }
-
-    @Override
-    public void updateArchaeology(Archaeology archaeology) {
-
-        archaeologyDao.updateArchaeology(archaeology);
-    }
+		archaeologyDao.updateArchaeology(archaeology);
+	}
 
 }

@@ -219,7 +219,6 @@ public class DataStatisticsUtils {
 
     /**
      * 求标准差
-     *
      * @param arr
      * @return
      */
@@ -233,33 +232,31 @@ public class DataStatisticsUtils {
     }
 
     //选择排序对数据进行降序排序(double)
-    public static void selectSortDescendingArray(double[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {//i<arr.length-1;最后一个不用比较
-            for (int j = i + 1; j < arr.length; j++) {
-                if (arr[i] < arr[j]) {
+    public static void selectSortDescendingArray(double[] arr){
+        for(int i = 0; i<arr.length-1;i++){//i<arr.length-1;最后一个不用比较
+          for(int j = i+1;j<arr.length;j++){
+                if(arr[i]<arr[j]){
                     double temp = arr[j];
                     arr[j] = arr[i];
                     arr[i] = temp;
+                    }
                 }
             }
         }
-    }
-
-    //选择排序对数据进行升序排序(double)
-    public static void selectSortAscendingArray(double[] arr) {
-        for (int i = 0; i < arr.length - 1; i++) {//i<arr.length-1;最后一个不用比较
-            for (int j = i + 1; j < arr.length; j++) {
-                if (arr[i] > arr[j]) {
-                    double temp = arr[j];
-                    arr[j] = arr[i];
-                    arr[i] = temp;
+//选择排序对数据进行升序排序(double)
+    public static void selectSortAscendingArray(double[] arr){
+            for(int i = 0; i<arr.length-1;i++){//i<arr.length-1;最后一个不用比较
+                for(int j = i+1;j<arr.length;j++){
+                    if(arr[i]>arr[j]){
+                        double temp = arr[j];
+                        arr[j] = arr[i];
+                        arr[i] = temp;
+                     }
+                   }
                 }
-            }
         }
-    }
-
     public static void main(String[] args) {
-        double[] arr = {200.2, 65.3, 98.2, 69, 600};
-        System.out.println(getTrimmedMean(arr, 20));
+        double[] arr = {200.2,65.3,98.2,69,600};
+        System.out.println(getTrimmedMean(arr,20));
     }
 }

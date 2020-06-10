@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfig {
 
     @Bean(name = "navigationService")
-    public NavigationServiceImpl navigationService() {
+    public NavigationServiceImpl navigationService(){
         return new NavigationServiceImpl();
     }
 }

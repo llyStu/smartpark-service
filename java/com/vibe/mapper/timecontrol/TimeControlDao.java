@@ -11,27 +11,27 @@ import java.util.List;
 
 @Repository
 public interface TimeControlDao {
+	
+	List<TimeControlDaoBean> queryTimeControlList();
+	
+	List<TimeControlTimePointDaoBean> queryTimeControlTimePointList(@Param("id") int id);
 
-    List<TimeControlDaoBean> queryTimeControlList();
+	void deleteTimeControl(@Param("id") int id);
 
-    List<TimeControlTimePointDaoBean> queryTimeControlTimePointList(@Param("id") int id);
+	void insertTimeControl(TimeControlDaoBean timeControlDaoBean);
 
-    void deleteTimeControl(@Param("id") int id);
+	void insertTimeControlScheduledTask(ScheduledTaskBean scheduledTaskBean);
+	
+	ScheduledTaskBean queryTimeControlScheduledTask(@Param("id") int id);
+	
+	void insertTimeControlTimePoint(TimeControlTimePointDaoBean timeControlTimePointDaoBean);
+	
+	void updateTimeControl(TimeControlDaoBean timeControlDaoBean);
+	
+	void updateTimeControlTimePoint(TimeControlTimePointDaoBean timeControlTimePointDaoBean);
+	
+	void updateScheduledTask(ScheduledTaskBean scheduledTaskBean);
 
-    void insertTimeControl(TimeControlDaoBean timeControlDaoBean);
-
-    void insertTimeControlScheduledTask(ScheduledTaskBean scheduledTaskBean);
-
-    ScheduledTaskBean queryTimeControlScheduledTask(@Param("id") int id);
-
-    void insertTimeControlTimePoint(TimeControlTimePointDaoBean timeControlTimePointDaoBean);
-
-    void updateTimeControl(TimeControlDaoBean timeControlDaoBean);
-
-    void updateTimeControlTimePoint(TimeControlTimePointDaoBean timeControlTimePointDaoBean);
-
-    void updateScheduledTask(ScheduledTaskBean scheduledTaskBean);
-
-    List<TimeControlLogBean> queryTimeControlLog(@Param("id") int id);
-
+	List<TimeControlLogBean> queryTimeControlLog(@Param("id") int id);
+	
 }

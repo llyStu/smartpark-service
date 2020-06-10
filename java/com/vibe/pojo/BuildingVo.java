@@ -1,8 +1,7 @@
 package com.vibe.pojo;
-
 //F本体情况大类，包含所有字段，用于录入和查询
 public class BuildingVo extends Check {
-
+	
     private Integer bId;
 
     private Integer building_id;

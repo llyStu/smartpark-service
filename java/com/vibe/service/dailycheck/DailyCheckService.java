@@ -7,15 +7,15 @@ import com.vibe.pojo.DailyCheck;
 
 
 public interface DailyCheckService {
+	
+	public void insertDailyCheck(DailyCheck dailyCheck);
 
-    public void insertDailyCheck(DailyCheck dailyCheck);
+	public void deleteDailyCheck(int parseInt);
 
-    public void deleteDailyCheck(int parseInt);
+	public DailyCheck queryDailyCheck(int id);
 
-    public DailyCheck queryDailyCheck(int id);
+	public List<DailyCheck> queryDailyCheckList();
 
-    public List<DailyCheck> queryDailyCheckList();
-
-    public void updateDailyCheck(DailyCheck dailyCheck);
-
+	public void updateDailyCheck(DailyCheck dailyCheck);
+	
 }

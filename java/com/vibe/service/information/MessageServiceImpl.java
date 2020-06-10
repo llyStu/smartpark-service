@@ -15,37 +15,37 @@ import com.vibe.utils.Page;
 
 @Repository
 public class MessageServiceImpl implements MessageService {
-    @Autowired
-    private MessageDao msgDao;
+	@Autowired
+	private MessageDao msgDao;
+	
+	@Override
+	public void sendMessage(Message message) {
+		message.setSendtime(new Date(System.currentTimeMillis()));
+		message.setState(1);
+		msgDao.addMessage(message);
+	}
 
-    @Override
-    public void sendMessage(Message message) {
-        message.setSendtime(new Date(System.currentTimeMillis()));
-        message.setState(1);
-        msgDao.addMessage(message);
-    }
+	@Override
+	public Page<Message> getSearchMessages(MessageVo vo, int pageNum, int pageSize) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<Message> list = msgDao.getSearchMessages(vo);
+		PageInfo<Message> page = new PageInfo<>(list);
+		
+		Page<Message> result = new Page<>();
+		result.setRows(list);
+		result.setPage(page.getPageNum());
+		result.setSize(page.getPageSize());
+		result.setTotal((int)page.getTotal());
+		return result;
+	}
 
-    @Override
-    public Page<Message> getSearchMessages(MessageVo vo, int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<Message> list = msgDao.getSearchMessages(vo);
-        PageInfo<Message> page = new PageInfo<>(list);
+	@Override
+	public Message getDetail(int mid) {
+		return msgDao.getDetail(mid);
+	}
 
-        Page<Message> result = new Page<>();
-        result.setRows(list);
-        result.setPage(page.getPageNum());
-        result.setSize(page.getPageSize());
-        result.setTotal((int) page.getTotal());
-        return result;
-    }
-
-    @Override
-    public Message getDetail(int mid) {
-        return msgDao.getDetail(mid);
-    }
-
-    @Override
-    public void deleteMessage(int[] id) {
-        msgDao.deleteMessage(id);
-    }
+	@Override
+	public void deleteMessage(int[] id) {
+		msgDao.deleteMessage(id);
+	}
 }

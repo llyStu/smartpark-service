@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class ConfUtil {
 
-    private static String imgStoreCatalogue;
+    private  static  String imgStoreCatalogue;
 
     @Value("${imgStoreCatalogue}")
     private String pushImgStoreCatalogue;

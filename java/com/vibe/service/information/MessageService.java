@@ -6,12 +6,12 @@ import com.vibe.utils.Page;
 
 public interface MessageService {
 
-    void sendMessage(Message message);
+	void sendMessage(Message message);
 
-    Page<Message> getSearchMessages(MessageVo vo, int pageNum, int pageSize);
+	Page<Message> getSearchMessages(MessageVo vo, int pageNum, int pageSize);
 
-    Message getDetail(int mid);
+	Message getDetail(int mid);
 
-    void deleteMessage(int[] id);
+	void deleteMessage(int[] id);
 
 }

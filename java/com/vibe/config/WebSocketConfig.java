@@ -1,5 +1,4 @@
 package com.vibe.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -7,9 +6,8 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**
  * 分类名称
- *
- * @author hyd132@126.com
  * @description aaa
+ * @author hyd132@126.com
  * @create 2020/04/02
  * @module 智慧园区
  */

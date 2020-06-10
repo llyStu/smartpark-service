@@ -14,22 +14,21 @@ import com.vibe.utils.Page;
 @RestController
 @RequestMapping("anfInformation")
 public class DoorInformationController {
+	
+	@Autowired
+	private DoorInformationService dis;
+	
+	@RequestMapping("/findAll_limit_door_record")
+	public Page<SafetyMessage> findDoorRecord(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int rows, SafetyMessage message) {
+		Page<SafetyMessage> doorMsgList = dis.findDoorRecord(page, rows, message);
+		return doorMsgList;
 
-    @Autowired
-    private DoorInformationService dis;
+	}
+	@RequestMapping("/findAll_door_record")
+	public List<SafetyMessage> findAllDoorRecord(SafetyMessage message) {
+		List<SafetyMessage> doorMsgList = dis.findAllDoorRecord(message);
+		return doorMsgList;
 
-    @RequestMapping("/findAll_limit_door_record")
-    public Page<SafetyMessage> findDoorRecord(@RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "10") int rows, SafetyMessage message) {
-        Page<SafetyMessage> doorMsgList = dis.findDoorRecord(page, rows, message);
-        return doorMsgList;
-
-    }
-
-    @RequestMapping("/findAll_door_record")
-    public List<SafetyMessage> findAllDoorRecord(SafetyMessage message) {
-        List<SafetyMessage> doorMsgList = dis.findAllDoorRecord(message);
-        return doorMsgList;
-
-    }
+	}
 }

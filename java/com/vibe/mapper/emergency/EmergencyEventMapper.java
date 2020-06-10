@@ -7,12 +7,12 @@ import java.util.List;
 
 @Repository
 public interface EmergencyEventMapper {
+	
+	List<EmergencyEventType> findAllEventType();
 
-    List<EmergencyEventType> findAllEventType();
+	//EmergencyEventType findOneEventType(@Param("eventName")String eventName, @Param("eventGrade")String eventGrade);
 
-    //EmergencyEventType findOneEventType(@Param("eventName")String eventName, @Param("eventGrade")String eventGrade);
-
-    List<EmergencyEventType> findAllEventGrade();
-
-
+	List<EmergencyEventType> findAllEventGrade();
+	
+	
 }

@@ -1,155 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.vibe.mapper.emergency.EmergencyManagementMapper">
-    <insert id="addEmergencyTask" parameterType="com.vibe.pojo.emergency.EmergencyTask" useGeneratedKeys="true"
-            keyProperty="etid">
-        insert into db_vibe_basic.t_emergency_task (
-        uid, number, name, modified, plan, summary, description, uids, popsci, type, location
-        ) values (
-        #{uid}, #{number}, #{name}, #{modified}, #{plan}, #{summary}, #{description}, #{uids}, #{popsci}, #{type},
-        #{location}
-        )
-    </insert>
-    <update id="updateEmergencyTask" parameterType="com.vibe.pojo.emergency.EmergencyTask">
-        update db_vibe_basic.t_emergency_task
-        <set>
-            <if test="uid != null">uid = #{uid},</if>
-            <if test="number != null">number = #{number},</if>
-            <if test="name != null">name = #{name},</if>
-            <if test="modified != null">modified = #{modified},</if>
-
-            <if test="plan != null">plan = #{plan},</if>
-            <if test="summary != null">summary = #{summary},</if>
-            <if test="description != null">description = #{description},</if>
-            <if test="uids != null">uids = #{uids},</if>
-            <if test="popsci != null">popsci = #{popsci},</if>
-            <if test="type != null">type = #{type},</if>
-            <if test="location != null">location = #{location},</if>
-        </set>
-        where etid = #{etid}
-    </update>
-    <delete id="deleteEmergencyTask">
-        delete from db_vibe_basic.t_emergency_task
-        where etid in (<foreach collection="etids" item="id" separator=",">#{id}</foreach>)
-    </delete>
-    <select id="findEmergencyTask" parameterType="com.vibe.pojo.emergency.EmergencyTaskVo"
-            resultType="com.vibe.pojo.emergency.EmergencyTask">
-        select et.*, u.name as uname
-        from db_vibe_basic.t_emergency_task et
-        left join db_vibe_basic.t_user u
-        on et.uid = u.id
-        <where>
-            <if test="etid != null">and et.etid = #{etid}</if>
-            <if test="uname != null and uname != ''">and u.name = #{uname}</if>
-            <if test="number != null and number != ''">and et.number = #{number}</if>
-            <if test="name != null and name != ''">and et.name like "%"#{name}"%"</if>
-            <if test="modified_min != null">and et.modified >= #{modified_min}</if>
-            <if test="modified_max != null">and et.modified &lt;= #{modified_max}</if>
-            <if test="type != null and type != ''">and et.type = #{type}</if>
-            <if test="location != null and location != ''">and et.location like "%"#{location}"%"</if>
-        </where>
-    </select>
-
-
-    <insert id="addEmergencyTaskDetail" parameterType="com.vibe.pojo.emergency.EmergencyTaskDetail"
-            useGeneratedKeys="true" keyProperty="tdid">
-        insert into db_vibe_basic.t_emergency_task_detail (
-        etid, uid, execution, location, resource, description
-        ) values (
-        #{etid}, #{uid}, #{execution}, #{location}, #{resource}, #{description}
-        )
-    </insert>
-    <update id="updateEmergencyTaskDetail" parameterType="com.vibe.pojo.emergency.EmergencyTaskDetail">
-        update db_vibe_basic.t_emergency_task_detail
-        <set>
-            <if test="etid != null">etid = #{etid},</if>
-            <if test="uid != null">uid = #{uid},</if>
-            <if test="execution != null">execution = #{execution},</if>
-            <if test="location != null">location = #{location},</if>
-            <if test="resource != null">resource = #{resource},</if>
-            <if test="description != null">description = #{description},</if>
-        </set>
-        where tdid = #{tdid}
-    </update>
-    <delete id="delEmergencyTaskDetail">
-        delete from db_vibe_basic.t_emergency_task_detail
-        where tdid in (<foreach collection="etdids" item="id" separator=",">#{id}</foreach>)
-    </delete>
-    <delete id="delEmergencyTaskDetailByParent">
-        delete from db_vibe_basic.t_emergency_task_detail
-        where etid in (<foreach collection="etids" item="id" separator=",">#{id}</foreach>)
-    </delete>
-    <select id="findEmergencyTaskDetail" parameterType="com.vibe.pojo.emergency.EmergencyTaskDetailVo"
-            resultType="com.vibe.pojo.emergency.EmergencyTaskDetail">
-        select etd.*, u.name as uname
-        from db_vibe_basic.t_emergency_task_detail etd
-        left join db_vibe_basic.t_user u
-        on etd.uid = u.id
-        <where>
-            <if test="tdid != null">and etd.tdid = #{tdid}</if>
-            <if test="etid != null">and etd.etid = #{etid}</if>
-            <if test="location != null and location != ''">and etd.location like "%"#{location}"%"</if>
-            <if test="resource != null and resource != ''">and etd.resource like "%"#{resource}"%"</if>
-            <if test="description != null and description != ''">and etd.description like "%"#{description}"%"</if>
-            <if test="uname != null and uname != ''">and u.name = #{uname}</if>
-        </where>
-    </select>
-
-
-    <insert id="addEmergency" parameterType="com.vibe.pojo.emergency.Emergency" useGeneratedKeys="true"
-            keyProperty="eid">
-        insert into db_vibe_basic.t_Emergency (
-        type, uid, level, progress, number, title, event, description, begin, enddate
-        ) values (
-        #{type}, #{uid}, #{level}, #{progress}, #{number}, #{title}, #{event}, #{description}, #{begin}, #{enddate}
-        )
-    </insert>
-    <update id="updateEmergency" parameterType="com.vibe.pojo.emergency.Emergency">
-        update db_vibe_basic.t_Emergency
-        <set>
-            <if test="type != null">type = #{type},</if>
-            <if test="uid != null">uid = #{uid},</if>
-            <if test="level != null">level = #{level},</if>
-            <if test="progress != null">progress = #{progress},</if>
-            <if test="number != null">number = #{number},</if>
-            <if test="title != null">title = #{title},</if>
-            <if test="event != null">event = #{event},</if>
-            <if test="description != null">description = #{description},</if>
-            <if test="begin != null">begin = #{begin},</if>
-            <if test="enddate != null">enddate = #{enddate},</if>
-        </set>
-        where eid = #{eid}
-    </update>
-    <delete id="delEmergency">
-        delete from db_vibe_basic.t_Emergency
-        where eid in (<foreach collection="eids" item="id" separator=",">#{id}</foreach>)
-    </delete>
-    <select id="findEmergency" parameterType="com.vibe.pojo.emergency.EmergencyVo"
-            resultType="com.vibe.pojo.emergency.Emergency">
-        select e.*, u.name as uname
-        from db_vibe_basic.t_Emergency e
-        left join db_vibe_basic.t_user u
-        on e.uid = u.id
-        <where>
-            <if test="eid != null">and e.eid = #{eid}</if>
-            <if test="type != null">and e.type = #{type}</if>
-            <if test="level != null">and e.level = #{level}</if>
-            <if test="progress != null">and e.progress = #{progress}</if>
-            <if test="number != null and number != ''">and e.number = #{number}</if>
-            <if test="title != null and title != ''">and e.title like "%"#{title}"%"</if>
-            <if test="event != null and event != ''">and e.event like "%"#{event}"%"</if>
-            <if test="description != null and description != ''">and e.description like "%"#{description}"%"</if>
-            <if test="uname != null and uname != ''">and u.name = #{uname}</if>
-            <if test="begin_max != null">and e.begin &lt;= #{begin_max}</if>
-            <if test="begin_min != null">and e.begin >= #{begin_min}</if>
-            <if test="enddate_max != null">and e.enddate &lt;= #{enddate_max}</if>
-            <if test="enddate_min != null">and e.enddate >= #{enddate_min}</if>
-        </where>
-    </select>
-
+	<insert id="addEmergencyTask" parameterType="com.vibe.pojo.emergency.EmergencyTask" useGeneratedKeys="true" keyProperty="etid">
+		insert into db_vibe_basic.t_emergency_task (
+			uid, number, name, modified, plan, summary, description, uids, popsci, type, location
+		) values (
+			#{uid}, #{number}, #{name}, #{modified}, #{plan}, #{summary}, #{description}, #{uids}, #{popsci}, #{type}, #{location}
+		)
+	</insert>
+	<update id="updateEmergencyTask" parameterType="com.vibe.pojo.emergency.EmergencyTask">
+		update db_vibe_basic.t_emergency_task
+		<set>
+			<if test="uid != null">uid = #{uid},</if>
+			<if test="number != null">number = #{number},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="modified != null">modified = #{modified},</if>
+			
+			<if test="plan != null">plan = #{plan},</if>
+			<if test="summary != null">summary = #{summary},</if>
+			<if test="description != null">description = #{description},</if>
+			<if test="uids != null">uids = #{uids},</if>
+			<if test="popsci != null">popsci = #{popsci},</if>
+			<if test="type != null">type = #{type},</if>
+			<if test="location != null">location = #{location},</if>
+		</set>
+		where etid = #{etid}
+	</update>
+	<delete id="deleteEmergencyTask">
+		delete from db_vibe_basic.t_emergency_task
+		where etid in (<foreach collection="etids" item="id" separator=",">#{id}</foreach>)
+	</delete>
+	<select id="findEmergencyTask" parameterType="com.vibe.pojo.emergency.EmergencyTaskVo" resultType="com.vibe.pojo.emergency.EmergencyTask">
+		select et.*, u.name as uname
+		from db_vibe_basic.t_emergency_task et
+		left join db_vibe_basic.t_user u
+		on et.uid = u.id
+		<where> 
+			<if test="etid != null">and et.etid = #{etid}</if>
+			<if test="uname != null and uname != ''">and u.name = #{uname}</if>
+			<if test="number != null and number != ''">and et.number = #{number}</if>
+			<if test="name != null and name != ''">and et.name like "%"#{name}"%"</if>
+			<if test="modified_min != null">and et.modified >= #{modified_min}</if>
+			<if test="modified_max != null">and et.modified &lt;= #{modified_max}</if>
+			<if test="type != null and type != ''">and et.type = #{type}</if>
+			<if test="location != null and location != ''">and et.location like "%"#{location}"%"</if>
+		</where>
+	</select>
+	
+	
+	
+	
+	<insert id="addEmergencyTaskDetail" parameterType="com.vibe.pojo.emergency.EmergencyTaskDetail" useGeneratedKeys="true" keyProperty="tdid">
+		insert into db_vibe_basic.t_emergency_task_detail (
+			 etid, uid, execution, location, resource, description
+		) values (
+			#{etid}, #{uid}, #{execution}, #{location}, #{resource}, #{description}
+		)
+	</insert>
+	<update id="updateEmergencyTaskDetail" parameterType="com.vibe.pojo.emergency.EmergencyTaskDetail">
+		update db_vibe_basic.t_emergency_task_detail
+		<set>
+			<if test="etid != null">etid = #{etid},</if>
+			<if test="uid != null">uid = #{uid},</if>
+			<if test="execution != null">execution = #{execution},</if>
+			<if test="location != null">location = #{location},</if>
+			<if test="resource != null">resource = #{resource},</if>
+			<if test="description != null">description = #{description},</if>
+		</set>
+		where tdid = #{tdid}
+	</update>
+	<delete id="delEmergencyTaskDetail">
+		delete from db_vibe_basic.t_emergency_task_detail
+		where tdid in (<foreach collection="etdids" item="id" separator=",">#{id}</foreach>)
+	</delete>
+	<delete id="delEmergencyTaskDetailByParent">
+		delete from db_vibe_basic.t_emergency_task_detail
+		where etid in (<foreach collection="etids" item="id" separator=",">#{id}</foreach>)
+	</delete>
+	<select id="findEmergencyTaskDetail" parameterType="com.vibe.pojo.emergency.EmergencyTaskDetailVo" resultType="com.vibe.pojo.emergency.EmergencyTaskDetail">
+		select etd.*, u.name as uname
+		from db_vibe_basic.t_emergency_task_detail etd
+		left join db_vibe_basic.t_user u
+		on etd.uid = u.id
+		<where> 
+			<if test="tdid != null">and etd.tdid = #{tdid}</if>
+			<if test="etid != null">and etd.etid = #{etid}</if> 
+			<if test="location != null and location != ''">and etd.location like "%"#{location}"%"</if>
+			<if test="resource != null and resource != ''">and etd.resource like "%"#{resource}"%"</if>
+			<if test="description != null and description != ''">and etd.description like "%"#{description}"%"</if>
+			<if test="uname != null and uname != ''">and u.name = #{uname}</if>
+		</where>
+	</select>
+	
+	
+	
+	
+	
+	<insert id="addEmergency" parameterType="com.vibe.pojo.emergency.Emergency" useGeneratedKeys="true" keyProperty="eid">
+		insert into db_vibe_basic.t_Emergency (
+			 type, uid, level, progress, number, title, event, description, begin, enddate
+		) values (
+			#{type}, #{uid}, #{level}, #{progress}, #{number}, #{title}, #{event}, #{description}, #{begin}, #{enddate}
+		)
+	</insert>
+	<update id="updateEmergency" parameterType="com.vibe.pojo.emergency.Emergency">
+		update db_vibe_basic.t_Emergency
+		<set>
+			<if test="type != null">type = #{type},</if>
+			<if test="uid != null">uid = #{uid},</if>
+			<if test="level != null">level = #{level},</if>
+			<if test="progress != null">progress = #{progress},</if>
+			<if test="number != null">number = #{number},</if>
+			<if test="title != null">title = #{title},</if>
+			<if test="event != null">event = #{event},</if>
+			<if test="description != null">description = #{description},</if>
+			<if test="begin != null">begin = #{begin},</if>
+			<if test="enddate != null">enddate = #{enddate},</if>
+		</set>
+		where eid = #{eid}
+	</update>
+	<delete id="delEmergency">
+		delete from db_vibe_basic.t_Emergency
+		where eid in (<foreach collection="eids" item="id" separator=",">#{id}</foreach>)
+	</delete>
+	<select id="findEmergency" parameterType="com.vibe.pojo.emergency.EmergencyVo" resultType="com.vibe.pojo.emergency.Emergency">
+		select e.*, u.name as uname
+		from db_vibe_basic.t_Emergency e
+		left join db_vibe_basic.t_user u
+		on e.uid = u.id
+		<where> 
+			<if test="eid != null">and e.eid = #{eid}</if>
+			<if test="type != null">and e.type = #{type}</if>
+			<if test="level != null">and e.level = #{level}</if>
+			<if test="progress != null">and e.progress = #{progress}</if> 
+			<if test="number != null and number != ''">and e.number = #{number}</if>
+			<if test="title != null and title != ''">and e.title like "%"#{title}"%"</if>
+			<if test="event != null and event != ''">and e.event like "%"#{event}"%"</if>
+			<if test="description != null and description != ''">and e.description like "%"#{description}"%"</if>
+			<if test="uname != null and uname != ''">and u.name = #{uname}</if> 
+			<if test="begin_max != null">and e.begin &lt;= #{begin_max}</if> 
+			<if test="begin_min != null">and e.begin >= #{begin_min}</if> 
+			<if test="enddate_max != null">and e.enddate &lt;= #{enddate_max}</if> 
+			<if test="enddate_min != null">and e.enddate >= #{enddate_min}</if>
+		</where>
+	</select>
+	
 </mapper>
 
 

@@ -8,10 +8,10 @@ import com.vibe.utils.TreeNode;
 
 @Service
 public class EnergyKind implements NavigationData {
-
-    @Override
-    public List<TreeNode> loadList() {
-        return Navigation.getNavigationService().getEnergyKindList();
-    }
+	
+	@Override
+	public List<TreeNode> loadList() {
+		return Navigation.getNavigationService().getEnergyKindList();
+	}
 
 }

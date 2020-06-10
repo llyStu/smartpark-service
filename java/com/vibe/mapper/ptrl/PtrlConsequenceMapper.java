@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PtrlConsequenceMapper {
 
-    ConnMountiong findOneConn(@Param("connname") String connname);
+	ConnMountiong findOneConn(@Param("connname") String connname);
 
 }

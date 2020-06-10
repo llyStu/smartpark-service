@@ -6,11 +6,11 @@ import java.util.List;
 
 public class BuildingsPhoto {
     private Integer id;
-
+    
     private int parentId;
 
     private String photo;//用于拼接字符串保存到数据库
-    private List<String> photos;//用于回显
+    private List<String>photos;//用于回显
 
     private LocalDate date;
     //private Date date;
@@ -23,25 +23,25 @@ public class BuildingsPhoto {
     private String statusDescription;
 
     private int type;
+    
+    
+	public int getType() {
+		return type;
+	}
 
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    public int getType() {
-        return type;
-    }
+	public List<String> getPhotos() {
+		return photos;
+	}
 
-    public void setType(int type) {
-        this.type = type;
-    }
+	public void setPhotos(List<String> photos) {
+		this.photos = photos;
+	}
 
-    public List<String> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(List<String> photos) {
-        this.photos = photos;
-    }
-
-    public Integer getId() {
+	public Integer getId() {
         return id;
     }
 
@@ -62,13 +62,15 @@ public class BuildingsPhoto {
     }
 
     public void setDate(String date) {
-        this.date = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        this.date = LocalDate.parse(date,DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         this.bDate = date.toString();
     }
-
+	
     public String getBDate() {
-        return bDate;
-    }
+		return bDate;
+	}
+
+
 
 
     public String getEvaluation() {
@@ -95,13 +97,14 @@ public class BuildingsPhoto {
         this.statusDescription = statusDescription == null ? null : statusDescription.trim();
     }
 
-    public int getParentId() {
-        return parentId;
-    }
+	public int getParentId() {
+		return parentId;
+	}
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
-    }
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
+	}
+
 
 
 }

@@ -36,7 +36,7 @@ public class GZIPResponseWrapper extends HttpServletResponseWrapper {
     @Override
     public void flushBuffer() throws IOException {
         if (printWriter != null) {
-            printWriter.flush();
+                printWriter.flush();
         }
         if (outputStream != null) {
             outputStream.flush();
@@ -69,7 +69,7 @@ public class GZIPResponseWrapper extends HttpServletResponseWrapper {
     }
 
     /* Creates a new output stream for writing compressed data in
-     * the GZIP file format. */
+    * the GZIP file format. */
     private void initGzip() throws IOException {
         gzipStream = new GZIPResponseStream(getResponse().getOutputStream());
     }

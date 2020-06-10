@@ -1,5 +1,6 @@
 package com.vibe.mapper.spacemodel;
 
+import com.vibe.parse.DeviceTree;
 import com.vibe.pojo.spacemodel.SceneAsset;
 import com.vibe.pojo.spacemodel.SpaceModelName;
 import org.apache.ibatis.annotations.Param;
@@ -10,22 +11,25 @@ import java.util.Set;
 
 @Repository
 public interface SpaceModelMapper {
-    List<SpaceModelName> findSpaceModelName(SpaceModelName vo);
+	List<SpaceModelName> findSpaceModelName(SpaceModelName vo);
+	
+	List<SceneAsset> findSceneAssetByCatalogAndScene(@Param("cas") List<Integer> cas, @Param("scene") String scene);
+	
+	List<SceneAsset> findSceneAssetByScene(SceneAsset scene);
 
-    List<SceneAsset> findSceneAssetByCatalogAndScene(@Param("cas") List<Integer> cas, @Param("scene") String scene);
+	int updateSceneAsset(SceneAsset sceneAsset);
 
-    List<SceneAsset> findSceneAssetByScene(SceneAsset scene);
+	int insertSceneAsset(SceneAsset sceneAsset);
 
-    int updateSceneAsset(SceneAsset sceneAsset);
+	List<String> findSpaceModelFile(SpaceModelName vo);
 
-    int insertSceneAsset(SceneAsset sceneAsset);
+	int deleteSpaceModelFile(@Param("filenames") String[] filenames);
+	int deleteSceneAsset(@Param("saids") int[] saids);
+	
+	Set<Integer> findSceneAssetId();
 
-    List<String> findSpaceModelFile(SpaceModelName vo);
+	//查询与scene_asset数据库有关联的设备信息
+	SceneAsset selectSceneAssetByAssetId(@Param("assetId") Integer assetId);
 
-    int deleteSpaceModelFile(@Param("filenames") String[] filenames);
-
-    int deleteSceneAsset(@Param("saids") int[] saids);
-
-    Set<Integer> findSceneAssetId();
-
+	List<DeviceTree> selectDeviceByRelationSceneAsset(@Param("idList") List<Integer> idList);
 }

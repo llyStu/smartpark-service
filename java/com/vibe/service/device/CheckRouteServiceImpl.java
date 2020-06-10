@@ -12,25 +12,25 @@ import com.vibe.service.dailycheck.CheckRouteService;
 @Service
 public class CheckRouteServiceImpl implements CheckRouteService {
 
-    @Autowired
-    private CheckRouteDao checkRouteDao;
+	@Autowired
+	private CheckRouteDao checkRouteDao;
+	
+	@Override
+	public void insert(CheckRoute checkRoute) {
+		// TODO Auto-generated method stub
+		checkRouteDao.insert(checkRoute);
+	}
 
-    @Override
-    public void insert(CheckRoute checkRoute) {
-        // TODO Auto-generated method stub
-        checkRouteDao.insert(checkRoute);
-    }
+	@Override
+	public Integer queryMaxId() {
+		// TODO Auto-generated method stub
+		return checkRouteDao.queryMaxId();
+	}
 
-    @Override
-    public Integer queryMaxId() {
-        // TODO Auto-generated method stub
-        return checkRouteDao.queryMaxId();
-    }
-
-    @Override
-    public List<CheckRoute> queryForList(int orderId) {
-        // TODO Auto-generated method stub
-        return checkRouteDao.queryForList(orderId);
-    }
-
+	@Override
+	public List<CheckRoute> queryForList(int orderId) {
+		// TODO Auto-generated method stub
+		return checkRouteDao.queryForList(orderId);
+	}
+		
 }

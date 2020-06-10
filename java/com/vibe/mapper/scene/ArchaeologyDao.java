@@ -8,14 +8,14 @@ import java.util.List;
 @Repository
 public interface ArchaeologyDao {
 
-    public void insertArchaeology(Archaeology archaeology);
+	public void insertArchaeology(Archaeology archaeology);
 
-    public void deleteArchaeology(int id);
+	public void deleteArchaeology(int id);
 
-    public Archaeology queryArchaeology(int id);
+	public Archaeology queryArchaeology(int id);
 
-    public List<Archaeology> queryArchaeologyList();
+	public List<Archaeology> queryArchaeologyList();
 
-    public void updateArchaeology(Archaeology archaeology);
-
+	public void updateArchaeology(Archaeology archaeology);
+	
 }

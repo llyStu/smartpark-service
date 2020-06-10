@@ -34,7 +34,6 @@ public class ResponseModel<T> {
         this.data = data;
 
     }
-
     public ResponseModel(boolean successful) {
         this.successful = successful;
     }
@@ -43,7 +42,6 @@ public class ResponseModel<T> {
         this.data = data;
         return this;
     }
-
     public ResponseModel<T> errorMessage(String message) {
         this.message = message;
         return this;

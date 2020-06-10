@@ -13,18 +13,17 @@ import com.vibe.service.global.navigation.Navigation;
 
 @Controller
 public class NavigationController {
-    @Autowired
-    private Navigation navigation;
-
-    @RequestMapping("/navigation/list")
-    public @ResponseBody
-    Map<String, Object> loadNavigationList(@RequestParam(defaultValue = "5") Integer menuId) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        navigation.loadNavigation(menuId);
-        map.put("relation", navigation.getRelationMap());
-        map.put("name", navigation.getNameMap());
-        map.put("value", navigation.getValueMap());
-        return map;
-    }
+	@Autowired
+	private Navigation navigation;
+	
+	@RequestMapping("/navigation/list")
+	public @ResponseBody Map<String,Object> loadNavigationList(@RequestParam(defaultValue="5")Integer menuId){
+		Map<String,Object> map = new HashMap<String,Object>();
+		navigation.loadNavigation(menuId);
+		map.put("relation", navigation.getRelationMap());
+		map.put("name", navigation.getNameMap());
+		map.put("value",navigation.getValueMap());
+		return map;
+	}
 
 }

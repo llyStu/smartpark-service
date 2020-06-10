@@ -9,19 +9,20 @@ import com.vibe.utils.EasyUIJson;
 
 public interface RoleService {
 
-    public EasyUIJson queryRoleListByPage(Role role, Integer page, Integer rows);
+	public  EasyUIJson queryRoleListByPage(Role role, Integer page, Integer rows);
 
-    public void addRole(Role role);
+	public void addRole(Role role);
 
-    public Role queryRoleById(Integer id);
+	public Role queryRoleById(Integer id);
 
-    public void deleteRole(String ids, User user);
+	public void deleteRole(String ids, User user);
 
-    public void editRole(Role role);
+	public void editRole(Role role);
 
-    public List<Permission> queryPermissionByRoleId(Integer id);
+	public List<Permission> queryPermissionByRoleId(Integer id);
 
-    public void updateRolePermission(Integer rid, String pids);
+	public void updateRolePermission(Integer rid, String pids);
 
+		
 
 }

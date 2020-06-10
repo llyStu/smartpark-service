@@ -10,9 +10,9 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class DateYMDSerializer extends JsonSerializer<Date> {
-    @Override
-    public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider arg2)
-            throws IOException, JsonProcessingException {
-        jsonGenerator.writeString(new SimpleDateFormat("yyyy-MM-dd").format(date));
-    }
+	@Override
+	public void serialize(Date date, JsonGenerator jsonGenerator, SerializerProvider arg2)
+			throws IOException, JsonProcessingException {
+		jsonGenerator.writeString(new SimpleDateFormat("yyyy-MM-dd").format(date));
+	}
 }

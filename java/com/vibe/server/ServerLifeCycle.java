@@ -19,59 +19,59 @@ import com.vibe.service.system.PermissionService;
 
 @Component
 public class ServerLifeCycle implements InitializingBean, DisposableBean, ServletContextAware {
-    static Logger logger = LogManager.getLogger(ServerLifeCycle.class);
-
-    @Autowired
-    private MonitorServer server;
-
-    @Autowired
+	static Logger logger = LogManager.getLogger(ServerLifeCycle.class);
+	
+	@Autowired
+	private MonitorServer server;
+	
+	@Autowired
     PermissionService permissionService;
+	
+	@Autowired
+	private CodeDictManager codeDicts;
+	
+	@Autowired
+	private SystemConfigManager configManager;
+	
+	@Autowired
+	private AssetBinding assetBinding;
+	
+	@Autowired
+	private Application application;
+	
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		// TODO Auto-generated method stub
+		
+	}
 
-    @Autowired
-    private CodeDictManager codeDicts;
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		System.out.println("Initilizing the vibe server ...");
+		//ClassPathXmlApplicationContext beanFactory = new ClassPathXmlApplicationContext("/config/spring/beans.xml");
+		//server = beanFactory.getBean("monitorServer", MonitorServer.class);
+		//beanFactory.close();
+		try {
+			codeDicts.load();
+			server.loadAssets();
+			//permissionService.loadMenuPermission();
+			application.addLoginSuccessCall(assetBinding);
+		} catch (Throwable e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		//codeDicts.dump();
+		//server.getAssetStore().dump();
+		String test = configManager.getValue("test");
+		if(!"true".equals(test)){
+			server.startUp();
+		}
+	}
 
-    @Autowired
-    private SystemConfigManager configManager;
-
-    @Autowired
-    private AssetBinding assetBinding;
-
-    @Autowired
-    private Application application;
-
-    @Override
-    public void setServletContext(ServletContext servletContext) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        System.out.println("Initilizing the vibe server ...");
-        //ClassPathXmlApplicationContext beanFactory = new ClassPathXmlApplicationContext("/config/spring/beans.xml");
-        //server = beanFactory.getBean("monitorServer", MonitorServer.class);
-        //beanFactory.close();
-        try {
-            codeDicts.load();
-            server.loadAssets();
-            //permissionService.loadMenuPermission();
-            application.addLoginSuccessCall(assetBinding);
-        } catch (Throwable e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        //codeDicts.dump();
-        //server.getAssetStore().dump();
-        String test = configManager.getValue("test");
-        if (!"true".equals(test)) {
-            server.startUp();
-        }
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        System.out.println("Finalizing the web listener ...");
-        server.shutDown();
-    }
+	@Override
+	public void destroy() throws Exception {
+		System.out.println("Finalizing the web listener ...");
+		server.shutDown();
+	}
 
 }

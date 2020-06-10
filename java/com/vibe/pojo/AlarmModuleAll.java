@@ -18,7 +18,7 @@ public class AlarmModuleAll {
 
     private List<AlarmModule> alarmModuleList;
 
-    public AlarmModuleAll(int doNum, int allNum, List<AlarmModule> alarmModuleList) {
+    public AlarmModuleAll(int doNum, int allNum, List<AlarmModule> alarmModuleList){
         this.doNum = doNum;
         this.allNum = allNum;
         this.alarmModuleList = alarmModuleList;

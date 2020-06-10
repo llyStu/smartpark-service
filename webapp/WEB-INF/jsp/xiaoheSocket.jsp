@@ -21,22 +21,26 @@
 <script>
 
     var webSocket;
-    if (window.WebSocket) {
+    if (window.WebSocket)
+    {
         webSocket = new WebSocket("ws://localhost:8008/websocket");
 
         //连通之后的回调事件
-        webSocket.onopen = function () {
+        webSocket.onopen = function()
+        {
             webSocket.send("发送数据");
         };
 
         //接收后台服务端的消息
-        webSocket.onmessage = function (evt) {
+        webSocket.onmessage = function (evt)
+        {
             var received_msg = evt.data;
             alert("数据已接收:" + received_msg);
         };
 
         //连接关闭的回调事件
-        webSocket.onclose = function () {
+        webSocket.onclose = function()
+        {
             alert("连接已关闭...");
         };
 

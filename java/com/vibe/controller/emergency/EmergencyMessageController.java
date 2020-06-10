@@ -16,49 +16,47 @@ import com.vibe.utils.Page;
 @RestController
 public class EmergencyMessageController {
 
-
-    @Autowired
-    private EmergencyMessageService emergencyMessageService;
-
-
-    /**
-     * 查询突发事件信息
-     *
-     * @param emergencyMessage
-     * @return
-     */
-    @RequestMapping("/emergencyMessage/findAll_emergencyMessage")
-    public Page<EmergencyMessage> findAllEmergencyMessage(@RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam(defaultValue = "10") int rows, EmergencyMessage emergencyMessage) {
-        return emergencyMessageService.findAllEmergencyMessage(page, rows, emergencyMessage);
-    }
-
-    @RequestMapping("/emergencyMessage/add_emergencyMessage")
-    public FormJson addEmergencyMessage(EmergencyMessage emergencyMessage, HttpSession session) {
-        if (emergencyMessage.getDescription().length() >= 300) {
-            return FormJsonBulider.fail("请输入300字以内的内容描述");
-        }
-        User user = (User) session.getAttribute("loginUser");
-        emergencyMessage.setRegistrant(user.getName());
-        return emergencyMessageService.addEmergencyMessage(emergencyMessage);
-    }
-
-    @RequestMapping("/emergencyMessage/findOne_EmergencyMessage")
-    public EmergencyMessage findOneEmergencyMessage(Integer id) {
-        return emergencyMessageService.findOneEmergencyMessage(id);
-
-    }
-
-    @RequestMapping("/emergencyMessage/update_EmergencyMessage")
-    public FormJson updateEmergencyMessage(EmergencyMessage emergencyMessage) {
-        if (emergencyMessage.getDescription().length() >= 300) {
-            return FormJsonBulider.fail("请输入300字以内的内容描述");
-        }
-        return emergencyMessageService.updateEmergencyMessage(emergencyMessage);
-    }
-
-    @RequestMapping("/emergencyMessage/delete_EmergencyMessage")
-    public FormJson deleteEmergencyMessage(int[] ids) {
-        return emergencyMessageService.deleteEmergencyMessage(ids);
-    }
+	
+	@Autowired
+	private EmergencyMessageService emergencyMessageService;
+	
+	
+	/**
+	 * 查询突发事件信息
+	 * @param emergencyMessage
+	 * @return
+	 */
+	@RequestMapping("/emergencyMessage/findAll_emergencyMessage")
+	public Page<EmergencyMessage> findAllEmergencyMessage(@RequestParam(defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "10") int rows, EmergencyMessage emergencyMessage){
+		return emergencyMessageService.findAllEmergencyMessage(page,rows,emergencyMessage);
+	}
+	
+	@RequestMapping("/emergencyMessage/add_emergencyMessage")
+	public FormJson addEmergencyMessage(EmergencyMessage emergencyMessage, HttpSession session){
+		if (emergencyMessage.getDescription().length() >= 300){
+			return FormJsonBulider.fail("请输入300字以内的内容描述");
+		}
+		User user = (User) session.getAttribute("loginUser");
+		emergencyMessage.setRegistrant(user.getName());
+		return emergencyMessageService.addEmergencyMessage(emergencyMessage);
+	}
+	
+	@RequestMapping("/emergencyMessage/findOne_EmergencyMessage")
+	public EmergencyMessage findOneEmergencyMessage(Integer id){
+		return emergencyMessageService.findOneEmergencyMessage(id);
+		
+	}
+	@RequestMapping("/emergencyMessage/update_EmergencyMessage")
+	public FormJson updateEmergencyMessage(EmergencyMessage emergencyMessage){
+		if (emergencyMessage.getDescription().length() >= 300){
+			return FormJsonBulider.fail("请输入300字以内的内容描述");
+		}
+		return emergencyMessageService.updateEmergencyMessage(emergencyMessage);
+	}
+	
+	@RequestMapping("/emergencyMessage/delete_EmergencyMessage")
+	public FormJson deleteEmergencyMessage(int[] ids){
+		return emergencyMessageService.deleteEmergencyMessage(ids);
+	}
 }

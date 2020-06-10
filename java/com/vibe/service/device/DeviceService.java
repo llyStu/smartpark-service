@@ -8,8 +8,7 @@ import java.util.Map;
 
 public interface DeviceService {
 
-    Map<String, Object> getPreparData(Integer id);
-
-    /*public List<FeildViewType> getFormData(Integer id);*/
-    ResponseEntity<byte[]> printDevice(String ids) throws IOException, Exception;
+	Map<String, Object> getPreparData(Integer id);
+	/*public List<FeildViewType> getFormData(Integer id);*/
+	ResponseEntity<byte[]> printDevice(String ids) throws IOException, Exception;
 }

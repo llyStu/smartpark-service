@@ -38,7 +38,7 @@ public class GZIPResponseStream extends ServletOutputStream {
     @Override
     public void write(byte b[], int off, int len) throws IOException {
         if (!open.get()) {
-            throw new IOException("Stream closed!");
+             throw new IOException("Stream closed!");
         }
         gzipStream.write(b, off, len);
     }
@@ -51,15 +51,15 @@ public class GZIPResponseStream extends ServletOutputStream {
         gzipStream.write(b);
     }
 
-    @Override
-    public boolean isReady() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+	@Override
+	public boolean isReady() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    @Override
-    public void setWriteListener(WriteListener writeListener) {
-        // TODO Auto-generated method stub
-
-    }
+	@Override
+	public void setWriteListener(WriteListener writeListener) {
+		// TODO Auto-generated method stub
+		
+	}   
 }

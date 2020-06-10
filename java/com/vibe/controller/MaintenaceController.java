@@ -22,68 +22,64 @@ import com.vibe.util.ResponseResult;
 
 @Controller
 public class MaintenaceController {
-
-    @Autowired
-    private MaintenaceService maintenaceService;
-
-    @RequestMapping("/queryMaintenaceByDeviceId")
-    public @ResponseBody
-    PageResult<MaintenaceDevicesBean> queryMaintenaceByDeviceId(int deviceId, @RequestParam(defaultValue = "1") int page,
-                                                                @RequestParam(defaultValue = "10") int rows) {
-        PageHelper.startPage(page, rows);
-        return maintenaceService.queryMaintenaceByDeviceId(deviceId);
-    }
-
-    @RequestMapping("/addMaintenace")
-    public @ResponseBody
-    Response addMaintenace(MaintenaceDevicesData maintenaceDevicesData, @RequestParam(required = false) MultipartFile[] photoFile,
-                           HttpServletRequest request) {
-        try {
-            if (photoFile != null) {
-                String pics = PathTool.getRelativePath(photoFile, request);
-                maintenaceDevicesData.getMaintenaceBean().setPicture(pics);
-            }
-            maintenaceService.addMaintenace(maintenaceDevicesData);
-            return ResponseResult.getANewResponse(true);
-        } catch (Exception e) {
-            // TODO: handle exception
-            return ResponseResult.getANewResponse(false);
-        }
-
-    }
-
-    @RequestMapping("/updateMaintenace")
-    public @ResponseBody
-    Response updateMaintenace(MaintenaceDevicesData maintenaceDevicesData, @RequestParam(required = false) MultipartFile[] photoFile,
-                              HttpServletRequest request) {
-
-        try {
-            if (photoFile != null) {
-                String pics = PathTool.getRelativePath(photoFile, request);
-                maintenaceDevicesData.getMaintenaceBean().setPicture(pics);
-            }
-            maintenaceService.updateMaintenace(maintenaceDevicesData);
-            return ResponseResult.getANewResponse(true);
-        } catch (Exception e) {
-            // TODO: handle exception
-            return ResponseResult.getANewResponse(false);
-        }
-    }
-
-    @RequestMapping("/deleteMaintenace")
-    public @ResponseBody
-    Response deleteMaintenace(String ids) {
-
-        try {
-            String[] ides = ids.split(",");
-            for (String id : ides) {
-                maintenaceService.deleteMaintenace(Integer.parseInt(id));
-            }
-            return ResponseResult.getANewResponse(true);
-        } catch (Exception e) {
-            // TODO: handle exception
-            return ResponseResult.getANewResponse(false);
-        }
-    }
-
+	
+	@Autowired
+	private MaintenaceService maintenaceService;
+	
+	@RequestMapping("/queryMaintenaceByDeviceId")
+	public @ResponseBody PageResult<MaintenaceDevicesBean> queryMaintenaceByDeviceId(int deviceId, @RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "10") int rows) {
+		PageHelper.startPage(page, rows);		
+		return maintenaceService.queryMaintenaceByDeviceId(deviceId);
+	}
+	
+	@RequestMapping("/addMaintenace")
+	public @ResponseBody Response addMaintenace(MaintenaceDevicesData maintenaceDevicesData,@RequestParam(required=false)MultipartFile[] photoFile,
+			HttpServletRequest request) {
+		try {
+			if(photoFile != null){
+				String pics = PathTool.getRelativePath(photoFile, request);
+				maintenaceDevicesData.getMaintenaceBean().setPicture(pics);
+			}
+			maintenaceService.addMaintenace(maintenaceDevicesData);
+			return ResponseResult.getANewResponse(true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseResult.getANewResponse(false);
+		}
+		
+	}
+	
+	@RequestMapping("/updateMaintenace")
+	public @ResponseBody Response updateMaintenace(MaintenaceDevicesData maintenaceDevicesData,@RequestParam(required=false)MultipartFile[] photoFile,
+			HttpServletRequest request) {
+		
+		try {
+			if(photoFile != null){
+				String pics = PathTool.getRelativePath(photoFile, request);
+				maintenaceDevicesData.getMaintenaceBean().setPicture(pics);
+			}
+			maintenaceService.updateMaintenace(maintenaceDevicesData);
+			return ResponseResult.getANewResponse(true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseResult.getANewResponse(false);
+		}
+	}
+	
+	@RequestMapping("/deleteMaintenace")
+	public @ResponseBody Response deleteMaintenace(String ids) {
+		
+		try {
+			String[] ides = ids.split(",");
+			for (String id : ides) {
+				maintenaceService.deleteMaintenace(Integer.parseInt(id));
+			}
+			return ResponseResult.getANewResponse(true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseResult.getANewResponse(false);
+		}
+	}
+	
 }

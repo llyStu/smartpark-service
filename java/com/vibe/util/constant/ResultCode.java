@@ -12,8 +12,7 @@ public final class ResultCode {
     public static final String NOAUTH = "-1";//没有权限
 
     public static final String CONFLICT = "-2";//冲突
+    
 
-
-    private ResultCode() {
-    }
+    private ResultCode(){}
 }

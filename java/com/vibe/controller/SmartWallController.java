@@ -11,13 +11,13 @@ import com.vibe.service.smartwall.SmartWallService;
 
 @Controller
 public class SmartWallController {
-    @Autowired
-    private SmartWallService smartWallService;
-
-    @RequestMapping("/smartWall")
-    @ResponseBody
-    public void smartWall(@RequestBody SmartWallData smartWallData) {
-        smartWallService.smartWall(smartWallData);
-    }
-
+	@Autowired
+	private SmartWallService smartWallService;
+	
+	@RequestMapping("/smartWall")
+	@ResponseBody
+	public void smartWall(@RequestBody SmartWallData smartWallData){
+		smartWallService.smartWall(smartWallData);
+	}
+	
 }

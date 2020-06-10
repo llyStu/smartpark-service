@@ -17,29 +17,29 @@ import com.vibe.service.user.UserService;
 
 @Controller
 public class WorkManageController {
+	
+	@Autowired
+	private WorkSimulatorService workSimulatorService;
+	@Autowired
+	private UserService userService;
 
-    @Autowired
-    private WorkSimulatorService workSimulatorService;
-    @Autowired
-    private UserService userService;
-
-    @RequestMapping("/WorkManage/findAllWorkPatternName")
-    @ResponseBody
-    public List<WorkPattern> findAllWorkPatternName(HttpServletRequest request) {//查询所有工况
-        User user = (User) request.getSession().getAttribute("loginUser");
-        List<Role> allRole = userService.getAllRole(user.getId());
-        for (Role role : allRole) {
-            if (role.getId() == 4) {
-                user = new User();
-            }
-        }
-        return workSimulatorService.findAllWorkPatternName(user);
-    }
-
-    @RequestMapping("/WorkManage/findWorkPatternCheckIds")
-    @ResponseBody
-    public List<WorkPattern> findWorkPatternCheckId(int[] ids) {
-        return workSimulatorService.findWorkPatternCheckId(ids);
-    }
-
+	@RequestMapping("/WorkManage/findAllWorkPatternName")
+	@ResponseBody
+	public List<WorkPattern> findAllWorkPatternName(HttpServletRequest request){//查询所有工况
+		User user = (User)request.getSession().getAttribute("loginUser");
+		List<Role> allRole = userService.getAllRole(user.getId());
+		for (Role role : allRole) {
+			if(role.getId()==4){
+				user=new User();
+			}
+		}
+		return workSimulatorService.findAllWorkPatternName(user);
+	}
+	
+	@RequestMapping("/WorkManage/findWorkPatternCheckIds")
+	@ResponseBody
+	public List<WorkPattern> findWorkPatternCheckId(int[] ids){
+		return workSimulatorService.findWorkPatternCheckId(ids);
+	}
+	
 }

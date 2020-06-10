@@ -27,9 +27,8 @@ import java.util.List;
 
 /**
  * 分类名称
- *
- * @author hyd132@126.com
  * @description 停车管理服务类
+ * @author hyd132@126.com
  * @create 2020/04/16
  * @module 智慧园区
  */
@@ -51,7 +50,6 @@ public class CarPushServiceImpl implements CarPushService {
 
     /**
      * 推送车位停车信息
-     *
      * @param carParkingStop 停车车位信息对象
      */
     @Override
@@ -60,31 +58,31 @@ public class CarPushServiceImpl implements CarPushService {
 //        long time = new Long(1480428796)*1000L; //1480428796是unix时间戳，
 //        String format = sdf.format(new Date(time));
         AssetTypeManager<ProbeType> probeTypes = assetStore.getProbeTypes();
-        if (probeTypes.size() > 0) {
+        if(probeTypes.size()>0){
             for (ProbeType probeType : probeTypes) {
-                if (probeType.getName().equals("ParkingLotProbe")) {
+                if(probeType.getName().equals("ParkingLotProbe")){
                     Collection<Asset<ProbeType>> assets = assetStore.getAssets(probeType);
-                    if (assets != null) {
+                    if(assets != null){
                         for (Asset<ProbeType> asset : assets) {
                             ParkingLotProbe probe = (ParkingLotProbe) asset;
-                            if (StringUtils.equals(carParkingStop.getLotName(), probe.getLotName())) {
+                            if (StringUtils.equals(carParkingStop.getLotName(),probe.getLotName())){
                                 carParkingStop.setProbeId(probe.getId());
                                 String carColor = carParkingStop.getCarColor();
-                                if (null != carColor) {
+                                if (null != carColor){
                                     carParkingStop.setCarColor(CarColorElement.getCarColorByNum(carColor));
                                 }
 //                               CarColorElement.valueOf()
                                 //如果停车状态为1 ，表示只有进车时间，没有出车时间
-                                if (StringUtils.equals(String.valueOf(carParkingStop.getIsNull()), "1")) {
+                                if (StringUtils.equals(String.valueOf(carParkingStop.getIsNull()),"1")){
                                     carParkingStop.setInLotTime(sdf.format(new Date(Long.valueOf(carParkingStop.getInLotTime()))));
                                     carParkingStop.setOutLotTime(null);
                                     carPushDao.saveBatchCarParkingStop(carParkingStop);
                                     //如果停车状态为2，表示根据停车名称更新停车时间及停车信息
-                                } else if (StringUtils.equals(String.valueOf(carParkingStop.getIsNull()), "2")) {
+                                }else if (StringUtils.equals(String.valueOf(carParkingStop.getIsNull()),"2")){
                                     carParkingStop.setOutLotTime(sdf.format(new Date(Long.valueOf(carParkingStop.getOutLotTime()))));
                                     carPushDao.updateParkInfoByParkingStop(carParkingStop);
                                 }
-                                monitorServer.getResultDispatcher().dispatch(new MonitorResult(probe, 1 == carParkingStop.getIsNull()));
+                                monitorServer.getResultDispatcher().dispatch(new MonitorResult(probe,1 == carParkingStop.getIsNull()));
                                 //进出车时间不同代表是真实数据
 //                                if (carParkingStop.getInLotTime() != carParkingStop.getOutLotTime()){
 
@@ -109,7 +107,6 @@ public class CarPushServiceImpl implements CarPushService {
 
     /**
      * 推送停车场信息统计
-     *
      * @param carParkingStop 停车车位信息对象
      */
     @Override
@@ -128,15 +125,16 @@ public class CarPushServiceImpl implements CarPushService {
         }*/
 //        carPushDao.insertParkingInfo(carParkingStop);
         CarParkingStop carParking = carPushDao.selectCarParkingByParkId(carParkingStop);
-        if (null != carParking) {
+        if (null != carParking){
             carPushDao.updateParkInfoByParkId(carParkingStop);
-        } else {
+        }else {
             carPushDao.insertParkingInfo(carParkingStop);
         }
         return ResponseModel.success("推送停车场信息成功").code(ResultCode.SUCCESS);
     }
 
     /**
+     *
      * @param probeId 设备id
      * @return ResponseModel<CarParkingStop> 对象
      */
@@ -149,9 +147,8 @@ public class CarPushServiceImpl implements CarPushService {
 
     /**
      * 过车记录分页查询
-     *
-     * @param pageNum        页码
-     * @param pageSize       每页显示条数
+     * @param pageNum 页码
+     * @param pageSize 每页显示条数
      * @param carParkingStop 停车场对象
      * @return
      */

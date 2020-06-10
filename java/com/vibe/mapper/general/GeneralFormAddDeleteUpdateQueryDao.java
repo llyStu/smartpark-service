@@ -8,11 +8,8 @@ import java.util.List;
 
 @Repository
 public interface GeneralFormAddDeleteUpdateQueryDao {
-    public List<GeneralForm> queryForms(@Param("business") String business);
-
-    public void deleteForm(@Param("id") int id, @Param("business") String business);
-
-    public int insertForm(GeneralForm generalFrom);
-
-    public void updateForm(@Param("data") String data, @Param("id") int id);
+	public List<GeneralForm> queryForms(@Param("business") String business);
+	public void deleteForm(@Param("id") int id, @Param("business") String business);
+	public int insertForm(GeneralForm generalFrom);
+	public void updateForm(@Param("data") String data, @Param("id") int id);
 }

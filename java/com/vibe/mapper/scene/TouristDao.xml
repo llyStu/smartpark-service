@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.scene.TouristDao">
-
-    <insert id="insertTourist" parameterType="Tourist">
-        insert into db_vibe_monitor.tourist (dailyCount, tempCount, photo, date)
-        values ( #{dailyCount,jdbcType=INTEGER}, #{tempCount,jdbcType=INTEGER},
-        #{photo,jdbcType=VARCHAR}, #{date,jdbcType=DATE})
-    </insert>
-
-    <delete id="deleteTourist" parameterType="int">
-        delete from db_vibe_monitor.tourist
-        where id = #{id}
-    </delete>
-
-    <update id="updateTourist" parameterType="Tourist">
-        update db_vibe_monitor.tourist
-        <set>
-            <if test="dailyCount != null">
-                dailyCount = #{dailyCount},
-            </if>
-            <if test="tempCount != null">
-                tempCount = #{tempCount},
-            </if>
-            <if test="photo != null">
-                photo = #{photo},
-            </if>
-            <if test="date != '' and date != null">
-                date = #{date},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-
-    <select id="queryTouristList" resultType="Tourist">
-        select * from db_vibe_monitor.tourist order BY id DESC
-    </select>
-
-    <select id="queryTourist" parameterType="int" resultType="Tourist">
-        select * from db_vibe_monitor.tourist
-        where id = #{id}
-    </select>
-
+	
+	<insert id="insertTourist" parameterType="Tourist">		
+		    insert into db_vibe_monitor.tourist (dailyCount, tempCount, photo, date)
+			  values ( #{dailyCount,jdbcType=INTEGER}, #{tempCount,jdbcType=INTEGER},
+			  #{photo,jdbcType=VARCHAR}, #{date,jdbcType=DATE})
+	</insert>
+		
+	<delete id="deleteTourist" parameterType="int">
+		delete from db_vibe_monitor.tourist 
+			where id = #{id}
+	</delete>	
+	
+	<update id="updateTourist" parameterType="Tourist">
+			update db_vibe_monitor.tourist
+	    <set>	   	     
+	      <if test="dailyCount != null" >
+	        dailyCount = #{dailyCount},
+	      </if>
+	      <if test="tempCount != null" >
+	        tempCount = #{tempCount},
+	      </if>
+	      <if test="photo != null" >
+	        photo = #{photo},
+	      </if>	     
+	      <if test="date != '' and date != null" >
+	        date = #{date},
+	      </if>	     
+	    </set>
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<select id="queryTouristList" resultType="Tourist">
+		select * from db_vibe_monitor.tourist  order BY id DESC
+	</select>
+	 
+	<select id="queryTourist" parameterType="int" resultType="Tourist">
+		select * from db_vibe_monitor.tourist 
+			where id = #{id}
+	</select>
+	
 </mapper>
 
 

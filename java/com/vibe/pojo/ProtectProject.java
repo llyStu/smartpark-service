@@ -62,7 +62,7 @@ public class ProtectProject {
     private String endTime;
 
     private String endReport;
-
+    
     private String otherFiles;
 
     private Double protectBudget;
@@ -70,17 +70,18 @@ public class ProtectProject {
     private Double protectBudget2;
 
     private String governCheckTime;
-
+    
+    
 
     public String getOtherFiles() {
-        return otherFiles;
-    }
+		return otherFiles;
+	}
 
-    public void setOtherFiles(String otherFiles) {
-        this.otherFiles = otherFiles;
-    }
+	public void setOtherFiles(String otherFiles) {
+		this.otherFiles = otherFiles;
+	}
 
-    public Integer getId() {
+	public Integer getId() {
         return id;
     }
 

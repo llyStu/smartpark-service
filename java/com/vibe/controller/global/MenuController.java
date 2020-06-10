@@ -11,14 +11,14 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class MenuController {
-    @Autowired
-    private MenuService menuService;
+	@Autowired
+	private MenuService menuService;
 
-    @RequestMapping("/getMenus")
-    @ResponseBody
+	@RequestMapping("/getMenus")
+	@ResponseBody
 //	@MethodLog(remark="insert",option="获取菜单")
-    public MenuBean getMenus(HttpServletRequest request) {
-        return menuService.getMenus(request);
-    }
+	public MenuBean getMenus(HttpServletRequest request){
+		return menuService.getMenus(request);
+	}
 
 }

@@ -7,7 +7,9 @@ import com.vibe.utils.Page;
 public interface PtrlConsequenceService {
 
 
-    Page<PtrlRecord> patrollingRecord(int pageNum, int pageSize);
+	Page<PtrlRecord> patrollingRecord(int pageNum, int pageSize);
 
-
+	
+	
+	
 }

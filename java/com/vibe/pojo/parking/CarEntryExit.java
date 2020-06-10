@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 /**
+ *
  * @Description 出入记录
  * @Author lxx-nice@163.com
  * @Create 2020/04/01

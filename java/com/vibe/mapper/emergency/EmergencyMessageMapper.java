@@ -9,17 +9,19 @@ import java.util.List;
 @Repository
 public interface EmergencyMessageMapper {
 
-    List<EmergencyMessage> findAllEmergencyMessage(EmergencyMessage emergencyMessage);
+	List<EmergencyMessage> findAllEmergencyMessage(EmergencyMessage emergencyMessage);
 
-    int addEmergencyMessage(EmergencyMessage emergencyMessage);
+	int addEmergencyMessage(EmergencyMessage emergencyMessage);
 
-    EmergencyMessage findOneEmergencyMessage(@Param("id") Integer id);
+	EmergencyMessage findOneEmergencyMessage(@Param("id") Integer id);
 
-    int updateEmergencyMessage(EmergencyMessage emergencyMessage);
+	int updateEmergencyMessage(EmergencyMessage emergencyMessage);
 
-    int deleteEmergencyMessage(@Param("id") int id);
+	int deleteEmergencyMessage(@Param("id") int id);
 
-    int deleteEmergencyMessages(@Param("ids") int[] ids);
+	int deleteEmergencyMessages(@Param("ids") int[] ids);
 
 
+	
+	
 }

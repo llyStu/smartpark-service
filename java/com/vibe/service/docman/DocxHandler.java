@@ -12,13 +12,13 @@ import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLConverter;
 import fr.opensagres.poi.xwpf.converter.xhtml.XHTMLOptions;
 
 public class DocxHandler extends ConvertHandler {
-    @Override
-    public void convertToHtml(File src, File dest) throws Exception {
-        try (XWPFDocument document = new XWPFDocument(new FileInputStream(src));
-             OutputStream out = new FileOutputStream(dest)) {
-            XHTMLOptions options = XHTMLOptions.create().setImageManager(new Base64EmbedImgManager());
-            XHTMLConverter.getInstance().convert(document, out, options);
-        }
-    }
+	@Override
+	public void convertToHtml(File src, File dest) throws Exception {
+		try (XWPFDocument document = new XWPFDocument(new FileInputStream(src));
+				OutputStream out = new FileOutputStream(dest)) {
+			XHTMLOptions options = XHTMLOptions.create().setImageManager(new Base64EmbedImgManager());
+			XHTMLConverter.getInstance().convert(document, out, options);
+		}
+	}
 
 }

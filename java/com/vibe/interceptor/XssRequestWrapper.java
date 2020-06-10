@@ -6,23 +6,23 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-public class XssRequestWrapper extends HttpServletRequestWrapper {
+public class XssRequestWrapper extends HttpServletRequestWrapper{
+	
+	private Map<String, String> xssMap;
+	
+	public XssRequestWrapper(HttpServletRequest request) {
+		super(request);
+		// TODO Auto-generated constructor stub
+	}
 
-    private Map<String, String> xssMap;
-
-    public XssRequestWrapper(HttpServletRequest request) {
-        super(request);
-        // TODO Auto-generated constructor stub
-    }
-
-    public XssRequestWrapper(HttpServletRequest request, Map<String, String> xssMap) {
-        super(request);
-        this.xssMap = xssMap;
-    }
-
+	public XssRequestWrapper(HttpServletRequest request,  Map<String, String> xssMap) {
+			super(request);
+		    this.xssMap = xssMap;
+	}
+	 
     @Override
     public String[] getParameterValues(String parameter) {
-        //System.out.println("获取参数1"+parameter);
+    	//System.out.println("获取参数1"+parameter);
         String[] values = super.getParameterValues(parameter);
         if (values == null) {
             return null;
@@ -35,7 +35,7 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         }
         return encodedValues;
     }
-
+ 
     @Override
     public String getParameter(String parameter) {
         String value = super.getParameter(parameter);
@@ -45,26 +45,26 @@ public class XssRequestWrapper extends HttpServletRequestWrapper {
         }
         return cleanXSS(value);
     }
-
+ 
     public String getHeader(String name) {
         String value = super.getHeader(name);
         if (value == null)
             return null;
         return cleanXSS(value);
-
+ 
     }
-
+ 
     /**
      * 清除恶意的XSS脚本
-     *
+     * 
      * @param value
      * @return
      */
     private String cleanXSS(String value) {
         Set<String> keySet = xssMap.keySet();
-        for (String key : keySet) {
+        for(String key : keySet){
             String v = xssMap.get(key);
-            value = value.replaceAll(key, v);
+            value = value.replaceAll(key,v);
         }
         return value;
     }

@@ -11,55 +11,55 @@ import java.util.List;
 @Repository
 public interface HomeDao {
 
-    public List<HomeBean> getUserHomes(@Param("userId") int userId);
+	public List<HomeBean> getUserHomes(@Param("userId") int userId);
+	
+	public List<HomeBean> getHomes(@Param("isDefault") int isDefault);
+	
+	public HomeBean getHome(@Param("homeId") int homeId);
+	
+	public void deleteUserHomes(@Param("userId") int userId);
+	
+	public void addUserHomes(@Param("userId") int userId, @Param("userHomeId") int userHomeId);
+	
+	public List<HomeLayoutParameter> getHomeLayoutParameter(@Param("homeId") int homeId);
+	
+	public int getAssetCountByCodeId(@Param("codeId") int codeId);
 
-    public List<HomeBean> getHomes(@Param("isDefault") int isDefault);
+	public int getEnergyAssetCountByCodeId(@Param("codeId") int codeId);
 
-    public HomeBean getHome(@Param("homeId") int homeId);
+	public List<Integer> getAssetIdByCodeId(@Param("codeId") int codeId);
 
-    public void deleteUserHomes(@Param("userId") int userId);
+	public List<Integer> getEnergyAssetIdByCodeId(@Param("codeId") int codeId);
 
-    public void addUserHomes(@Param("userId") int userId, @Param("userHomeId") int userHomeId);
+	public int getDoAlarmCount();
+	
+	public int getUnDoAlarmCount();
+	
+	public int getUnDoFaultCount();
+	
+	public int getDoFaultCount();
+	
+	public int getAlarmCountByCodeId(@Param("codeId") int codeId);
+	
+	public int getUndoTaskCount();
+	
+	public int getTotalTaskCount();
+	
+	public int getMonthDoTaskCount();
+	
+	public int getTodayDoTaskCount();
+	
+	public int getMonthTotalTaskCount();
+	
+	public int getTodayTotalTaskCount();
 
-    public List<HomeLayoutParameter> getHomeLayoutParameter(@Param("homeId") int homeId);
+	int countDoAlarm(@Param("modules") String modules);
 
-    public int getAssetCountByCodeId(@Param("codeId") int codeId);
+	int countAllAlarm(@Param("modules") String modules);
 
-    public int getEnergyAssetCountByCodeId(@Param("codeId") int codeId);
+	List<AlarmModule> countAlarmByModules(@Param("modules") String modules);
 
-    public List<Integer> getAssetIdByCodeId(@Param("codeId") int codeId);
+	List<AlarmModule> countAlarmByIds(@Param("ids") String ids);
 
-    public List<Integer> getEnergyAssetIdByCodeId(@Param("codeId") int codeId);
-
-    public int getDoAlarmCount();
-
-    public int getUnDoAlarmCount();
-
-    public int getUnDoFaultCount();
-
-    public int getDoFaultCount();
-
-    public int getAlarmCountByCodeId(@Param("codeId") int codeId);
-
-    public int getUndoTaskCount();
-
-    public int getTotalTaskCount();
-
-    public int getMonthDoTaskCount();
-
-    public int getTodayDoTaskCount();
-
-    public int getMonthTotalTaskCount();
-
-    public int getTodayTotalTaskCount();
-
-    int countDoAlarm(@Param("modules") String modules);
-
-    int countAllAlarm(@Param("modules") String modules);
-
-    List<AlarmModule> countAlarmByModules(@Param("modules") String modules);
-
-    List<AlarmModule> countAlarmByIds(@Param("ids") String ids);
-
-    int countAlarm();
+	int countAlarm();
 }

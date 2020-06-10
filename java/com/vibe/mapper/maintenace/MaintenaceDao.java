@@ -8,20 +8,21 @@ import java.util.List;
 
 public interface MaintenaceDao {
 
+	
+	
+	public List<MaintenaceDeviceBean> queryMaintenaceByDeviceId(int deviceId);
 
-    public List<MaintenaceDeviceBean> queryMaintenaceByDeviceId(int deviceId);
+	public void addMaintenace(MaintenaceBean maintenaceBean);
+	
+	public void addDeviceMaintenace(@Param("maintenaceId") int maintenaceId, @Param("deviceId") int deviceId);
 
-    public void addMaintenace(MaintenaceBean maintenaceBean);
+	public void updateMaintenace(MaintenaceBean maintenaceBean);
 
-    public void addDeviceMaintenace(@Param("maintenaceId") int maintenaceId, @Param("deviceId") int deviceId);
+	public List<Integer> queryDeviceIdsByMaintenaceId(@Param("maintenaceId") int maintenaceId);
 
-    public void updateMaintenace(MaintenaceBean maintenaceBean);
+	public void deleteDeviceMaintenace(@Param("maintenaceId") int maintenaceId, @Param("deviceId") int deviceId);
 
-    public List<Integer> queryDeviceIdsByMaintenaceId(@Param("maintenaceId") int maintenaceId);
-
-    public void deleteDeviceMaintenace(@Param("maintenaceId") int maintenaceId, @Param("deviceId") int deviceId);
-
-    public void updateDeviceMaintenace(@Param("maintenaceId") int maintenaceId, @Param("deviceId") int deviceId);
-
-    public void deleteMaintenace(@Param("id") int id);
+	public void updateDeviceMaintenace(@Param("maintenaceId") int maintenaceId, @Param("deviceId") int deviceId);
+	
+	public void deleteMaintenace(@Param("id") int id);
 }

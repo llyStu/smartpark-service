@@ -10,10 +10,12 @@ public class ExcelSheetPO {
     private String sheetName;
 
 
+
     /**
      * 数据集合
      */
     private List<List<String>> dataList;
+
 
 
     public List<List<String>> getDataList() {
@@ -31,6 +33,7 @@ public class ExcelSheetPO {
     public void setSheetName(String sheetName) {
         this.sheetName = sheetName;
     }
+
 
 
 }

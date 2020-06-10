@@ -8,5 +8,5 @@
             timeToLiveSeconds="120"
             overflowToDisk="false"
             diskPersistent="false"
-            diskExpiryThreadIntervalSeconds="120"/>
+            diskExpiryThreadIntervalSeconds="120" />
 </ehcache>

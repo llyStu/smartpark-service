@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface EnergyDao {
-    List<KeyValueBean> fenxiangduibiTime(@Param("timeType") String timeType, @Param("time") String time);
-
-    List<KeyValueBean> fenxiangduibiStartEndTime(@Param("timeType") String timeType, @Param("start") String start, @Param("end") String end);
+	List<KeyValueBean> fenxiangduibiTime(@Param("timeType") String timeType, @Param("time") String time);
+	List<KeyValueBean> fenxiangduibiStartEndTime(@Param("timeType") String timeType, @Param("start") String start, @Param("end") String end);
 }

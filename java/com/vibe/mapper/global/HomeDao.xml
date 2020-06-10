@@ -1,171 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.global.HomeDao">
+	 
+	
+	<select id="getUserHomes" resultType="com.vibe.pojo.HomeBean">
+		select h.id id,h.caption caption,h.click_url clickUrl,hu.sequence sequence,h.interface_url interfaceUrl,h.layout_type layoutType from db_vibe_basic.t_home_user as hu,db_vibe_basic.t_home as h where hu.user_id = #{userId}
+	</select>
+	
+	<select id="getHomes" resultType="com.vibe.pojo.HomeBean">
+		<if test="isDefault == 0">
+    		select id,caption,click_url clickUrl,layout_type layoutType,interface_url interfaceUrl from db_vibe_basic.t_home where is_default = 0
+  		</if>
+  		<if test="isDefault == 1">
+    		select id,caption,click_url clickUrl,layout_type layoutType,interface_url interfaceUrl from db_vibe_basic.t_home
+  		</if>
+	</select>
+	
+	<select id="getHome" resultType="com.vibe.pojo.HomeBean">
+		select id,caption,click_url clickUrl,layout_type layoutType,interface_url interfaceUrl,json_data jsonData from db_vibe_basic.t_home where id = #{homeId}
+	</select>
+	
+	<delete id="deleteUserHomes">
+		delete from db_vibe_basic.t_home_user where user_id = #{userId}
+	</delete>
+	
+	<insert id="addUserHomes">
+		insert into db_vibe_basic.t_home_user values(#{userId},#{userHomeId})
+	</insert>
+	
+	<select id="getHomeLayoutParameter" resultType="com.vibe.pojo.HomeLayoutParameter">
+		select id,home_id homeId, parameter_name parameterName,parameter_value parameterValue from db_vibe_basic.t_home_layout_parameter where home_id = #{homeId}
+	</select>
 
+	<!--2020年4月15日 liujingeng， 修改where条件，不统计虚表-->
+	<select id="getEnergyAssetCountByCodeId" resultType="java.lang.Integer">
+		SELECT
+			sum( a )
+		FROM
+			((select COUNT(*) a from db_vibe_monitor.t_probe t1
+				left join db_vibe_monitor.t_probe_energy t2 on t1.id = t2.probe_id
+			where t1.catalog = #{codeId} and (t2.id is null or t2.value_type = 0))union all select COUNT(*) a from db_vibe_monitor.t_control where catalog = #{codeId}) as t;
+	</select>
+	<select id="getEnergyAssetIdByCodeId" resultType="java.lang.Integer">
+	SELECT id FROM
+		(
+		(SELECT t1.id FROM db_vibe_monitor.t_probe t1
+			left join db_vibe_monitor.t_probe_energy t2 on t1.id = t2.probe_id
+			where t1.catalog = #{codeId} and (t2.id is null or t2.value_type = 0))
+	union all select id from db_vibe_monitor.t_control where catalog = #{codeId}) as t;
+	</select>
 
-    <select id="getUserHomes" resultType="com.vibe.pojo.HomeBean">
-        select h.id id,h.caption caption,h.click_url clickUrl,hu.sequence sequence,h.interface_url
-        interfaceUrl,h.layout_type layoutType from db_vibe_basic.t_home_user as hu,db_vibe_basic.t_home as h where
-        hu.user_id = #{userId}
-    </select>
+	<select id="getAssetCountByCodeId" resultType="java.lang.Integer">
+		select sum(a) from (select COUNT(*) a from db_vibe_monitor.t_device where catalog = #{codeId} union all
+		 (select COUNT(*) a FROM db_vibe_monitor.t_probe t1
+			left join db_vibe_monitor.t_probe_energy t2 on t1.id = t2.probe_id
+			where t1.catalog = #{codeId} and (t2.id is null or t2.value_type = 0))
+		 union all select COUNT(*) a from db_vibe_monitor.t_control where catalog = #{codeId}) as t;
+	</select>
+	
+	<select id="getAssetIdByCodeId" resultType="java.lang.Integer">
+		select id from (select id from db_vibe_monitor.t_probe where catalog = #{codeId} union all select id from db_vibe_monitor.t_control where catalog = #{codeId}) as t;
+	</select>
+	
+	<select id="getUnDoAlarmCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_alarm_message where handled = 1
+	</select>
+	
+	<select id="getDoAlarmCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_alarm_message where handled = 2
+	</select>
+	
+	<select id="getAlarmCountByCodeId" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_alarm_message a,db_vibe_monitor.t_error_message_log b where 
+			a.logId = b.id and b.assetId in (select id from (select id from db_vibe_monitor.t_probe where catalog in (select id from db_vibe_basic.t_code where parent = #{codeId}) 
+			union all select id from db_vibe_monitor.t_control where catalog in (select id from db_vibe_basic.t_code where parent = #{codeId})) as t)
+	</select>
 
-    <select id="getHomes" resultType="com.vibe.pojo.HomeBean">
-        <if test="isDefault == 0">
-            select id,caption,click_url clickUrl,layout_type layoutType,interface_url interfaceUrl from
-            db_vibe_basic.t_home where is_default = 0
-        </if>
-        <if test="isDefault == 1">
-            select id,caption,click_url clickUrl,layout_type layoutType,interface_url interfaceUrl from
-            db_vibe_basic.t_home
-        </if>
-    </select>
+	<select id="countAlarm" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_alarm_message
+	</select>
 
-    <select id="getHome" resultType="com.vibe.pojo.HomeBean">
-        select id,caption,click_url clickUrl,layout_type layoutType,interface_url interfaceUrl,json_data jsonData from
-        db_vibe_basic.t_home where id = #{homeId}
-    </select>
+	<select id="countDoAlarm" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*)
+			from db_vibe_monitor.t_alarm_message t1
+				left join db_vibe_monitor.t_error_message_log t2 on t1.logId = t2. id
+			where t2.assetId in
+			(select id from
+				(select id,catalog from db_vibe_monitor.t_probe union all select id,catalog from db_vibe_monitor.t_control) t where t.catalog in
+					(select id from db_vibe_basic.t_code where parent in (${modules}))) and t1.handled = 2;
+	</select>
 
-    <delete id="deleteUserHomes">
-        delete from db_vibe_basic.t_home_user where user_id = #{userId}
-    </delete>
+	<select id="countAllAlarm" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*)
+			from db_vibe_monitor.t_alarm_message t1
+				left join db_vibe_monitor.t_error_message_log t2 on t1.logId = t2. id
+			where t2.assetId in
+			(select id from
+				(select id,catalog from db_vibe_monitor.t_probe union all select id,catalog from db_vibe_monitor.t_control) t where t.catalog in
+					(select id from db_vibe_basic.t_code where parent in (${modules})));
+	</select>
 
-    <insert id="addUserHomes">
-        insert into db_vibe_basic.t_home_user values(#{userId},#{userHomeId})
-    </insert>
+	<select id="countAlarmByModules" parameterType="java.lang.String" resultType="com.vibe.pojo.AlarmModule">
+		select t4.parent as id,t5.name,count(t1.id) as number
+		from db_vibe_monitor.t_alarm_message t1
+			left join db_vibe_monitor.t_error_message_log t2 on t1.logId = t2. id
+			left join (select id,catalog from db_vibe_monitor.t_probe union all select id,catalog from db_vibe_monitor.t_control) t3 on t2.assetId = t3.id
+			left join (select id,parent,name from db_vibe_basic.t_code where catalog = 2001) t4 on t3.catalog = t4.id
+			left join (select id,parent,name from db_vibe_basic.t_code where catalog = 2001) t5 on t4.parent = t5.id
+			where t4.parent in (${modules})
+			group by t4.parent;
+	</select>
 
-    <select id="getHomeLayoutParameter" resultType="com.vibe.pojo.HomeLayoutParameter">
-        select id,home_id homeId, parameter_name parameterName,parameter_value parameterValue from
-        db_vibe_basic.t_home_layout_parameter where home_id = #{homeId}
-    </select>
+	<select id="countAlarmByIds" parameterType="java.lang.String" resultType="com.vibe.pojo.AlarmModule">
+		select t4.id,t4.name,count(t1.id) as number
+			from db_vibe_monitor.t_alarm_message t1
+				left join db_vibe_monitor.t_error_message_log t2 on t1.logId = t2. id
+				left join (select id,catalog from db_vibe_monitor.t_probe union all select id,catalog from db_vibe_monitor.t_control) t3 on t2.assetId = t3.id
+				left join (select id,name from db_vibe_basic.t_code where catalog = 2001) t4 on t3.catalog = t4.id
+			where t4.id in (${ids})
+			group by t4.id;
+	</select>
 
-    <!--2020年4月15日 liujingeng， 修改where条件，不统计虚表-->
-    <select id="getEnergyAssetCountByCodeId" resultType="java.lang.Integer">
-        SELECT
-        sum( a )
-        FROM
-        ((select COUNT(*) a from db_vibe_monitor.t_probe t1
-        left join db_vibe_monitor.t_probe_energy t2 on t1.id = t2.probe_id
-        where t1.catalog = #{codeId} and (t2.id is null or t2.value_type = 0))union all select COUNT(*) a from
-        db_vibe_monitor.t_control where catalog = #{codeId}) as t;
-    </select>
-    <select id="getEnergyAssetIdByCodeId" resultType="java.lang.Integer">
-        SELECT id FROM
-        (
-        (SELECT t1.id FROM db_vibe_monitor.t_probe t1
-        left join db_vibe_monitor.t_probe_energy t2 on t1.id = t2.probe_id
-        where t1.catalog = #{codeId} and (t2.id is null or t2.value_type = 0))
-        union all select id from db_vibe_monitor.t_control where catalog = #{codeId}) as t;
-    </select>
-
-    <select id="getAssetCountByCodeId" resultType="java.lang.Integer">
-        select sum(a) from (select COUNT(*) a from db_vibe_monitor.t_device where catalog = #{codeId} union all
-        (select COUNT(*) a FROM db_vibe_monitor.t_probe t1
-        left join db_vibe_monitor.t_probe_energy t2 on t1.id = t2.probe_id
-        where t1.catalog = #{codeId} and (t2.id is null or t2.value_type = 0))
-        union all select COUNT(*) a from db_vibe_monitor.t_control where catalog = #{codeId}) as t;
-    </select>
-
-    <select id="getAssetIdByCodeId" resultType="java.lang.Integer">
-        select id from (select id from db_vibe_monitor.t_probe where catalog = #{codeId} union all select id from
-        db_vibe_monitor.t_control where catalog = #{codeId}) as t;
-    </select>
-
-    <select id="getUnDoAlarmCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_alarm_message where handled = 1
-    </select>
-
-    <select id="getDoAlarmCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_alarm_message where handled = 2
-    </select>
-
-    <select id="getAlarmCountByCodeId" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_alarm_message a,db_vibe_monitor.t_error_message_log b where
-        a.logId = b.id and b.assetId in (select id from (select id from db_vibe_monitor.t_probe where catalog in (select
-        id from db_vibe_basic.t_code where parent = #{codeId})
-        union all select id from db_vibe_monitor.t_control where catalog in (select id from db_vibe_basic.t_code where
-        parent = #{codeId})) as t)
-    </select>
-
-    <select id="countAlarm" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_alarm_message
-    </select>
-
-    <select id="countDoAlarm" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select count(*)
-        from db_vibe_monitor.t_alarm_message t1
-        left join db_vibe_monitor.t_error_message_log t2 on t1.logId = t2. id
-        where t2.assetId in
-        (select id from
-        (select id,catalog from db_vibe_monitor.t_probe union all select id,catalog from db_vibe_monitor.t_control) t
-        where t.catalog in
-        (select id from db_vibe_basic.t_code where parent in (${modules}))) and t1.handled = 2;
-    </select>
-
-    <select id="countAllAlarm" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select count(*)
-        from db_vibe_monitor.t_alarm_message t1
-        left join db_vibe_monitor.t_error_message_log t2 on t1.logId = t2. id
-        where t2.assetId in
-        (select id from
-        (select id,catalog from db_vibe_monitor.t_probe union all select id,catalog from db_vibe_monitor.t_control) t
-        where t.catalog in
-        (select id from db_vibe_basic.t_code where parent in (${modules})));
-    </select>
-
-    <select id="countAlarmByModules" parameterType="java.lang.String" resultType="com.vibe.pojo.AlarmModule">
-        select t4.parent as id,t5.name,count(t1.id) as number
-        from db_vibe_monitor.t_alarm_message t1
-        left join db_vibe_monitor.t_error_message_log t2 on t1.logId = t2. id
-        left join (select id,catalog from db_vibe_monitor.t_probe union all select id,catalog from
-        db_vibe_monitor.t_control) t3 on t2.assetId = t3.id
-        left join (select id,parent,name from db_vibe_basic.t_code where catalog = 2001) t4 on t3.catalog = t4.id
-        left join (select id,parent,name from db_vibe_basic.t_code where catalog = 2001) t5 on t4.parent = t5.id
-        where t4.parent in (${modules})
-        group by t4.parent;
-    </select>
-
-    <select id="countAlarmByIds" parameterType="java.lang.String" resultType="com.vibe.pojo.AlarmModule">
-        select t4.id,t4.name,count(t1.id) as number
-        from db_vibe_monitor.t_alarm_message t1
-        left join db_vibe_monitor.t_error_message_log t2 on t1.logId = t2. id
-        left join (select id,catalog from db_vibe_monitor.t_probe union all select id,catalog from
-        db_vibe_monitor.t_control) t3 on t2.assetId = t3.id
-        left join (select id,name from db_vibe_basic.t_code where catalog = 2001) t4 on t3.catalog = t4.id
-        where t4.id in (${ids})
-        group by t4.id;
-    </select>
-
-    <select id="getUnDoFaultCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_old_fault where state = 2
-    </select>
-
-    <select id="getDoFaultCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_old_fault where state = 4
-    </select>
-
-    <select id="getUndoTaskCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_task where state != 6
-    </select>
-    <select id="getTotalTaskCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_task where state
-    </select>
-    <select id="getMonthDoTaskCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_task where state = 6 and DATE_FORMAT( stateTime, '%Y%m' ) = DATE_FORMAT(
-        CURDATE() , '%Y%m' )
-    </select>
-    <select id="getTodayDoTaskCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_task where state = 6 and to_days(stateTime) = to_days(now())
-    </select>
-    <select id="getMonthTotalTaskCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_task where state and DATE_FORMAT( stateTime, '%Y%m' ) = DATE_FORMAT(
-        CURDATE() , '%Y%m' )
-    </select>
-    <select id="getTodayTotalTaskCount" resultType="java.lang.Integer">
-        select count(*) from db_vibe_monitor.t_task where state and to_days(stateTime) = to_days(now())
-    </select>
+	<select id="getUnDoFaultCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_old_fault where state = 2
+	</select>
+	
+	<select id="getDoFaultCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_old_fault where state = 4
+	</select>
+	
+	<select id="getUndoTaskCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_task where state != 6
+	</select>
+	<select id="getTotalTaskCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_task where state
+	</select>
+	<select id="getMonthDoTaskCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_task where state = 6 and DATE_FORMAT( stateTime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+	</select>
+	<select id="getTodayDoTaskCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_task where state = 6 and to_days(stateTime) = to_days(now())
+	</select>
+	<select id="getMonthTotalTaskCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_task where state and DATE_FORMAT( stateTime, '%Y%m' ) = DATE_FORMAT( CURDATE() , '%Y%m' )
+	</select>
+	<select id="getTodayTotalTaskCount" resultType="java.lang.Integer">
+		select count(*) from db_vibe_monitor.t_task where state and to_days(stateTime) = to_days(now())
+	</select>
 </mapper>
 
 

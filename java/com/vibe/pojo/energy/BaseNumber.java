@@ -13,7 +13,7 @@ public class BaseNumber {
     private String month;
     private String nameId;
     private String name;
-    private Object value;
+    private double value;
 
     public String getYear() {
         return year;
@@ -47,11 +47,11 @@ public class BaseNumber {
         this.name = name;
     }
 
-    public Object getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(double value) {
         this.value = value;
     }
 }

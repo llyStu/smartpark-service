@@ -1,72 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.information.PostDao">
-
-
-    <insert id="insertPost" useGeneratedKeys="true" keyProperty="pid">
-        insert into qs_test.t_post(published, title, content, uid, level, views)
-        values(#{published}, #{title}, #{content}, #{uid}, #{level}, #{views})
-    </insert>
-    <update id="updateViews">
-        update qs_test.t_post set views=views+1 where pid=#{pid}
-    </update>
-    <update id="delete">
-        delete from qs_test.t_post where pid in (<foreach collection="ids" item="id">id</foreach>)
-    </update>
-
-    <select id="queryPostList" resultType="com.vibe.pojo.infomation.Post">
-        select pid, published, title, uid, level, views, state, u.name as user
-        from qs_test.t_post p
-        left join db_vibe_basic.t_user u
-        on p.uid = u.id
-        where level &lt;= #{level}
-        order by published desc
-    </select>
-
-    <select id="getSearchPosts" resultType="com.vibe.pojo.infomation.Post">
-        select pid, published, title, uid, level, views, state, u.name as user
-        from qs_test.t_post p
-        left join db_vibe_basic.t_user u
-        on p.uid = u.id
-        <where>
-            <if test="title != null and title != ''">and title like "%"#{title}"%"</if>
-            <if test="user != null and user != ''">and u.name like "%"#{user}"%"</if>
-            <if test="start != null and start != ''">and published &gt;= #{start}</if>
-            <if test="end != null and end != ''">and published &lt;= #{end}</if>
-        </where>
-        order by published desc
-    </select>
-    <select id="queryDraft" resultType="com.vibe.pojo.infomation.Post">
-        select pid, published, title, uid, level, views, state, u.name as user
-        from qs_test.t_post p
-        left join db_vibe_basic.t_user u
-        on p.uid = u.id
-        <where>
-            uid = #{uid} and level = 0
-        </where>
-        order by published
-    </select>
-
-    <select id="queryPost" resultType="com.vibe.pojo.infomation.Post">
-        select pid, published, title, content, uid, level, views, state, u.name as user
-        from qs_test.t_post p
-        left join db_vibe_basic.t_user u
-        on p.uid = u.id
-        <where>
-            pid = #{pid}
-        </where>
-    </select>
-
-    <update id="updatePostState">
-        update qs_test.t_post set level = #{newLevel}
-        <where>
-            pid = #{pid}
-        </where>
-    </update>
-
+	 
+	
+	<insert id="insertPost" useGeneratedKeys="true" keyProperty="pid">
+		insert into qs_test.t_post(published, title, content, uid, level, views)
+			values(#{published}, #{title}, #{content}, #{uid}, #{level}, #{views})
+	</insert>
+	<update id="updateViews">
+		update qs_test.t_post set views=views+1 where pid=#{pid}
+	</update>
+	<update id="delete">
+		delete from qs_test.t_post where pid in (<foreach collection="ids" item="id">id</foreach>)
+	</update>
+	
+	<select id="queryPostList" resultType="com.vibe.pojo.infomation.Post">
+		select pid, published, title, uid, level, views, state, u.name as user
+		from qs_test.t_post p
+		left join db_vibe_basic.t_user u
+		on p.uid = u.id
+		where level &lt;= #{level}
+		order by published desc
+	</select>
+	
+	<select id="getSearchPosts" resultType="com.vibe.pojo.infomation.Post">
+		select pid, published, title, uid, level, views, state, u.name as user
+		from qs_test.t_post p
+		left join db_vibe_basic.t_user u
+		on p.uid = u.id
+		<where>
+			<if test="title != null and title != ''">and title like "%"#{title}"%"</if>
+			<if test="user != null and user != ''">and u.name like "%"#{user}"%"</if>
+			<if test="start != null and start != ''">and published &gt;= #{start}</if>
+			<if test="end != null and end != ''">and published &lt;= #{end}</if>
+		</where>
+		order by published desc
+	</select>
+	<select id="queryDraft" resultType="com.vibe.pojo.infomation.Post">
+		select pid, published, title, uid, level, views, state, u.name as user
+		from qs_test.t_post p
+		left join db_vibe_basic.t_user u
+		on p.uid = u.id
+		<where>
+			uid = #{uid} and level = 0
+		</where>
+		order by published
+	</select>
+	
+	<select id="queryPost" resultType="com.vibe.pojo.infomation.Post">
+		select pid, published, title, content, uid, level, views, state, u.name as user
+		from qs_test.t_post p
+		left join db_vibe_basic.t_user u
+		on p.uid = u.id
+		<where>
+			pid = #{pid}
+		</where>
+	</select>
+	
+	<update id="updatePostState" >
+		update qs_test.t_post set level = #{newLevel}
+		<where>
+			pid = #{pid}
+		</where>
+	</update>
+	
 </mapper>
 
 

@@ -1,78 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.scene.BuildingsPhotoDao">
 
-    <!-- “增” ——参数名：BuildingsPhoto，类型：BuildingsPhoto-->
-    <insert id="addBuildingsPhoto" parameterType="BuildingsPhoto">
-        insert into db_vibe_monitor.buildings_photo (parentId, photo, date,
-        evaluation, protectStatus, statusDescription
-        )
-        values (#{parentId}, #{photo,jdbcType=VARCHAR}, #{date,jdbcType=DATE},
-        #{evaluation,jdbcType=VARCHAR}, #{protectStatus,jdbcType=VARCHAR}, #{statusDescription,jdbcType=VARCHAR}
-        )
-    </insert>
-
-    <!-- “删”——参数名：id,类型：int-->
-    <delete id="delBuildingsPhoto" parameterType="int">
-        delete from db_vibe_monitor.buildings_photo
-        where id = #{id,jdbcType=INTEGER}
-    </delete>
-
-    <!-- “改”——参数名：protectProject,参数类型：ProtectProject-->
-    <update id="updBuildingsPhoto" parameterType="BuildingsPhoto">
-        update db_vibe_monitor.buildings_photo
-        <set>
-
-            <if test="parentId != null">
-                parentId = #{parentId},
-            </if>
-            <if test="photo != null">
-                photo = #{photo,jdbcType=VARCHAR},
-            </if>
-            <if test="date != '' and date != null">
-                date = #{date,jdbcType=DATE},
-            </if>
-            <if test="evaluation != null">
-                evaluation = #{evaluation,jdbcType=VARCHAR},
-            </if>
-            <if test="protectStatus != null">
-                protectStatus = #{protectStatus,jdbcType=VARCHAR},
-            </if>
-            <if test="statusDescription != null">
-                statusDescription = #{statusDescription,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-
-    <!-- 查询列表 -->
-    <select id="lisBuildingsPhoto" resultType="BuildingsPhoto">
-        select * from db_vibe_monitor.buildings_photo order BY id DESC
-    </select>
-
-    <!-- “查询单个”——参数名：id,参数类型：int -->
-    <select id="queBuildingsPhoto" parameterType="int" resultType="BuildingsPhoto">
-        select id,parentId,photo,date,evaluation,protectStatus,statusDescription,type
-        from db_vibe_monitor.buildings_photo
-        where id = #{id,jdbcType=INTEGER}
-    </select>
-
-    <!-- 联合查询所有实测录入类型的表的id,type,date,photo字段 -->
-    <select id="lisUnionPolling" resultType="UnionPolling">
-
-        SELECT id, TYPE, DATE ,photo FROM db_vibe_monitor.archaeology
-        UNION ALL
-        SELECT id, TYPE, DATE ,photo FROM db_vibe_monitor.buildings_photo
-        UNION ALL
-        SELECT id, TYPE, DATE ,photo FROM db_vibe_monitor.implimentation
-        UNION ALL
-        SELECT id, TYPE, DATE ,photo FROM db_vibe_monitor.tourist
-        ORDER BY DATE DESC
-
-    </select>
+	<!-- “增” ——参数名：BuildingsPhoto，类型：BuildingsPhoto-->
+	<insert id="addBuildingsPhoto" parameterType="BuildingsPhoto">
+		 insert into db_vibe_monitor.buildings_photo (parentId, photo, date, 
+	      evaluation, protectStatus, statusDescription
+	      )
+	    values (#{parentId}, #{photo,jdbcType=VARCHAR}, #{date,jdbcType=DATE}, 
+	      #{evaluation,jdbcType=VARCHAR}, #{protectStatus,jdbcType=VARCHAR}, #{statusDescription,jdbcType=VARCHAR}
+	      )
+	</insert>
+	
+	<!-- “删”——参数名：id,类型：int-->
+	<delete id="delBuildingsPhoto" parameterType="int">
+		delete from db_vibe_monitor.buildings_photo
+	   		 where id = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<!-- “改”——参数名：protectProject,参数类型：ProtectProject-->
+	<update id="updBuildingsPhoto" parameterType="BuildingsPhoto">
+		update db_vibe_monitor.buildings_photo
+	    <set >
+	      
+	      <if test="parentId != null" >
+	        parentId = #{parentId},
+	      </if>
+	      <if test="photo != null" >
+	        photo = #{photo,jdbcType=VARCHAR},
+	      </if>
+	      <if test="date != '' and date != null" >
+	        date = #{date,jdbcType=DATE},
+	      </if>
+	      <if test="evaluation != null" >
+	        evaluation = #{evaluation,jdbcType=VARCHAR},
+	      </if>
+	      <if test="protectStatus != null" >
+	        protectStatus = #{protectStatus,jdbcType=VARCHAR},
+	      </if>
+	      <if test="statusDescription != null" >
+	        statusDescription = #{statusDescription,jdbcType=VARCHAR},
+	      </if>
+	    </set>
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 查询列表 -->
+	<select id="lisBuildingsPhoto" resultType="BuildingsPhoto">
+		select * from db_vibe_monitor.buildings_photo  order BY id DESC
+	</select>
+	
+	<!-- “查询单个”——参数名：id,参数类型：int -->
+	<select id="queBuildingsPhoto" parameterType="int" resultType="BuildingsPhoto">
+		select id,parentId,photo,date,evaluation,protectStatus,statusDescription,type
+			from db_vibe_monitor.buildings_photo 
+			where id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 联合查询所有实测录入类型的表的id,type,date,photo字段 -->
+	<select id="lisUnionPolling" resultType="UnionPolling">
+		
+		SELECT id, TYPE, DATE ,photo FROM db_vibe_monitor.archaeology
+		UNION ALL
+		SELECT id, TYPE,  DATE ,photo FROM db_vibe_monitor.buildings_photo
+		UNION ALL
+		SELECT id, TYPE,  DATE ,photo FROM db_vibe_monitor.implimentation
+		UNION ALL
+		SELECT id, TYPE,  DATE ,photo FROM db_vibe_monitor.tourist
+		ORDER BY DATE DESC
+		
+	</select>
 </mapper>
 
 

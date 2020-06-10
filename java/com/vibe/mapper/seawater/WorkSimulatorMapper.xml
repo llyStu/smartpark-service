@@ -1,209 +1,204 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.vibe.mapper.seawater.WorkSimulatorMapper">
-    <resultMap type="com.vibe.pojo.seawater.WorkPattern" id="WorkPatternResult">
-        <id column="id" property="id"/>
-        <result column="name" property="name"/>
-        <result column="time" property="creationTime"/>
-        <result column="data" property="data"/>
-        <result column="state" property="state"/>
-        <result column="delfalg" property="delFalg"/>
-        <result column="user_id" property="userId"/>
-        <collection property="workPeriods" ofType="com.vibe.pojo.seawater.WorkPeriod">
-            <id column="lid" property="id"/>
-            <result column="startTime" property="startTime"/>
-            <result column="endTime" property="endTime"/>
-            <result column="runData" property="runData"/>
-            <result column="runState" property="runState"/>
-            <result column="workTemplateId" property="workTemplateId"/>
-            <result column="run_first_logid" property="runFirstLogId"/>
-            <result column="falg" property="falg"/>
-        </collection>
-    </resultMap>
+	<resultMap type="com.vibe.pojo.seawater.WorkPattern" id="WorkPatternResult">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="time" property="creationTime"/>
+		<result column="data" property="data"/>
+		<result column="state" property="state"/>
+		<result column="delfalg" property="delFalg"/>
+		<result column="user_id" property="userId"/>
+		<collection property="workPeriods" ofType="com.vibe.pojo.seawater.WorkPeriod">
+			<id column="lid" property="id"/>
+			<result column="startTime" property="startTime"/>
+			<result column="endTime" property="endTime"/>
+			<result column="runData" property="runData"/>
+			<result column="runState" property="runState"/>
+			<result column="workTemplateId" property="workTemplateId"/>
+			<result column="run_first_logid" property="runFirstLogId"/>
+			<result column="falg" property="falg"/>
+		</collection>
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		wtl.id,wtl.name,wtl.time,wtl.data,wtl.state,wtl.delfalg,wtl.user_id
+		,wl.id as
+		lid,wl.startTime,wl.endTime,wl.runData,wl.runState,wl.workTemplateId,wl.run_first_logid,wl.falg
+	</sql>
+	<resultMap type="com.vibe.pojo.seawater.WorkPeriod" id="WorkPeriodResult">
+		<id column="id" property="id"/>
+			<result column="startTime" property="startTime"/>
+			<result column="endTime" property="endTime"/>
+			<result column="runData" property="runData"/>
+			<result column="runState" property="runState"/>
+			<result column="workTemplateId" property="workTemplateId"/>
+			<result column="run_first_logid" property="runFirstLogId"/>
+			<result column="falg" property="falg"/>
+			<result column="name" property="workName"/>
+			<result column="state" property="workState"/>
+	</resultMap>
 
-    <sql id="Base_Column_List">
-        wtl.id,wtl.name,wtl.time,wtl.data,wtl.state,wtl.delfalg,wtl.user_id
-        ,wl.id as
-        lid,wl.startTime,wl.endTime,wl.runData,wl.runState,wl.workTemplateId,wl.run_first_logid,wl.falg
-    </sql>
-    <resultMap type="com.vibe.pojo.seawater.WorkPeriod" id="WorkPeriodResult">
-        <id column="id" property="id"/>
-        <result column="startTime" property="startTime"/>
-        <result column="endTime" property="endTime"/>
-        <result column="runData" property="runData"/>
-        <result column="runState" property="runState"/>
-        <result column="workTemplateId" property="workTemplateId"/>
-        <result column="run_first_logid" property="runFirstLogId"/>
-        <result column="falg" property="falg"/>
-        <result column="name" property="workName"/>
-        <result column="state" property="workState"/>
-    </resultMap>
-
-    <!-- 添加工况 -->
-    <insert id="insertSimulatorWork" parameterType="com.vibe.pojo.seawater.WorkPattern">
-        insert into
-        db_vibe_monitor.t_work_template(name,time,data,state,delfalg,user_id)
-        value(#{name},#{creationTime},#{data},#{state},#{delFalg},#{user.id});
-    </insert>
-    <!-- 修改工况信息 -->
-    <update id="updateSimulatorWork" parameterType="com.vibe.pojo.seawater.WorkPattern">
-        update db_vibe_monitor.t_work_template
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="name!=null and ''!=name">
-                name=#{name},
-            </if>
-            <if test="data!=null and ''!=data">
-                data=#{data},
-            </if>
-            <if test="state!=null">
-                state=#{state}
-            </if>
-        </trim>
-        where id=#{id}
-    </update>
-
-    <!-- 查询所有工况以及工况运行信息 -->
-    <select id="findAllSimulatorWork" parameterType="com.vibe.pojo.seawater.WorkPattern"
-            resultMap="WorkPatternResult">
-        select
-        <include refid="Base_Column_List"/>
-        from
-        db_vibe_monitor.t_work_template as wtl left join
-        db_vibe_monitor.t_work_log as wl on wtl.id=wl.workTemplateId
-        and wl.falg &lt;=#{delFalg}
-        <where>
-            <if test="name !=null and name!=''">
-                wtl.name like "%"#{name}"%"
-            </if>
-            <if test="user !=null">
-                and wtl.user_id=#{user.id}
-            </if>
-            and wtl.delfalg &lt;=#{delFalg}
-        </where>
-        order by wl.endTime asc
-    </select>
-    <!-- 根据多个id查询工况信息 -->
-    <select id="findSimulatorWork" resultMap="WorkPatternResult">
-        select wtl.id,wtl.name,wtl.time,wtl.data,wtl.state,wtl.delfalg,wtl.user_id from
-        db_vibe_monitor.t_work_template as wtl
-        <where>
-            wtl.id in(
-            <foreach collection="ids" item="id" separator=",">
-                #{id}
-            </foreach>
-            )
-        </where>
-    </select>
-
-
-    <select id="findAllWorkPeriod" parameterType="com.vibe.pojo.seawater.WorkPeriod" resultMap="WorkPeriodResult">
-        select
-        wl.id,wl.startTime,wl.endTime,wl.runData,wl.runState,wl.workTemplateId,wl.run_first_logid,wl.falg,wtl.name,wtl.state
-        from
-        db_vibe_monitor.t_work_log as wl left join db_vibe_monitor.t_work_template as wtl on wtl.id=wl.workTemplateId
-
-        <where>
-            <if test="startTime!=null">
-                and wl.startTime >= #{startTime}
-            </if>
-            <if test="startTime!=null">
-                and wl.endTime &lt;= #{endTime}
-            </if>
-            <if test="workTemplateId!=null">
-                and wl.workTemplateId = #{workTemplateId}
-            </if>
-            <if test="user !=null">
-                and wtl.user_id=#{user.id}
-            </if>
-            and wl.falg &lt;=#{falg}
-        </where>
-        order by wl.id desc
-    </select>
-
-    <!-- 删除工况根据id -->
-    <update id="delSimulatorWork">
-        update db_vibe_monitor.t_work_template set delfalg=2
-        <where>
-            id in(
-            <foreach collection="ids" item="id" separator=",">
-                #{id}
-            </foreach>
-            )
-        </where>
-    </update>
-    <!-- 根据id删除运行工况 -->
-    <update id="delWorkPeriod">
-        update db_vibe_monitor.t_work_log set falg=#{falg}
-        <where>
-            id in(
-            <foreach collection="ids" item="id" separator=",">
-                #{id}
-            </foreach>
-            )
-        </where>
-    </update>
-    <!-- 根据工况id删除运行工况 -->
-    <update id="delWorkTemplateId">
-        update db_vibe_monitor.t_work_log set falg=2
-        <where>
-            workTemplateId in(
-            <foreach collection="ids" item="id" separator=",">
-                #{id}
-            </foreach>
-            )
-        </where>
-    </update>
-
-    <select id="findAllWorkPatternName" resultType="com.vibe.pojo.seawater.WorkPattern">
-        select wtl.id,wtl.name from db_vibe_monitor.t_work_template as wtl
-        <where>
-            <if test="userId!=null">
-                wtl.user_id=#{userId}
-            </if>
-            <if test="delFalg!=null">
-                and wtl.delfalg=#{delFalg}
-            </if>
-        </where>
-    </select>
-
-    <select id="findNameSimulatorWork" resultType="com.vibe.pojo.seawater.WorkPattern">
-        select * from db_vibe_monitor.t_work_template as wtl
-        <where>
-            <if test="name !=null">
-                wtl.name=#{name}
-            </if>
-            <if test="userId !=null">
-                and wtl.user_id=#{userId}
-            </if>
-            and wtl.delfalg=#{delFalg}
-        </where>
-    </select>
-
-    <insert id="insertWorkPeriod" parameterType="com.vibe.pojo.seawater.WorkPeriod" useGeneratedKeys="true"
-            keyProperty="id">
-        insert into db_vibe_monitor.t_work_log(startTime,runData,workTemplateId,runState,run_first_logid,falg)
-        value(#{startTime},#{runData},#{workTemplateId},#{runState},#{runFirstLogId},#{falg})
-    </insert>
-
-    <update id="updateWorkPeriod" parameterType="com.vibe.pojo.seawater.WorkPeriod">
-        update db_vibe_monitor.t_work_log set endTime=#{endTime},runState=#{runState} where id=#{id}
-    </update>
-
-    <select id="findWorkPatternCheckId" resultType="com.vibe.pojo.seawater.WorkPeriod">
-        select wl.startTime,wl.endTime,wl.runData,wl.workTemplateId,wl.runState,wl.run_first_logid,wl.falg from
-        db_vibe_monitor.t_work_log as wl
-        <where>
-            wl.id in(
-            <foreach collection="ids" item="id" separator=",">
-                #{id}
-            </foreach>
-            )
-        </where>
-    </select>
-
+	<!-- 添加工况 -->
+	<insert id="insertSimulatorWork" parameterType="com.vibe.pojo.seawater.WorkPattern">
+		insert into
+		db_vibe_monitor.t_work_template(name,time,data,state,delfalg,user_id)
+		value(#{name},#{creationTime},#{data},#{state},#{delFalg},#{user.id});
+	</insert>
+	<!-- 修改工况信息 -->
+	<update id="updateSimulatorWork" parameterType="com.vibe.pojo.seawater.WorkPattern">
+		update db_vibe_monitor.t_work_template
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="name!=null and ''!=name">
+				name=#{name},
+			</if>
+			<if test="data!=null and ''!=data">
+				data=#{data},
+			</if>
+			<if test="state!=null">
+				state=#{state}
+			</if>
+		</trim>
+		where id=#{id}
+	</update>
+	
+	<!-- 查询所有工况以及工况运行信息 -->
+	<select id="findAllSimulatorWork" parameterType="com.vibe.pojo.seawater.WorkPattern"
+		resultMap="WorkPatternResult">
+		select
+			<include refid="Base_Column_List"/>
+		from
+		db_vibe_monitor.t_work_template as wtl left join
+		db_vibe_monitor.t_work_log as wl on wtl.id=wl.workTemplateId
+				 and wl.falg &lt;=#{delFalg}
+		<where>
+			<if test="name !=null and name!=''">
+				wtl.name like "%"#{name}"%"
+			</if>
+			<if test="user !=null">
+				and wtl.user_id=#{user.id}
+			</if>
+				and wtl.delfalg &lt;=#{delFalg}
+		</where>
+		order by wl.endTime asc
+	</select>
+	<!-- 根据多个id查询工况信息 -->
+	<select id="findSimulatorWork" resultMap="WorkPatternResult">
+		select wtl.id,wtl.name,wtl.time,wtl.data,wtl.state,wtl.delfalg,wtl.user_id from
+		db_vibe_monitor.t_work_template as wtl 
+		<where>
+			wtl.id in( 
+			<foreach collection="ids" item="id" separator=",">
+				#{id}
+			</foreach>
+			)
+		</where>
+	</select>
+	
+	
+	<select id="findAllWorkPeriod" parameterType="com.vibe.pojo.seawater.WorkPeriod" resultMap="WorkPeriodResult">
+		select wl.id,wl.startTime,wl.endTime,wl.runData,wl.runState,wl.workTemplateId,wl.run_first_logid,wl.falg,wtl.name,wtl.state from
+		db_vibe_monitor.t_work_log as wl left join db_vibe_monitor.t_work_template as wtl on wtl.id=wl.workTemplateId
+		 
+		<where>
+			<if test="startTime!=null">
+				and wl.startTime >= #{startTime}
+			</if>
+			<if test="startTime!=null">
+				and wl.endTime &lt;= #{endTime}
+			</if>
+			<if test="workTemplateId!=null">
+				and wl.workTemplateId = #{workTemplateId}
+			</if>
+			<if test="user !=null">
+				and wtl.user_id=#{user.id}
+			</if>
+				and wl.falg &lt;=#{falg}
+		</where>
+		order by wl.id desc
+	</select>
+	
+	<!-- 删除工况根据id -->
+	<update id="delSimulatorWork">
+		update db_vibe_monitor.t_work_template set delfalg=2
+		<where>
+			id in( 
+			<foreach collection="ids" item="id" separator=",">
+				#{id}
+			</foreach>
+			)
+		</where>
+	</update>
+	<!-- 根据id删除运行工况 -->
+	<update id="delWorkPeriod">
+		update db_vibe_monitor.t_work_log set falg=#{falg}
+		<where>
+			id in( 
+			<foreach collection="ids" item="id" separator=",">
+				#{id}
+			</foreach>
+			)
+		</where>
+	</update>
+	<!-- 根据工况id删除运行工况 -->
+	<update id="delWorkTemplateId">
+		update db_vibe_monitor.t_work_log set falg=2
+		<where>
+			workTemplateId in(
+			<foreach collection="ids" item="id" separator=",">
+				#{id}
+			</foreach>
+			)
+		</where>
+	</update>
+	
+	<select id="findAllWorkPatternName" resultType="com.vibe.pojo.seawater.WorkPattern">
+		select wtl.id,wtl.name from db_vibe_monitor.t_work_template as wtl 
+		<where>
+			<if test="userId!=null">
+				wtl.user_id=#{userId}
+			</if>
+			<if test="delFalg!=null">
+				and wtl.delfalg=#{delFalg}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findNameSimulatorWork" resultType="com.vibe.pojo.seawater.WorkPattern">
+		select * from db_vibe_monitor.t_work_template as wtl 
+		<where>
+			<if test="name !=null">
+				 wtl.name=#{name} 
+			</if>
+			<if test="userId !=null">
+				 and wtl.user_id=#{userId} 
+			</if>
+				 and wtl.delfalg=#{delFalg} 
+		</where>
+	</select>
+	
+	<insert id="insertWorkPeriod" parameterType="com.vibe.pojo.seawater.WorkPeriod" useGeneratedKeys="true" keyProperty="id">
+		insert into db_vibe_monitor.t_work_log(startTime,runData,workTemplateId,runState,run_first_logid,falg)  value(#{startTime},#{runData},#{workTemplateId},#{runState},#{runFirstLogId},#{falg})
+	</insert>	
+	
+	<update id="updateWorkPeriod" parameterType="com.vibe.pojo.seawater.WorkPeriod">
+		update  db_vibe_monitor.t_work_log  set endTime=#{endTime},runState=#{runState} where id=#{id}
+	</update>	
+	
+	<select id="findWorkPatternCheckId" resultType="com.vibe.pojo.seawater.WorkPeriod">
+		select wl.startTime,wl.endTime,wl.runData,wl.workTemplateId,wl.runState,wl.run_first_logid,wl.falg from db_vibe_monitor.t_work_log as wl 
+			<where>
+			wl.id in( 
+			<foreach collection="ids" item="id" separator=",">
+				#{id}
+			</foreach>
+			)
+		</where>
+	</select>
+	
 </mapper>
 
 

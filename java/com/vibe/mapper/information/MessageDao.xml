@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.information.MessageDao">
-    <insert id="addMessage">
-        insert into qs_test.t_Message(mid, sender, receiver, sendtime, state, content)
-        values(#{mid}, #{sender}, #{receiver}, #{sendtime}, #{state}, #{content})
-    </insert>
-
-    <select id="getSearchMessages" resultType="com.vibe.pojo.infomation.Message">
-        select mid, sender, receiver, sendtime, state, content from qs_test.t_Message
-        <where>
-            <if test="sender != null">and sender = #{sender}</if>
-            <if test="receiver != null">and receiver = #{receiver}</if>
-            <if test="state != null">and state = #{state}</if>
-            <if test="start != null and start !=''">and sendtime >= #{start}</if>
-            <if test="end != null and end != ''">and sendtime &lt;= #{end}</if>
-            <if test="content != null and content != ''">and content like "%"#{content}"%"</if>
-            <if test="user != null">and (sender = #{user} or receiver = #{user})</if>
-        </where>
-        order by sendtime desc
-    </select>
-
-    <select id="getDetail" resultType="com.vibe.pojo.infomation.Message">
-        select mid, sender, receiver, sendtime, state, content from qs_test.t_Message where mid = #{mid}
-    </select>
-
-    <delete id="deleteMessage">
-        delete from qs_test.t_Message where
-        <foreach collection="ids" item="id" separator=" or ">
-            mid = #{id}
-        </foreach>
-    </delete>
+	<insert id="addMessage">
+		insert into qs_test.t_Message(mid, sender, receiver, sendtime, state, content)
+			values(#{mid}, #{sender}, #{receiver}, #{sendtime}, #{state}, #{content})
+	</insert>
+	
+	<select id="getSearchMessages" resultType="com.vibe.pojo.infomation.Message">
+		select mid, sender, receiver, sendtime, state, content from qs_test.t_Message
+		<where>
+			<if test="sender != null">and sender = #{sender}</if>
+			<if test="receiver != null">and receiver = #{receiver}</if>
+			<if test="state != null">and state = #{state}</if>
+			<if test="start != null and start !=''">and sendtime >= #{start}</if>
+			<if test="end != null and end != ''">and sendtime &lt;= #{end}</if>
+			<if test="content != null and content != ''">and content like "%"#{content}"%"</if>
+			<if test="user != null">and (sender = #{user} or receiver = #{user})</if>
+		</where>
+		order by sendtime desc
+	</select>
+	
+	<select id="getDetail" resultType="com.vibe.pojo.infomation.Message">
+		select mid, sender, receiver, sendtime, state, content from qs_test.t_Message where mid = #{mid}
+	</select>
+	
+	<delete id="deleteMessage">
+		delete from qs_test.t_Message where
+		<foreach collection="ids" item="id" separator=" or ">
+			mid = #{id}
+		</foreach>
+	</delete>
 </mapper>
 
 

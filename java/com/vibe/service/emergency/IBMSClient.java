@@ -6,9 +6,9 @@ import com.vibe.pojo.emergency.EmergencyEvent;
 import com.vibe.pojo.emergency.Operation;
 
 public interface IBMSClient {
-    void init();
+	void init();
 
-    String getName();
+	String getName();
 
-    void handle(List<Operation> operations, EmergencyEvent event, IBMSClient src);
+	void handle(List<Operation> operations, EmergencyEvent event, IBMSClient src);
 }

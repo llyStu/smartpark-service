@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface SystemDao {
 
-    public List<SystemSettingBean> getSystemSettings();
+	public List<SystemSettingBean> getSystemSettings();
 }

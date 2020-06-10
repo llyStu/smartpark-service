@@ -6,50 +6,50 @@ import java.util.List;
 import java.util.Map;
 
 public interface HomeService {
+	
+	public List<HomeBean> getHomes();
+	
+	public List<HomeBean> getUserHomes(int userId);
+	
+	public void updateHomes(int userId, List<Integer> userHomes);
 
-    public List<HomeBean> getHomes();
+	public String homeInterfaceMonitor(int homeId);
 
-    public List<HomeBean> getUserHomes(int userId);
+	public String homeInterfaceAlarm(int homeId);
 
-    public void updateHomes(int userId, List<Integer> userHomes);
+	public String homeInterfaceFault(int homeId);
 
-    public String homeInterfaceMonitor(int homeId);
+	public String homeInterfaceTask(int homeId);
 
-    public String homeInterfaceAlarm(int homeId);
+	public String homeInterfaceEnvironment(int homeId);
 
-    public String homeInterfaceFault(int homeId);
+	public Map<Object, Object> homeInterfaceAsset(String codeName, int type);
 
-    public String homeInterfaceTask(int homeId);
+	public int alarmCount();
 
-    public String homeInterfaceEnvironment(int homeId);
+	public Map<Object, Object> allInterface(String url);
 
-    public Map<Object, Object> homeInterfaceAsset(String codeName, int type);
+	public List<HomeCamera> homeCamera(String codeName);
 
-    public int alarmCount();
+	public Map<Object, Object> allDeviceStateData();
 
-    public Map<Object, Object> allInterface(String url);
+	public Map<Short, XiaofangCount> xiaofangCountData();
 
-    public List<HomeCamera> homeCamera(String codeName);
+	AlarmModuleAll homeInterfaceAlarmByModule(String modules);
 
-    public Map<Object, Object> allDeviceStateData();
+	List<AlarmModule> homeInterfaceAlarmById(String ids);
 
-    public Map<Short, XiaofangCount> xiaofangCountData();
+	int countAlarm();
 
-    AlarmModuleAll homeInterfaceAlarmByModule(String modules);
+	List<AlarmModule> countAlarmByCatalogs(String catalog);
 
-    List<AlarmModule> homeInterfaceAlarmById(String ids);
+	Map<String, Integer> countMonitorByCatalogs(String catalog);
 
-    int countAlarm();
+	Map<String, Object> deviceTypeAlarmProportion();
 
-    List<AlarmModule> countAlarmByCatalogs(String catalog);
+	Map<String, List<Object>> countMonitorStatus(String ids);
 
-    Map<String, Integer> countMonitorByCatalogs(String catalog);
+	Map<String, Integer> homeAssetHealth(Integer spaceId, Integer kind);
 
-    Map<String, Object> deviceTypeAlarmProportion();
-
-    Map<String, List<Object>> countMonitorStatus(String ids);
-
-    Map<String, Integer> homeAssetHealth(Integer spaceId, Integer kind);
-
-    Map<String, Object> getEnergyModule(EnergyModule energyModule);
+	Map<String, Object> getEnergyModule(EnergyModule energyModule);
 }

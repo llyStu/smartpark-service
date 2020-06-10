@@ -10,18 +10,18 @@ import com.vibe.utils.FormJson;
 
 @Controller
 public class Backup {
-    @Autowired
-    private BackupService backup;
-
-    @RequestMapping("/backupAll")
-    @ResponseBody
-    public FormJson backupAll() {
-        return backup.backupAll();
-    }
-
-    @RequestMapping("/recoverAll")
-    @ResponseBody
-    public FormJson recoverAll() {
-        return backup.recoverAll();
-    }
+	@Autowired
+	private BackupService backup;
+	
+	@RequestMapping("/backupAll")
+	@ResponseBody
+	public FormJson backupAll(){
+		return backup.backupAll();
+	}
+	
+	@RequestMapping("/recoverAll")
+	@ResponseBody
+	public FormJson recoverAll(){
+		return backup.recoverAll();
+	}
 }

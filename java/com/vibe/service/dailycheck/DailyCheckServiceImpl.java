@@ -10,38 +10,38 @@ import com.vibe.pojo.DailyCheck;
 
 @Service
 public class DailyCheckServiceImpl implements DailyCheckService {
+	
+	@Autowired
+	private DailyCheckDao dailyCheckDao;
+	
+	public void insertDailyCheck(DailyCheck dailyCheck) {		
 
-    @Autowired
-    private DailyCheckDao dailyCheckDao;
+		dailyCheckDao.insertDailyCheck(dailyCheck);
+		
+	}
 
-    public void insertDailyCheck(DailyCheck dailyCheck) {
+	public void deleteDailyCheck(int parseInt) {
+		
+		dailyCheckDao.deleteDailyCheck(parseInt);
+	}
 
-        dailyCheckDao.insertDailyCheck(dailyCheck);
+	public DailyCheck queryDailyCheck(int id) {
+		
+		DailyCheck d = dailyCheckDao.queryDailyCheck(id);
+		//return dailyCheckDao.queryDailyCheck(id);
+		return d;
+	}
 
-    }
+	@Override
+	public List<DailyCheck> queryDailyCheckList() {
+		
+		return dailyCheckDao.queryDailyCheckList();
+	}
 
-    public void deleteDailyCheck(int parseInt) {
+	@Override
+	public void updateDailyCheck(DailyCheck dailyCheck) {
 
-        dailyCheckDao.deleteDailyCheck(parseInt);
-    }
-
-    public DailyCheck queryDailyCheck(int id) {
-
-        DailyCheck d = dailyCheckDao.queryDailyCheck(id);
-        //return dailyCheckDao.queryDailyCheck(id);
-        return d;
-    }
-
-    @Override
-    public List<DailyCheck> queryDailyCheckList() {
-
-        return dailyCheckDao.queryDailyCheckList();
-    }
-
-    @Override
-    public void updateDailyCheck(DailyCheck dailyCheck) {
-
-        dailyCheckDao.updateDailyCheck(dailyCheck);
-    }
+		dailyCheckDao.updateDailyCheck(dailyCheck);
+	}
 
 }

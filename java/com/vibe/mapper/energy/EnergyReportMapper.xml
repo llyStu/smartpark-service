@@ -1,132 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.energy.EnergyReportMapper">
-    <select id="getUnit" resultType="string">
-        SELECT unit from db_vibe_basic.t_code where id = #{catalog} and catalog in (2001, 2200) limit 1
-    </select>
-
-    <select id="getPerCapitaEnergyReport1" parameterType="com.vibe.pojo.energy.EnergyReportVo"
-            resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
-        SELECT t.moment, TRUNCATE(SUM(amountValue),2) AS inc
-        FROM ${srcTable} AS t
-        LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
-        LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
-        LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
-        WHERE pe.itemize_type = #{catalog} and pe.value_type=1
-        AND t.moment BETWEEN #{start} AND #{end}
-        GROUP BY t.moment
-        ORDER BY t.moment
-    </select>
-
-    <select id="getUnitAreaEnergyReport1" parameterType="com.vibe.pojo.energy.EnergyReportVo"
-            resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
-        SELECT t.moment, TRUNCATE(SUM(amountValue) / IFNULL(s.area, 1),2) AS inc
-        FROM ${srcTable} AS t
-        LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
-        LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
-        LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
-        WHERE pe.value_type=1 and pe.itemize_type = #{catalog} AND p.parent = #{spaceId}
-        AND t.moment BETWEEN #{start} AND #{end}
-        GROUP BY t.moment
-        ORDER BY t.moment
-    </select>
-    <select id="getUnitAreaEnergyReport2" parameterType="com.vibe.pojo.energy.EnergyReportVo"
-            resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
-        SELECT s.caption AS spaceCaption, TRUNCATE(SUM(amountValue),2) AS inc
-        FROM ${srcTable} AS t
-        LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
-        LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
-        LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
-        WHERE pe.value_type=1 and pe.itemize_type = #{catalog} AND s.parent = #{spaceId}
-        AND t.moment BETWEEN #{start} AND #{end}
-        GROUP BY s.id
-        ORDER BY s.seqence
-    </select>
+	<select id="getUnit" resultType="string">
+		SELECT unit from db_vibe_basic.t_code where id = #{catalog} and catalog in (2001, 2200) limit 1
+	</select>
+	
+	<select id="getPerCapitaEnergyReport1" parameterType="com.vibe.pojo.energy.EnergyReportVo" resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
+		SELECT t.moment, TRUNCATE(SUM(amountValue),2) AS inc
+		FROM ${srcTable} AS t
+		LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
+		LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
+		LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
+		WHERE pe.itemize_type = #{catalog} and pe.value_type=1
+			AND t.moment BETWEEN #{start} AND #{end}
+		GROUP BY t.moment
+		ORDER BY t.moment
+	</select>
+	
+	<select id="getUnitAreaEnergyReport1" parameterType="com.vibe.pojo.energy.EnergyReportVo" resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
+		SELECT t.moment, TRUNCATE(SUM(amountValue) / IFNULL(s.area, 1),2) AS inc
+		FROM ${srcTable} AS t
+		LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
+		LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
+		LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
+		WHERE pe.value_type=1 and pe.itemize_type = #{catalog} AND p.parent = #{spaceId}
+			AND t.moment BETWEEN #{start} AND #{end}
+		GROUP BY t.moment
+		ORDER BY t.moment
+	</select>
+	<select id="getUnitAreaEnergyReport2" parameterType="com.vibe.pojo.energy.EnergyReportVo" resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
+		SELECT s.caption AS spaceCaption, TRUNCATE(SUM(amountValue),2) AS inc
+		FROM ${srcTable} AS t
+		LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
+		LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
+		LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
+		WHERE pe.value_type=1 and pe.itemize_type = #{catalog} AND s.parent = #{spaceId}
+			AND t.moment BETWEEN #{start} AND #{end}
+		GROUP BY s.id
+		ORDER BY s.seqence
+	</select>
 
 
-    <select id="getAllCatalog" resultType="com.vibe.pojo.energy.CatalogTreeNode">
-        select id, catalog as catalogId, name, unit, parent as parentId from db_vibe_basic.t_code where catalog = 2200
-        order by parent
-    </select>
-    <select id="getProbeByCatalogs" resultType="com.vibe.pojo.HandInputProbe">
-        select p.name as caption, p.id AS monitorId, pe.itemize_type AS catalog, p.caption as name
-        FROM db_vibe_monitor.t_probe p
-        LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
-        where pe.value_type=1 and pe.itemize_type in (
-        <foreach collection="catalogIds" item="id" separator=",">#{id}</foreach>
-        )
-    </select>
-    <select id="getEquiEnergyReport" parameterType="com.vibe.pojo.energy.EnergyReportVo"
-            resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
-        SELECT t.moment,TRUNCATE(amountValue,2) AS inc
-        FROM ${srcTable} AS t
-        WHERE t.monitor = #{probeId}
-        AND t.moment BETWEEN #{start} AND #{end}
-        ORDER BY t.moment
-    </select>
+	<select id="getAllCatalog" resultType="com.vibe.pojo.energy.CatalogTreeNode">
+		select id,  catalog as catalogId,  name,  unit, parent as parentId from db_vibe_basic.t_code where catalog = 2200 order by parent
+	</select>
+	<select id="getProbeByCatalogs" resultType="com.vibe.pojo.HandInputProbe">
+		select p.name as caption, p.id AS monitorId, pe.itemize_type AS catalog, p.caption as name
+		FROM db_vibe_monitor.t_probe p
+		LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
+		where pe.value_type=1 and pe.itemize_type in (
+			<foreach collection="catalogIds" item="id" separator=",">#{id}</foreach>
+		)
+	</select>
+	<select id="getEquiEnergyReport" parameterType="com.vibe.pojo.energy.EnergyReportVo" resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
+		SELECT t.moment,TRUNCATE(amountValue,2)  AS inc
+		FROM ${srcTable} AS t
+		WHERE t.monitor = #{probeId}
+			AND t.moment BETWEEN #{start} AND #{end}
+		ORDER BY t.moment
+	</select>
+	
 
+	<select id="getIdleEnergyReport" parameterType="com.vibe.pojo.energy.EnergyReportVo" resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
+		SELECT t.moment, TRUNCATE(SUM(amountValue),2) AS inc
+		FROM db_vibe_data.t_sample_float_hour t
+		LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
+		LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
+		LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
+		WHERE pe.value_type=1 and s.parent = 0 AND pe.itemize_type = 34
+			AND t.moment BETWEEN #{start} AND #{end}
+		GROUP BY t.moment
+		ORDER BY t.moment
+	</select>
 
-    <select id="getIdleEnergyReport" parameterType="com.vibe.pojo.energy.EnergyReportVo"
-            resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
-        SELECT t.moment, TRUNCATE(SUM(amountValue),2) AS inc
-        FROM db_vibe_data.t_sample_float_hour t
-        LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
-        LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
-        LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
-        WHERE pe.value_type=1 and s.parent = 0 AND pe.itemize_type = 34
-        AND t.moment BETWEEN #{start} AND #{end}
-        GROUP BY t.moment
-        ORDER BY t.moment
-    </select>
-
-    <select id="getSpaceEnergyReport" parameterType="com.vibe.pojo.energy.EnergyReportVo"
-            resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
-        SELECT s.id as spaceId, s.type as spaceType, s.name as spaceName, s.caption as spaceCaption,
-        p.type as probeType, p.name as probeName, p.caption as probeCaption, c.unit as probeUnit,
-        t.moment as moment, TRUNCATE(SUM(amountValue),2) AS inc
-        FROM ${srcTable} AS t
-        LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
-        LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
-        LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
-        LEFT JOIN db_vibe_basic.t_code c ON c.catalog = 2200 AND c.id = pe.itemize_type
-        WHERE pe.value_type=1 and pe.itemize_type = #{catalog} AND s.parent = #{spaceId}
-        AND t.moment BETWEEN #{start} AND #{end}
-        GROUP BY p.parent, t.moment
-        ORDER BY p.parent, t.moment
-    </select>
-
-    <select id="getCatalogEnergyReport" parameterType="com.vibe.pojo.energy.EnergyReportVo"
-            resultType="com.vibe.pojo.energy.CatalogEnergyReportData">
-        SELECT pe.itemize_type AS catalog, c.name, t.moment, TRUNCATE((amountValue),2) AS inc, c.unit
-        FROM ${srcTable} AS t
-        LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
-        LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
-        LEFT JOIN db_vibe_basic.t_code c ON c.id = pe.itemize_type
-        WHERE pe.value_type=1 and c.catalog = 2200 AND c.parent = #{catalog} and p.parent = 1
-        and c.name &lt;&gt; '综合用电'
-        AND t.moment BETWEEN #{start} AND #{end}
-        GROUP BY pe.itemize_type, t.moment
-        ORDER BY pe.itemize_type, t.moment
-    </select>
-
-
-    <select id="getSpaceEnergyReport0" parameterType="com.vibe.pojo.energy.EnergyReportVo"
-            resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
-        SELECT t.moment, TRUNCATE(SUM(amountValue),2) AS inc
-        FROM ${srcTable} AS t
-        LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
-        LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
-        WHERE pe.value_type=1 and pe.itemize_type = #{catalog}
-        AND t.moment BETWEEN #{start} AND #{end}
-        AND p.parent IN (
-        <foreach collection="spaceIds" item="id" separator=",">#{id}</foreach>
-        )
-        GROUP BY t.moment
-        ORDER BY t.moment
-    </select>
+	<select id="getSpaceEnergyReport" parameterType="com.vibe.pojo.energy.EnergyReportVo" resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
+		SELECT s.id as spaceId, s.type as spaceType, s.name as spaceName, s.caption as spaceCaption,
+			p.type as probeType, p.name as probeName, p.caption as probeCaption, c.unit as probeUnit,
+			t.moment as moment, TRUNCATE(SUM(amountValue),2) AS inc
+		FROM ${srcTable} AS t
+		LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
+		LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
+		LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
+		LEFT JOIN db_vibe_basic.t_code c ON c.catalog = 2200 AND c.id = pe.itemize_type
+		WHERE pe.value_type=1 and pe.itemize_type = #{catalog} AND s.parent = #{spaceId}
+			AND t.moment BETWEEN #{start} AND #{end}
+		GROUP BY p.parent, t.moment
+		ORDER BY p.parent, t.moment
+	</select>
+	
+	<select id="getCatalogEnergyReport" parameterType="com.vibe.pojo.energy.EnergyReportVo" resultType="com.vibe.pojo.energy.CatalogEnergyReportData">
+		SELECT pe.itemize_type AS catalog, c.name, t.moment, TRUNCATE((amountValue),2) AS inc, c.unit
+		FROM ${srcTable} AS t
+		LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
+		LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
+		LEFT JOIN db_vibe_basic.t_code c ON c.id = pe.itemize_type
+		WHERE pe.value_type=1 and c.catalog = 2200 AND c.parent = #{catalog} and p.parent = 1
+		and c.name &lt;&gt; '综合用电'
+		AND t.moment BETWEEN #{start} AND #{end}
+		GROUP BY pe.itemize_type, t.moment
+		ORDER BY pe.itemize_type, t.moment
+	</select>
+	
+	
+	<select id="getSpaceEnergyReport0" parameterType="com.vibe.pojo.energy.EnergyReportVo" resultType="com.vibe.pojo.energy.SpaceEnergyReportData">
+		SELECT t.moment, TRUNCATE(SUM(amountValue),2) AS inc
+		FROM ${srcTable} AS t
+		LEFT JOIN db_vibe_monitor.t_probe p ON p.id = t.monitor
+		LEFT JOIN db_vibe_monitor.t_probe_energy pe ON pe.probe_id = p.id
+		WHERE pe.value_type=1 and pe.itemize_type = #{catalog}
+		AND t.moment BETWEEN #{start} AND #{end}
+		AND p.parent IN (
+			<foreach collection="spaceIds" item="id" separator=",">#{id}</foreach>
+		)
+		GROUP BY t.moment
+		ORDER BY t.moment
+	</select>
 </mapper>
 
 

@@ -8,46 +8,46 @@
 <!-- http://www.qos.ch/shop/products/professionalSupport -->
 <!-- -->
 <configuration scan="true">
-    <property name="VIBEWEB" value="com.vibe.vibe-web"/>
+	<property name="VIBEWEB" value="com.vibe.vibe-web" />
     <!-- <property name="LOG_HOME" value="D:/zzzzz"/>  -->
-    <property name="LOG_HOME" value="/export/log/${VIBEWEB}"/>
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{yy-MM-dd.HH:mm:ss.SSS} [%-16t] %-5p %-22c{0} %X{ServiceId} - %m%n</pattern>
-        </encoder>
-    </appender>
+	<property name="LOG_HOME" value="/export/log/${VIBEWEB}" />
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yy-MM-dd.HH:mm:ss.SSS} [%-16t] %-5p %-22c{0} %X{ServiceId} - %m%n</pattern>
+		</encoder>
+	</appender>
 
-    <appender name="DETAIL" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${LOG_HOME}/${PRODUCT}_detail.log</File>
-        <encoder>
-            <pattern>%d{yy-MM-dd.HH:mm:ss.SSS} [%-16t] %-5p %-22c{0} %X{ServiceId} - %m%n</pattern>
-        </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_HOME}/${PRODUCT}_detail.log.%d{yyyyMMdd}</fileNamePattern>
-        </rollingPolicy>
-    </appender>
+	<appender name="DETAIL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${LOG_HOME}/${PRODUCT}_detail.log</File>
+		<encoder>
+			<pattern>%d{yy-MM-dd.HH:mm:ss.SSS} [%-16t] %-5p %-22c{0} %X{ServiceId} - %m%n</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/${PRODUCT}_detail.log.%d{yyyyMMdd}</fileNamePattern>
+		</rollingPolicy>
+	</appender>
 
-    <logger name="org.springframework" level="INFO">
-        <!--		<appender-ref ref="CONSOLE" />-->
-    </logger>
+	<logger name="org.springframework" level="INFO">
+<!--		<appender-ref ref="CONSOLE" />-->
+	</logger>
 
-    <logger name="com.vibe" level="INFO">
-        <appender-ref ref="DETAIL"/>
-    </logger>
+	<logger name="com.vibe" level="INFO" >
+		<appender-ref ref="DETAIL" />
+	</logger>
 
 
-    <logger name="org.springframework.core" level="info"/>
-    <logger name="org.springframework.beans" level="info"/>
-    <logger name="org.springframework.context" level="info"/>
-    <logger name="org.springframework.web" level="info"/>
-    <logger name="org.jboss.netty" level="warn"/>
-    <logger name="org.apache.http" level="warn"/>
-    <logger name="com.vibe.monitor.drivers.yinao.service.YinaoService" level="trace"/>
-    <logger name="com.vibe.monitor.drivers.route.bio.ModbusBridge" level="trace"/>
+	<logger name="org.springframework.core" level="info"/>
+	<logger name="org.springframework.beans" level="info"/>
+	<logger name="org.springframework.context" level="info"/>
+	<logger name="org.springframework.web" level="info"/>
+	<logger name="org.jboss.netty" level="warn"/>
+	<logger name="org.apache.http" level="warn"/>
+	<logger name="com.vibe.monitor.drivers.yinao.service.YinaoService" level="trace"/>
+	<logger name="com.vibe.monitor.drivers.route.bio.ModbusBridge" level="trace"/>
 
-    <root level="ERROR">
-        <appender-ref ref="CONSOLE"/>
-    </root>
+	<root level="ERROR">
+		<appender-ref ref="CONSOLE" />
+	</root>
 
 </configuration>
 

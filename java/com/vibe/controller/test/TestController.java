@@ -23,48 +23,6 @@ import java.util.List;
  * @Date 2019/9/12 14:18
  * @Version 1.0
  * @Author zhsili81@gmail.com
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.lang.String>
- * @Version 1.0
- * @Date 2019/9/12 16:13
- * @Author zhsili81@gmail.com
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.util.List < com.vibe.pojo.energy.Energy>>
- * @Version 1.0
- * @Date 2019/9/12 16:13
- * @Author zhsili81@gmail.com
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.util.List < com.vibe.pojo.TreeAlarmData>>
- * @Version 1.0
- * @Date 2019/9/12 15:45
- * @Author zhsili81@gmail.com
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.lang.String>
- * @Version 1.0
- * @Date 2019/9/12 16:13
- * @Author zhsili81@gmail.com
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.util.List < com.vibe.pojo.energy.Energy>>
- * @Version 1.0
- * @Date 2019/9/12 16:13
- * @Author zhsili81@gmail.com
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.util.List < com.vibe.pojo.TreeAlarmData>>
- * @Version 1.0
- * @Date 2019/9/12 15:45
- * @Author zhsili81@gmail.com
  *//*
 
 @RestController
@@ -79,15 +37,15 @@ public class TestController {
     
     */
 /**
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.lang.String>
- *
- * @Version 1.0
- * @Date 2019/9/12 16:13
- * @Author zhsili81@gmail.com
- *//*
+     * @ClassName TestController
+     * @Description 
+     * @param  
+     * @return com.vibe.util.constant.ResponseModel<java.lang.String>
+     *
+     * @Version 1.0
+     * @Date 2019/9/12 16:13
+     * @Author zhsili81@gmail.com
+     *//*
 
     @GetMapping("/error")
     @ResponseBody
@@ -97,15 +55,15 @@ public class TestController {
     }
     */
 /**
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.util.List < com.vibe.pojo.energy.Energy>>
- *
- * @Version 1.0
- * @Date 2019/9/12 16:13
- * @Author zhsili81@gmail.com
- *//*
+     * @ClassName TestController
+     * @Description 
+     * @param  
+     * @return com.vibe.util.constant.ResponseModel<java.util.List<com.vibe.pojo.energy.Energy>>
+     *
+     * @Version 1.0
+     * @Date 2019/9/12 16:13
+     * @Author zhsili81@gmail.com
+     *//*
 
     @GetMapping("/obj")
     @ResponseBody
@@ -120,15 +78,15 @@ public class TestController {
     }
     */
 /**
- * @ClassName TestController
- * @Description
- * @param
- * @return com.vibe.util.constant.ResponseModel<java.util.List < com.vibe.pojo.TreeAlarmData>>
- *
- * @Version 1.0
- * @Date 2019/9/12 15:45
- * @Author zhsili81@gmail.com
- *//*
+     * @ClassName TestController
+     * @Description 
+     * @param  
+     * @return com.vibe.util.constant.ResponseModel<java.util.List<com.vibe.pojo.TreeAlarmData>>
+     *
+     * @Version 1.0
+     * @Date 2019/9/12 15:45
+     * @Author zhsili81@gmail.com
+     *//*
 
     @GetMapping("/objList")
     @ResponseBody

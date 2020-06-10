@@ -7,15 +7,15 @@ import com.vibe.utils.EasyUIJson;
 
 public interface PermissionService {
 
-    public EasyUIJson queryPemissionListByPage(Permission permission, Integer page, Integer rows);
+	public  EasyUIJson queryPemissionListByPage(Permission permission, Integer page, Integer rows);
 
-    public void addPermission(Permission permission);
+	public void addPermission(Permission permission);
 
-    public Permission queryPermissionById(Integer id);
+	public Permission queryPermissionById(Integer id);
 
-    public void deletePermission(String ids);
+	public void deletePermission(String ids);
 
-    public void loadMenuPermission(HttpServletRequest request);
-
+	public void loadMenuPermission(HttpServletRequest request);
+		
 
 }

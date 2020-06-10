@@ -10,15 +10,15 @@ import com.vibe.pojo.SystemSettingBean;
 
 @Service
 public class SystemServiceImpl implements SystemService {
-
-    @Autowired
-    private SystemDao systemDao;
-
-
-    @Override
-    public List<SystemSettingBean> getSystemSettings() {
-        return systemDao.getSystemSettings();
-    }
+	
+	@Autowired
+	private SystemDao systemDao;
 
 
+	@Override
+	public List<SystemSettingBean> getSystemSettings() {
+		return systemDao.getSystemSettings();
+	}
+	
+	
 }

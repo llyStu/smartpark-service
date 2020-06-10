@@ -12,16 +12,16 @@ import com.vibe.util.ResponseResult;
 
 @Controller
 public class ControlController {
-    @Autowired
-    private MonitorServer monitorServer;
+	@Autowired
+	private  MonitorServer monitorServer;
 
-    @RequestMapping("/execControlCommand")
-    @ResponseBody
-    public Response execControlCommand(@RequestParam("id") int id, @RequestParam("cmd") String cmd) {
-        String execControlCommand = monitorServer.execControlCommand(id, cmd);
-        Boolean result = execControlCommand.contains("failed") ? false : true;
-        System.out.println("命令返回的结果：" + result);
-        return ResponseResult.getANewResponse(result);
-    }
-
+	@RequestMapping("/execControlCommand")
+	@ResponseBody
+	public Response execControlCommand(@RequestParam("id") int id,@RequestParam("cmd") String cmd){
+		String execControlCommand = monitorServer.execControlCommand(id, cmd);
+		Boolean result = execControlCommand.contains("failed")?false:true;
+		System.out.println("命令返回的结果："+result);
+		return ResponseResult.getANewResponse(result);
+	}
+	
 }

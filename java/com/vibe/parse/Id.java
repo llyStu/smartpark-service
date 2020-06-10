@@ -8,10 +8,9 @@ public class Id {
 	public static int getUniqueId() {
 		return gen.next();
 	}*/
-
-    private static int id = 1;
-
-    public static int getUniqueId() {
-        return id++;
-    }
+	
+	private static int id = 1;
+	public static int getUniqueId() {
+		return id++;
+	}
 }

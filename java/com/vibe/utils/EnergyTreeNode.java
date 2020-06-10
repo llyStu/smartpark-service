@@ -19,18 +19,18 @@ public class EnergyTreeNode {
     public static List<Energy> build(List<Energy> treeNodes) {
 
         List<Energy> trees = new ArrayList<Energy>();
-        if (null == treeNodes || treeNodes.size() <= 0) {
+        if (null == treeNodes || treeNodes.size() <= 0){
             return treeNodes;
         }
         for (Energy treeNode : treeNodes) {
             String parentId = String.valueOf(treeNode.getParentId());
-            if (StringUtils.equals("0", parentId)) {
+            if (StringUtils.equals("0",parentId)) {
                 trees.add(treeNode);
             }
             for (Energy it : treeNodes) {
                 String parentIds = String.valueOf(it.getParentId());
                 String floorId = String.valueOf(treeNode.getFloorId());
-                if (StringUtils.equals(parentIds, floorId)) {
+                if (StringUtils.equals(parentIds,floorId)) {
                     if (treeNode.getNodes() == null) {
                         treeNode.setNodes(new ArrayList<Energy>());
                     }

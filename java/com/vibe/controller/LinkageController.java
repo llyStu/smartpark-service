@@ -20,62 +20,62 @@ import com.vibe.util.ResponseResult;
 
 @Controller
 public class LinkageController {
-    @Autowired
-    private LinkageService linkageService;
+	@Autowired
+	private  LinkageService linkageService;
 
 
-    @RequestMapping("/insertLinkageRule")
-    @ResponseBody
-    public Response insertUpdateTreeAlarmRule(@RequestBody LinkageRuleBean linkageRuleBean) {
-        try {
-            linkageService.insertLinkageRule(linkageRuleBean);
-            LinkageBusiness.linkageRuleCauseChanged.onChanged();
-            return ResponseResult.getANewResponse(true);
-        } catch (Exception e) {
-            // TODO: handle exception
-            return ResponseResult.getANewResponse(false);
-        }
-    }
-
-
-    @RequestMapping("/queryLinkageLogListByTime")
-    @ResponseBody
-    public EasyUIJson queryLinkageLogListByTime(@RequestParam("pageNum") int pageNum,
-                                                @RequestParam("pageCount") int pageCount, @RequestParam("start") String start, @RequestParam("end") String end) {
-        return linkageService.queryLinkageLogListByTime(pageNum, pageCount, start, end);
-    }
-
-    @RequestMapping("/queryLinkageList")
-    @ResponseBody
-    public List<LinkageRule> queryLinkageList() {
-        return linkageService.queryLinkageList();
-    }
-
-    @RequestMapping("/deleteLinkage")
-    @ResponseBody
-    public Response deleteLinkage(@RequestParam("linkageArrStr") String linkageIds) {
-        try {
-            linkageService.deleteLinkageRuleCause(linkageIds);
-            LinkageBusiness.linkageRuleCauseChanged.onChanged();
-            return ResponseResult.getANewResponse(true);
-        } catch (Exception e) {
-            // TODO: handle exception
-            return ResponseResult.getANewResponse(false);
-        }
-
-    }
-
-    @RequestMapping("/updateLinkage")
-    @ResponseBody
-    public Response updateLinkage(@RequestBody LinkageRuleBean linkageRuleBean) {
-
-        try {
-            linkageService.updateLinkage(linkageRuleBean);
-            LinkageBusiness.linkageRuleCauseChanged.onChanged();
-            return ResponseResult.getANewResponse(true);
-        } catch (Exception e) {
-            // TODO: handle exception
-            return ResponseResult.getANewResponse(false);
-        }
-    }
+	@RequestMapping("/insertLinkageRule")
+	@ResponseBody
+	public Response insertUpdateTreeAlarmRule(@RequestBody LinkageRuleBean linkageRuleBean){
+		try {
+			linkageService.insertLinkageRule(linkageRuleBean);
+			LinkageBusiness.linkageRuleCauseChanged.onChanged();
+			return ResponseResult.getANewResponse(true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseResult.getANewResponse(false);
+		}
+	}
+	
+	
+	@RequestMapping("/queryLinkageLogListByTime")
+	@ResponseBody
+	public EasyUIJson queryLinkageLogListByTime(@RequestParam("pageNum") int pageNum,
+												@RequestParam("pageCount") int pageCount, @RequestParam("start") String start, @RequestParam("end") String end){
+		return linkageService.queryLinkageLogListByTime(pageNum, pageCount, start, end);
+	}
+	
+	@RequestMapping("/queryLinkageList")
+	@ResponseBody
+	public List<LinkageRule> queryLinkageList(){
+		return linkageService.queryLinkageList();
+	}
+	
+	@RequestMapping("/deleteLinkage")
+	@ResponseBody
+	public Response deleteLinkage(@RequestParam("linkageArrStr") String linkageIds){
+		try {
+			linkageService.deleteLinkageRuleCause(linkageIds);
+			LinkageBusiness.linkageRuleCauseChanged.onChanged();
+			return ResponseResult.getANewResponse(true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseResult.getANewResponse(false);
+		}
+		
+	}
+	
+	@RequestMapping("/updateLinkage")
+	@ResponseBody
+	public Response updateLinkage(@RequestBody LinkageRuleBean linkageRuleBean){
+		
+		try {
+			linkageService.updateLinkage(linkageRuleBean);
+			LinkageBusiness.linkageRuleCauseChanged.onChanged();
+			return ResponseResult.getANewResponse(true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return ResponseResult.getANewResponse(false);
+		}
+	}
 }

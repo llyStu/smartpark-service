@@ -15,43 +15,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 */
 /**
  * Created by wzj on 2018/3/14.
- * <p>
- * 在线人数
- * <p>
- * 所有的对象
- * <p>
- * 会话
- * <p>
- * 建立连接
- *
- * @param session
- * <p>
- * 连接关闭
- * <p>
- * 收到客户端的消息
- * @param message 消息
- * @param session 会话
- * <p>
- * 发送消息
- * @param message 消息
- * <p>
- * 在线人数
- * <p>
- * 所有的对象
- * <p>
- * 会话
- * <p>
- * 建立连接
- * @param session
- * <p>
- * 连接关闭
- * <p>
- * 收到客户端的消息
- * @param message 消息
- * @param session 会话
- * <p>
- * 发送消息
- * @param message 消息
  *//*
 
 @ServerEndpoint(value = "/websocket")
@@ -59,31 +22,31 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class MyWebSocket {
     */
 /**
- * 在线人数
- *//*
+     * 在线人数
+     *//*
 
     public static int onlineNumber = 0;
 
     */
 /**
- * 所有的对象
- *//*
+     * 所有的对象
+     *//*
 
     public static List<MyWebSocket> webSockets = new CopyOnWriteArrayList<MyWebSocket>();
 
     */
 /**
- * 会话
- *//*
+     * 会话
+     *//*
 
     private Session session;
 
     */
 /**
- * 建立连接
- *
- * @param session
- *//*
+     * 建立连接
+     *
+     * @param session
+     *//*
 
     @OnOpen
     public void onOpen(Session session)
@@ -98,8 +61,8 @@ public class MyWebSocket {
 
     */
 /**
- * 连接关闭
- *//*
+     * 连接关闭
+     *//*
 
     @OnClose
     public void onClose()
@@ -111,11 +74,11 @@ public class MyWebSocket {
 
     */
 /**
- * 收到客户端的消息
- *
- * @param message 消息
- * @param session 会话
- *//*
+     * 收到客户端的消息
+     *
+     * @param message 消息
+     * @param session 会话
+     *//*
 
     @OnMessage
     public void onMessage(String message, Session session)
@@ -127,10 +90,10 @@ public class MyWebSocket {
 
     */
 /**
- * 发送消息
- *
- * @param message 消息
- *//*
+     * 发送消息
+     *
+     * @param message 消息
+     *//*
 
     public void sendMessage(String message)
     {

@@ -1,5 +1,5 @@
 package com.vibe.util;
-
+ 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-
+ 
+ 
 /**
  * * [简述]:List通用排序工具类
  * * User: zr
@@ -19,14 +19,14 @@ import java.util.regex.Pattern;
  * * To change this template use File | Settings | File Templates.
  */
 public class ListSortUtil {
-
-
+ 
+ 
     private static final String SORT_ASC = "asc";
-
-
+ 
+ 
     private static final String SORT_DESC = "desc";
-
-
+ 
+ 
     /**
      * [简述]： 对List数组排序
      *
@@ -34,13 +34,13 @@ public class ListSortUtil {
      * @param sort 升序 还是 降序，默认升序
      * @return List
      */
-
-
+ 
+ 
     public static List<?> sort(List<?> list, final String sort) {
         Collections.sort(list, new Comparator<Object>() {
             @Override
-
-
+ 
+ 
             public int compare(Object o1, Object o2) {
                 int ret = 0;
                 if (o1 instanceof Integer) {
@@ -64,12 +64,12 @@ public class ListSortUtil {
                     return ret;
                 }
             }
-
+ 
         });
         return list;
     }
-
-
+ 
+ 
     /**
      * [简述]: List 泛型 排序
      *
@@ -79,13 +79,13 @@ public class ListSortUtil {
      * @param <T>   泛型T
      * @return List
      */
-
-
+ 
+ 
     public static <T> List<T> sort(List<T> list, final String field, final String sort) {
         Collections.sort(list, new Comparator<T>() {
             @Override
-
-
+ 
+ 
             public int compare(T o1, T o2) {
                 int ret = 0;
                 try {
@@ -109,8 +109,8 @@ public class ListSortUtil {
                     } else {
                         ret = String.valueOf(field1.get(o1)).compareTo(String.valueOf(field1.get(o2)));
                     }
-
-
+ 
+ 
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (NoSuchFieldException e) {
@@ -126,12 +126,12 @@ public class ListSortUtil {
                     return ret;
                 }
             }
-
+ 
         });
         return list;
     }
-
-
+ 
+ 
     private static boolean isDouble(String str) {
         boolean flag = false;
         if (isInteger(str) || isFloat(str)) {
@@ -139,19 +139,19 @@ public class ListSortUtil {
         }
         return flag;
     }
-
-
+ 
+ 
     private static boolean isInteger(String str) {
         Matcher matcher = Pattern.compile("^[+-]?[0-9]+$").matcher(str);
         return matcher.find();
     }
-
-
+ 
+ 
     private static boolean isFloat(String str) {
         return str.matches("[\\d]+\\.[\\d]+");
     }
-
-
+ 
+ 
     /**
      * [简述]: List 泛型 排序
      *
@@ -161,7 +161,7 @@ public class ListSortUtil {
      * @param <T>    泛型T
      * @return List
      */
-
+ 
     public static <T> List<T> sort(List<T> list, final String[] fields, final String[] sorts) {
         if (null != fields && fields.length > 0) {
             for (int index = 0; index < fields.length; index++) {
@@ -173,8 +173,8 @@ public class ListSortUtil {
                 final String field = fields[index];
                 Collections.sort(list, new Comparator<T>() {
                     @Override
-
-
+ 
+ 
                     public int compare(T o1, T o2) {
                         int ret = 0;
                         try {
@@ -198,8 +198,8 @@ public class ListSortUtil {
                             } else {
                                 ret = String.valueOf(field1.get(o1)).compareTo(String.valueOf(field1.get(o2)));
                             }
-
-
+ 
+ 
                         } catch (NoSuchMethodException e) {
                             e.printStackTrace();
                         } catch (InvocationTargetException e) {
@@ -215,26 +215,26 @@ public class ListSortUtil {
                             return ret;
                         }
                     }
-
+ 
                 });
             }
         }
         return list;
     }
-
-
+ 
+ 
     private static String getMethodName(String str) {
         StringBuffer name = new StringBuffer();
         name = name.append("get").append(firstLetterToCapture(str));
         return name.toString();
     }
-
-
+ 
+ 
     private static String firstLetterToCapture(String name) {
         char[] arr = name.toCharArray();
         arr[0] -= 32;
         return String.valueOf(arr);
     }
-
-
+ 
+ 
 }

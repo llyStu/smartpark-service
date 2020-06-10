@@ -17,31 +17,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class JsonpController {
-    @RequestMapping("/_jsonp/**")
-    public void jsonp(String callback, Boolean _isString, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        resp.setContentType("application/json;charset=UTF-8");
-        try (ServletOutputStream out = resp.getOutputStream()) {
-            out.print(callback);
-            out.print('(');
-            if (_isString != null && _isString) out.print('"');
-            resp.flushBuffer();
-            req.getRequestDispatcher(getPath(req)).include(req, resp);
-            if (_isString != null && _isString) out.print('"');
-            out.print(')');
-            resp.flushBuffer();
-        }
-    }
+	@RequestMapping("/_jsonp/**")
+	public void jsonp(String callback, Boolean _isString, HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+		resp.setContentType("application/json;charset=UTF-8");
+		try (ServletOutputStream out = resp.getOutputStream()) {
+			out.print(callback);
+			out.print('(');
+			if (_isString != null && _isString) out.print('"');
+			resp.flushBuffer();
+			req.getRequestDispatcher(getPath(req)).include(req, resp);
+			if (_isString != null && _isString) out.print('"');
+			out.print(')');
+			resp.flushBuffer();
+		}
+	}
+	
 
+	private final Pattern pathParm = Pattern.compile("/[^/\\\\]+/_jsonp(/.*)?");
 
-    private final Pattern pathParm = Pattern.compile("/[^/\\\\]+/_jsonp(/.*)?");
+	private String getPath(HttpServletRequest req) throws UnsupportedEncodingException {
+		String uri = req.getRequestURI();
+		Matcher mat = pathParm.matcher(uri);
+		String path = mat.find() ? mat.group(1) : null;
 
-    private String getPath(HttpServletRequest req) throws UnsupportedEncodingException {
-        String uri = req.getRequestURI();
-        Matcher mat = pathParm.matcher(uri);
-        String path = mat.find() ? mat.group(1) : null;
-
-        if (path != null)
-            path = URLDecoder.decode(path, "utf-8");
-        return path;
-    }
+		if (path != null)
+			path = URLDecoder.decode(path, "utf-8");
+		return path;
+	}
 }

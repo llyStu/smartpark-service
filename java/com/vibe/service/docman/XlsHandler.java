@@ -17,23 +17,23 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class XlsHandler extends ConvertHandler {
-    @Autowired
-    @Override
-    public void convertToHtml(File src, File dest) throws Exception {
-        ExcelToHtmlConverter converter = new ExcelToHtmlConverter(
-                DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument());
+	@Autowired
+	@Override
+	public void convertToHtml(File src, File dest) throws Exception {
+		ExcelToHtmlConverter converter = new ExcelToHtmlConverter(
+				DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument());
 
-        Transformer serializer = TransformerFactory.newInstance().newTransformer();
-        serializer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-        serializer.setOutputProperty(OutputKeys.INDENT, "yes");
-        serializer.setOutputProperty(OutputKeys.METHOD, "html");
+		Transformer serializer = TransformerFactory.newInstance().newTransformer();
+		serializer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
+		serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+		serializer.setOutputProperty(OutputKeys.METHOD, "html");
+		
+		try (HSSFWorkbook excel = new HSSFWorkbook(new FileInputStream(src))) {
+			converter.processWorkbook(excel);
 
-        try (HSSFWorkbook excel = new HSSFWorkbook(new FileInputStream(src))) {
-            converter.processWorkbook(excel);
-
-            try (OutputStream out = new FileOutputStream(dest)) {
-                serializer.transform(new DOMSource(converter.getDocument()), new StreamResult(out));
-            }
+			try (OutputStream out = new FileOutputStream(dest)) {
+				serializer.transform(new DOMSource(converter.getDocument()), new StreamResult(out));
+			}
 
 //			List<HSSFPictureData> pics = excel.getAllPictures();
 //			if (pics == null || pics.isEmpty()) return;
@@ -44,6 +44,6 @@ public class XlsHandler extends ConvertHandler {
 //				FileUtils.writeByteArrayToFile(new File(""), data);
 //				
 //			}
-        }
-    }
+		}
+	}
 }

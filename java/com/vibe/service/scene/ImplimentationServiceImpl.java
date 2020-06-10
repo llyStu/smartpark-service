@@ -10,38 +10,38 @@ import com.vibe.pojo.Implimentation;
 
 @Service
 public class ImplimentationServiceImpl implements ImplimentationService {
+	
+	@Autowired
+	private ImplimentationDao implimentationDao;
+	
+	public void insertImplimentation(Implimentation implimentation) {		
 
-    @Autowired
-    private ImplimentationDao implimentationDao;
+		implimentationDao.insertImplimentation(implimentation);
+		
+	}
 
-    public void insertImplimentation(Implimentation implimentation) {
+	public void deleteImplimentation(int id) {
+		
+		implimentationDao.deleteImplimentation(id);
+	}
 
-        implimentationDao.insertImplimentation(implimentation);
+	public Implimentation queryImplimentation(int id) {
+		
+		Implimentation d = implimentationDao.queryImplimentation(id);
+		//return ImplimentationDao.queryImplimentation(id);
+		return d;
+	}
 
-    }
+	@Override
+	public List<Implimentation> queryImplimentationList() {
+		
+		return implimentationDao.queryImplimentationList();
+	}
 
-    public void deleteImplimentation(int id) {
+	@Override
+	public void updateImplimentation(Implimentation implimentation) {
 
-        implimentationDao.deleteImplimentation(id);
-    }
-
-    public Implimentation queryImplimentation(int id) {
-
-        Implimentation d = implimentationDao.queryImplimentation(id);
-        //return ImplimentationDao.queryImplimentation(id);
-        return d;
-    }
-
-    @Override
-    public List<Implimentation> queryImplimentationList() {
-
-        return implimentationDao.queryImplimentationList();
-    }
-
-    @Override
-    public void updateImplimentation(Implimentation implimentation) {
-
-        implimentationDao.updateImplimentation(implimentation);
-    }
+		implimentationDao.updateImplimentation(implimentation);
+	}
 
 }

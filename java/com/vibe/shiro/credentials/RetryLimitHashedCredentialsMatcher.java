@@ -54,8 +54,8 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
     /**
      * build user password
      */
-    public String buildCredentials(String userName, String password, String credentialsSalt) {
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userName, password, ByteSource.Util.bytes(userName + credentialsSalt), userName);
+    public String buildCredentials(String userName, String password,String credentialsSalt) {
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userName,password, ByteSource.Util.bytes(userName + credentialsSalt),userName);
         AuthenticationToken token = new UsernamePasswordToken(userName, password);
         return super.hashProvidedCredentials(token, authenticationInfo).toString();
     }

@@ -11,25 +11,25 @@ import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 
 public class XlsxExportType implements IExportType {
-    @Override
-    public String getSuffix() {
-        return "xlsx";
-    }
+	@Override
+	public String getSuffix() {
+		return "xlsx";
+	}
 
-    @Override
-    public void writeAndClose(OutputStream outputStream, JasperPrint print) throws JRException {
-        JRXlsxExporter exporter = new JRXlsxExporter();
+	@Override
+	public void writeAndClose(OutputStream outputStream, JasperPrint print) throws JRException {
+		JRXlsxExporter exporter = new JRXlsxExporter();
 
-        ExporterInput exporterInput = new SimpleExporterInput(print);
-        exporter.setExporterInput(exporterInput);
+		ExporterInput exporterInput = new SimpleExporterInput(print);
+		exporter.setExporterInput(exporterInput);
 
-        SimpleOutputStreamExporterOutput out = new SimpleOutputStreamExporterOutput(outputStream);
-        exporter.setExporterOutput(out);
-        exporter.exportReport();
-    }
+		SimpleOutputStreamExporterOutput out = new SimpleOutputStreamExporterOutput(outputStream);
+		exporter.setExporterOutput(out);
+		exporter.exportReport();
+	}
 
-    @Override
-    public void writeAndClose(Writer writer, JasperPrint print) throws JRException {
-        throw new UnsupportedOperationException();
-    }
+	@Override
+	public void writeAndClose(Writer writer, JasperPrint print) throws JRException {
+		throw new UnsupportedOperationException();
+	}
 }

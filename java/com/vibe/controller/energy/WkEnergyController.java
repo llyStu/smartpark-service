@@ -13,18 +13,17 @@ import com.vibe.service.energy.EnergyService;
 
 @Controller
 public class WkEnergyController {
-    @Autowired
+	@Autowired
     EnergyService energyService;
-
-    @RequestMapping("/fenxiangduibi")
-    @ResponseBody
-    public List<KeyValueBean> fenxiangduibi(@RequestParam("timeType") String timeType, @RequestParam("time") String time, @RequestParam("start") String start, @RequestParam("end") String end) {
-        return energyService.fenxiangduibi(timeType, time, start, end);
-    }
-
-    @RequestMapping("/wangqitongji")
-    @ResponseBody
-    public List<KeyValueBean> wangqitongji(@RequestParam("timeType") String timeType, @RequestParam("time") String time, @RequestParam("start") String start, @RequestParam("end") String end) {
-        return energyService.fenxiangduibi(timeType, time, start, end);
-    }
+	@RequestMapping("/fenxiangduibi")
+	@ResponseBody
+	public List<KeyValueBean> fenxiangduibi(@RequestParam("timeType") String timeType,@RequestParam("time") String time,@RequestParam("start") String start,@RequestParam("end") String end){
+		return energyService.fenxiangduibi(timeType,time, start, end);
+	}
+	
+	@RequestMapping("/wangqitongji")
+	@ResponseBody
+	public List<KeyValueBean> wangqitongji(@RequestParam("timeType") String timeType,@RequestParam("time") String time,@RequestParam("start") String start,@RequestParam("end") String end){
+		return energyService.fenxiangduibi(timeType,time, start, end);
+	}
 }

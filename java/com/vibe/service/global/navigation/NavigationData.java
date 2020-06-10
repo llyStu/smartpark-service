@@ -5,5 +5,5 @@ import java.util.List;
 import com.vibe.utils.TreeNode;
 
 public interface NavigationData {
-    public List<TreeNode> loadList();
+	public List<TreeNode>  loadList();
 }

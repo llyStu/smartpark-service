@@ -1,92 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vibe.mapper.user.PermissionMapper">
-    <!-- 根据人员id,查询该人需要的菜单 -->
-    <select id="queryMenubyUser" parameterType="Integer" resultType="Integer">
-        select distinct(p.menu_id)menuId FROM db_vibe_basic.t_user_role ur
-        left join db_vibe_basic.t_role r on ur.rid = r.id
-        left join db_vibe_basic.t_role_permission rp on r.id =rp.rid
-        left join db_vibe_basic.t_permission p on p.id =rp.pid
-        where ur.uid =#{id};
-    </select>
-    <!-- 根据模块id,查询权限树节点的数据 -->
-    <select id="queryPermissionByMenuId" parameterType="int" resultType="Permission">
-        select id,name,menu_id menuId,p_type pType,p_desc pDesc,src
-        from t_permission
-        where menu_id=#{menuId}
-    </select>
-
-    <select id="queryPermissionByRoleId" parameterType="int" resultType="Permission">
-        select id,name,menu_id menuId,p_type pType,p_desc pDesc,src
-        from t_role_permission rp
-        left join t_permission p on rp.pid=p.id
-        where rp.rid=#{id}
-    </select>
-
-    <select id="queryPermissionByPid" parameterType="int" resultType="Permission">
-        select id,name,menu_id menuId,p_type pType,p_desc pDesc,src
-        from t_permission
-        where id=#{pid}
-    </select>
-
-    <select id="queryPermissionList" parameterType="Permission" resultType="Permission">
-        select id,name,menu_id menuId,p_type pType,p_desc pDesc,src from t_permission
-        <where>
-            <if test="id != null and id !='' ">
-                and id=#{id}
-            </if>
-            <if test="name != null and name != ''">
-                and name like "%"#{name}"%"
-            </if>
-            <if test="src != null ">
-                and src = #{src}
-            </if>
-            <if test="pDesc != null and pDesc !=''">
-                and p_desc like "%"#{pDesc}"%"
-            </if>
-        </where>
-
-    </select>
-    <!-- 新增权限 -->
-    <insert id="addPermission" parameterType="Permission">
-        insert into t_permission (id,
-        name,menu_id,p_type,p_desc,src)
-        values (#{id},#{name},#{menuId},#{pType},#{pDesc},#{src})
-    </insert>
-
-    <!-- 更新权限 -->
-    <update id="editPermissionById" parameterType="Permission">
-        update t_permission
-        <set>
-            <if test="name!=null">
-                name = #{name},
-            </if>
-            <if test="menuId!=null">
-                menu_id=#{menuId},
-            </if>
-            <if test="pType!=null">
-                p_type=#{pType},
-            </if>
-            <if test="src!=null">
-                src=#{src},
-            </if>
-
-        </set>
-        WHERE id=#{id}
-    </update>
-    <delete id="deleteCustomerById" parameterType="int">delete from t_permission
-        where id = #{id}
-    </delete>
-    <delete id="deleteRolePermission" parameterType="RolePermission">
-        delete from t_role_permission where rid = #{rid} and pid=#{pid}
-    </delete>
-    <insert id="addRolePermission" parameterType="RolePermission">
-        insert into t_role_permission (rid,pid) values (#{rid},#{pid})
-    </insert>
-    <select id="queryRolePermission" parameterType="RolePermission" resultType="RolePermission">
-        select rid,pid from t_role_permission where rid = #{rid} and pid = #{pid};
-    </select>
-
+	<!-- 根据人员id,查询该人需要的菜单 -->
+	  <select id="queryMenubyUser" parameterType="Integer" resultType="Integer">
+		select distinct(p.menu_id)menuId FROM db_vibe_basic.t_user_role ur 
+			left join db_vibe_basic.t_role r on ur.rid = r.id
+			left join db_vibe_basic.t_role_permission rp on r.id =rp.rid
+			left join db_vibe_basic.t_permission p on p.id =rp.pid
+ 		where ur.uid =#{id};
+	</select>
+	<!-- 根据模块id,查询权限树节点的数据 -->
+	  <select id="queryPermissionByMenuId" parameterType="int" resultType="Permission">
+		select id,name,menu_id menuId,p_type pType,p_desc pDesc,src
+		 from t_permission 
+		where menu_id=#{menuId}
+	</select> 
+	
+	 <select id="queryPermissionByRoleId" parameterType="int" resultType="Permission">
+		select id,name,menu_id menuId,p_type pType,p_desc pDesc,src
+		from t_role_permission rp 
+		left join t_permission p on rp.pid=p.id
+		where rp.rid=#{id}
+	</select> 
+	
+	<select id="queryPermissionByPid" parameterType="int" resultType="Permission">
+		select id,name,menu_id menuId,p_type pType,p_desc pDesc,src
+		 from t_permission 
+		where id=#{pid}
+	</select> 
+	
+	<select id="queryPermissionList" parameterType="Permission" resultType="Permission">
+		select id,name,menu_id menuId,p_type pType,p_desc pDesc,src from t_permission 
+		<where>
+			<if test="id != null and id !='' ">
+				and id=#{id}
+			</if>
+			<if test="name != null and name != ''">
+				and name like "%"#{name}"%"
+			</if>
+			<if test="src != null ">
+				and src = #{src}
+			</if>
+			<if test="pDesc != null and pDesc !=''">
+				and p_desc like "%"#{pDesc}"%"
+			</if>
+		</where>
+		
+	</select> 
+	<!-- 新增权限 -->
+	<insert id="addPermission" parameterType="Permission">
+		insert into t_permission (id,
+		 name,menu_id,p_type,p_desc,src)
+		values (#{id},#{name},#{menuId},#{pType},#{pDesc},#{src})
+	</insert>
+	
+	<!-- 更新权限 -->
+	<update id="editPermissionById" parameterType="Permission">
+		update t_permission
+		<set>
+			<if test="name!=null">
+				name = #{name},
+			</if>
+			<if test="menuId!=null">
+				menu_id=#{menuId},
+			</if>
+			<if test="pType!=null">
+				p_type=#{pType},
+			</if>
+			<if test="src!=null">
+				src=#{src},
+			</if>
+			
+		</set>
+		WHERE id=#{id}
+	</update>
+	 <delete id="deleteCustomerById" parameterType="int"> delete from t_permission 
+		where id = #{id} 
+	</delete> 
+	 <delete id="deleteRolePermission" parameterType="RolePermission"> 
+	 	delete from t_role_permission where rid = #{rid}  and pid=#{pid}
+	</delete> 
+	<insert id="addRolePermission" parameterType="RolePermission">
+		insert into t_role_permission (rid,pid) values (#{rid},#{pid})
+	</insert>
+	<select id="queryRolePermission" parameterType="RolePermission" resultType="RolePermission">
+		select rid,pid from  t_role_permission where rid = #{rid} and pid = #{pid};
+	</select>
+	
 </mapper>

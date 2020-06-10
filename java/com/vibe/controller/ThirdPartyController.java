@@ -10,15 +10,14 @@ import com.vibe.utils.FormJsonBulider;
 @Controller
 public class ThirdPartyController {
 
-    /**
-     * 短信接口预留
-     *
-     * @return
-     */
-    @RequestMapping("/thirdparty/transmitter_note")
-    @ResponseBody
-    public FormJson transmitterNote() {
-        return FormJsonBulider.fail("短信发送失败");
-    }
-
+	/**
+	 * 短信接口预留
+	 * @return
+	 */
+	@RequestMapping("/thirdparty/transmitter_note")
+	@ResponseBody
+	public FormJson transmitterNote(){
+		return FormJsonBulider.fail("短信发送失败");
+	}
+	
 }

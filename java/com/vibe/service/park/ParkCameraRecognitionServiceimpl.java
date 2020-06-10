@@ -14,38 +14,38 @@ import com.vibe.utils.FormJsonBulider;
 import com.vibe.utils.Page;
 
 @Service
-public class ParkCameraRecognitionServiceimpl implements ParkCameraRecognitionService {
+public class ParkCameraRecognitionServiceimpl implements ParkCameraRecognitionService{
 
-    @Autowired
-    private ParkCameraRecognitionMapper pcrm;
+	@Autowired
+	private ParkCameraRecognitionMapper pcrm;
 
-    @Override
-    public Page<CameraRecognitionData> findCameraRecognitionLog(int pageNum, int pageSize, CameraRecognitionData data) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<CameraRecognitionData> list = pcrm.findCameraRecognitionLog(data);
-        return toPage(list);
-    }
+	@Override
+	public Page<CameraRecognitionData> findCameraRecognitionLog(int pageNum, int pageSize, CameraRecognitionData data) {
+		PageHelper.startPage(pageNum, pageSize);
+		List<CameraRecognitionData> list = pcrm.findCameraRecognitionLog(data);
+		return toPage(list);
+	}
+	
+	private static <T> Page<T> toPage(List<T> list) {
+		PageInfo<T> page = new PageInfo<>(list);
+		Page<T> result = new Page<>();
+		result.setRows(list);
+		result.setPage(page.getPageNum());
+		result.setSize(page.getPageSize());
+		result.setTotal((int) page.getTotal());
+		return result;
+	}
 
-    private static <T> Page<T> toPage(List<T> list) {
-        PageInfo<T> page = new PageInfo<>(list);
-        Page<T> result = new Page<>();
-        result.setRows(list);
-        result.setPage(page.getPageNum());
-        result.setSize(page.getPageSize());
-        result.setTotal((int) page.getTotal());
-        return result;
-    }
-
-    @Override
-    public FormJson delCameraRecognitionlog(int[] ids) {
-        if (null == ids) {
-            return FormJsonBulider.fail("参数不能为空");
-        } else {
-            if (pcrm.delCameraRecognitionlog(ids) == 0) {
-                return FormJsonBulider.fail("删除失败");
-            }
-        }
-        return FormJsonBulider.success();
-    }
-
+	@Override
+	public FormJson delCameraRecognitionlog(int[] ids) {
+		if(null==ids){
+			return FormJsonBulider.fail("参数不能为空");
+		}else{
+			if(pcrm.delCameraRecognitionlog(ids)==0){
+				return FormJsonBulider.fail("删除失败");
+			}
+		}
+		return FormJsonBulider.success();
+	}
+	
 }

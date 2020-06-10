@@ -8,12 +8,12 @@ import com.vibe.pojo.MenuBean;
 
 public interface MenuService {
 
-    public List<MenuBean> getMenuList(HttpServletRequest request);
+	public List<MenuBean> getMenuList(HttpServletRequest request);
 
-    public MenuBean getMenus(HttpServletRequest request);
+	public MenuBean getMenus(HttpServletRequest request);
 
-    public MenuBean getMenuTreeByRole(Integer roleId);
+	public MenuBean getMenuTreeByRole(Integer roleId);
 
-    public Integer queryParentByMenu(int pid);
+	public Integer queryParentByMenu(int pid);
 
 }

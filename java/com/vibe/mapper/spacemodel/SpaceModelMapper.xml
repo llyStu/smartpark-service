@@ -1,102 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vibe.mapper.spacemodel.SpaceModelMapper">
-    <select id="findSpaceModelName" parameterType="com.vibe.pojo.spacemodel.SpaceModelName"
-            resultType="com.vibe.pojo.spacemodel.SpaceModelName">
-        select * from db_vibe_basic.`t_spacemodelname`
-        <where>
-            <if test="catalog != null">and catalog = #{catalog}</if>
-            <if test="filename != null and filename != ''">and filename = #{filename}</if>
-            <if test="name != null and name != ''">and name = #{name}</if>
-            <if test="nickname != null and nickname != ''">and nickname = #{nickname}</if>
-            <if test="cas != null">and catalog IN (<foreach collection="cas" item="catalog" separator=",">
-                #{catalog}</foreach>)
-            </if>
-        </where>
-    </select>
-    <select id="findSpaceModelFile" parameterType="com.vibe.pojo.spacemodel.SpaceModelName" resultType="string">
-        SELECT DISTINCT(filename) FROM db_vibe_basic.`t_spacemodelname`
-        <where>
-            <if test="catalog != null">and catalog = #{catalog}</if>
-            <if test="cas != null">and catalog IN (<foreach collection="cas" item="catalog" separator=",">
-                #{catalog}</foreach>)
-            </if>
-        </where>
-    </select>
+	<resultMap id="baseDeviceTreeMap" type="com.vibe.parse.DeviceTree">
+		<id column="id" property="id" />
+		<result column="parent" property="parent" />
+		<result column="type" property="type" />
+		<result column="catalog" property="catalog" />
+		<result column="name" property="name" />
+		<result column="caption" property="caption" />
+		<collection property="deviceTreeList" ofType="com.vibe.parse.DeviceTree"
+					select="selectDeviceChildrenBySceneAsset" column="{id=id}">
+			<id column="id" property="id" />
+			<result column="parent" property="parent" />
+			<result column="type" property="type" />
+			<result column="catalog" property="catalog" />
+			<result column="name" property="name" />
+			<result column="caption" property="caption" />
+		</collection>
+	</resultMap>
+	<select id="findSpaceModelName" parameterType="com.vibe.pojo.spacemodel.SpaceModelName" resultType="com.vibe.pojo.spacemodel.SpaceModelName">
+		select * from db_vibe_basic.`t_spacemodelname`
+		<where>
+			<if test="catalog != null">and catalog = #{catalog}</if> 
+			<if test="filename != null and filename != ''">and filename = #{filename}</if>
+			<if test="name != null and name != ''">and name = #{name}</if>
+			<if test="nickname != null and nickname != ''">and nickname = #{nickname}</if>
+			<if test="cas != null">and catalog IN (<foreach collection="cas" item="catalog" separator=",">#{catalog}</foreach>)</if>
+		</where>
+	</select>
+	<select id="findSpaceModelFile" parameterType="com.vibe.pojo.spacemodel.SpaceModelName" resultType="string">
+		SELECT DISTINCT(filename) FROM db_vibe_basic.`t_spacemodelname`
+		<where>
+			<if test="catalog != null">and catalog = #{catalog}</if>
+			<if test="cas != null">and catalog IN (<foreach collection="cas" item="catalog" separator=",">#{catalog}</foreach>)</if>
+		</where>
+	</select>
+	
+	<delete id="deleteSpaceModelFile">
+		delete from db_vibe_basic.`t_spacemodelname` where filename in (<foreach collection="filenames" item="filename" separator=",">#{filename}</foreach>)
+	</delete>
+	
+	<delete id="deleteSceneAsset">
+		delete from db_vibe_monitor.t_scene_asset where said in (<foreach collection="saids" item="said" separator=",">#{said}</foreach>)
+	</delete>
 
-    <delete id="deleteSpaceModelFile">
-        delete from db_vibe_basic.`t_spacemodelname` where filename in (<foreach collection="filenames" item="filename"
-                                                                                 separator=",">#{filename}</foreach>)
-    </delete>
 
-    <delete id="deleteSceneAsset">
-        delete from db_vibe_monitor.t_scene_asset where said in (<foreach collection="saids" item="said" separator=",">
-        #{said}</foreach>)
-    </delete>
+	<insert id="insertSceneAsset" parameterType="com.vibe.pojo.spacemodel.SceneAsset" useGeneratedKeys="true" keyProperty="said">
+		insert into db_vibe_monitor.t_scene_asset(sceneId, assetId,  elementName, position, rotation, scale, viewpoint, principleModelName, boardElementName, boardPosition, path, status)
+			values(#{sceneId}, #{assetId},  #{elementName}, #{position}, #{rotation}, #{scale}, #{viewpoint}, #{principleModelName}, #{boardElementName}, #{boardPosition},<![CDATA[#{path}]]> ,#{status})
+	</insert>
 
 
-    <insert id="insertSceneAsset" parameterType="com.vibe.pojo.spacemodel.SceneAsset" useGeneratedKeys="true"
-            keyProperty="said">
-        insert into db_vibe_monitor.t_scene_asset(sceneId, assetId, elementName, position, rotation, scale, viewpoint,
-        principleModelName, boardElementName, boardPosition, path, status)
-        values(#{sceneId}, #{assetId}, #{elementName}, #{position}, #{rotation}, #{scale}, #{viewpoint},
-        #{principleModelName}, #{boardElementName}, #{boardPosition},<![CDATA[#{path}]]> ,#{status})
-    </insert>
-
-
-    <update id="updateSceneAsset" parameterType="com.vibe.pojo.spacemodel.SceneAsset">
-        update db_vibe_monitor.t_scene_asset
-        <set>
-            <if test="sceneId != null">sceneId = #{sceneId},</if>
-            <if test="assetId != null">assetId = #{assetId},</if>
-            <if test="elementName != null and elementName != ''">elementName = #{elementName},</if>
-            <if test="position != null and position != ''">position = #{position},</if>
-            <if test="path != null and path != ''">path = #{path},</if>
-            <if test="rotation != null and rotation != ''">rotation = #{rotation},</if>
-            <if test="scale != null and scale != ''">scale = #{scale},</if>
-            <if test="viewpoint != null and viewpoint != ''">viewpoint = #{viewpoint},</if>
-            <if test="principleModelName != null and principleModelName != ''">principleModelName =
-                #{principleModelName},
-            </if>
-            <if test="boardElementName != null and boardElementName != ''">boardElementName = #{boardElementName},</if>
-            <if test="boardPosition != null and boardPosition != ''">boardPosition = #{boardPosition},</if>
-            <if test="status != null">status = #{status},</if>
-        </set>
-        where said = #{said}
-    </update>
-
-    <select id="findSceneAssetByCatalogAndScene" resultType="com.vibe.pojo.spacemodel.SceneAsset">
-        SELECT * FROM db_vibe_monitor.`t_scene_asset` sa WHERE #{scene} = sa.sceneId AND (
-        EXISTS (
-        SELECT id FROM db_vibe_monitor.`t_probe` p WHERE (SELECT SUBSTRING_INDEX(sa.path,'>',-1)) = p.name
-        <if test="cas != null">and p.catalog IN (<foreach collection="cas" item="catalog" separator=",">
-            #{catalog}</foreach>)
-        </if>
-        )
-        OR EXISTS (
-        SELECT id FROM db_vibe_monitor.`t_control` c WHERE (SELECT SUBSTRING_INDEX(sa.path,'>',-1)) = c.name
-        <if test="cas != null">and c.catalog IN (<foreach collection="cas" item="catalog" separator=",">
-            #{catalog}</foreach>)
-        </if>
-        )
-        OR EXISTS (
-        SELECT id FROM db_vibe_monitor.`t_device` d WHERE (SELECT SUBSTRING_INDEX(sa.path,'>',-1)) = d.name
-        <if test="cas != null">and d.catalog IN (<foreach collection="cas" item="catalog" separator=",">
-            #{catalog}</foreach>)
-        </if>
-        )
-        )
-    </select>
-    <select id="findSceneAssetByScene" parameterType="com.vibe.pojo.spacemodel.SceneAsset"
-            resultType="com.vibe.pojo.spacemodel.SceneAsset">
-        SELECT * FROM db_vibe_monitor.`t_scene_asset` sa
-        <if test="sceneId != null">WHERE #{sceneId} = sa.sceneId</if>
-        <if test="elementName != null">WHERE #{elementName} = sa.elementName</if>
-        <if test="path != null">WHERE #{path} = sa.path</if>
-    </select>
-    <select id="findSceneAssetId" resultType="java.lang.Integer">
-        select assetId from db_vibe_monitor.`t_scene_asset`
-    </select>
+	<update id="updateSceneAsset" parameterType="com.vibe.pojo.spacemodel.SceneAsset">
+		update db_vibe_monitor.t_scene_asset
+		<set>
+			<if test="sceneId != null">sceneId = #{sceneId},</if>
+			<if test="assetId != null">assetId = #{assetId},</if>
+			<if test="elementName != null and elementName != ''">elementName = #{elementName},</if>
+			<if test="position != null and position != ''">position = #{position},</if>
+			<if test="path != null and path != ''">path = #{path},</if>
+			<if test="rotation != null and rotation != ''">rotation = #{rotation},</if>
+			<if test="scale != null and scale != ''">scale = #{scale},</if>
+			<if test="viewpoint != null and viewpoint != ''">viewpoint = #{viewpoint},</if>
+			<if test="principleModelName != null and principleModelName != ''">principleModelName = #{principleModelName},</if>
+			<if test="boardElementName != null and boardElementName != ''">boardElementName = #{boardElementName},</if>
+			<if test="boardPosition != null and boardPosition != ''">boardPosition = #{boardPosition},</if>
+			<if test="status != null">status = #{status},</if>
+		</set>
+		where said = #{said}
+	</update>
+	
+	<select id="findSceneAssetByCatalogAndScene" resultType="com.vibe.pojo.spacemodel.SceneAsset">
+		SELECT * FROM db_vibe_monitor.`t_scene_asset` sa WHERE #{scene} = sa.sceneId AND (
+			EXISTS (
+				SELECT id FROM db_vibe_monitor.`t_probe` p WHERE (SELECT SUBSTRING_INDEX(sa.path,'>',-1)) = p.name  <if test="cas != null">and p.catalog IN (<foreach collection="cas" item="catalog" separator=",">#{catalog}</foreach>)</if>)
+			 OR EXISTS (
+				SELECT id FROM db_vibe_monitor.`t_control` c WHERE (SELECT SUBSTRING_INDEX(sa.path,'>',-1)) = c.name  <if test="cas != null">and c.catalog IN (<foreach collection="cas" item="catalog" separator=",">#{catalog}</foreach>)</if>)
+			OR EXISTS (
+				SELECT id FROM db_vibe_monitor.`t_device` d WHERE (SELECT SUBSTRING_INDEX(sa.path,'>',-1)) = d.name  <if test="cas != null">and d.catalog IN (<foreach collection="cas" item="catalog" separator=",">#{catalog}</foreach>)</if>)
+			)
+	</select>
+	<select id="findSceneAssetByScene" parameterType="com.vibe.pojo.spacemodel.SceneAsset" resultType="com.vibe.pojo.spacemodel.SceneAsset">
+		SELECT * FROM db_vibe_monitor.`t_scene_asset` sa 
+		<if test="sceneId != null">WHERE #{sceneId} = sa.sceneId</if>
+		<if test="elementName != null">WHERE #{elementName} = sa.elementName</if>
+		<if test="path != null">WHERE #{path} = sa.path</if>
+	</select>
+	<select id="findSceneAssetId" resultType="java.lang.Integer">
+		select assetId from db_vibe_monitor.`t_scene_asset`
+	</select>
+	<select id="selectSceneAssetByAssetId" resultType="com.vibe.pojo.spacemodel.SceneAsset">
+		select
+			sceneId,assetId,elementName,position,path,rotation,scale,viewpoint,principleModelName,boardElementName,boardPosition,said,status
+		from db_vibe_monitor.`t_scene_asset`
+		<where>
+			<if test="assetId != null">
+				and assetId = #{assetId}
+			</if>
+		</where>
+	</select>
+	<select id="selectDeviceByRelationSceneAsset" resultMap="baseDeviceTreeMap" parameterType="java.util.List">
+		select
+			b.id,b.parent,b.type,b.catalog,b.`name`,b.caption
+		from
+			db_vibe_monitor.t_scene_asset a
+		left join
+			db_vibe_monitor.t_device b
+		on
+			a.assetId = b.id
+		<where>
+			b.id is not null
+			<if test="idList != null">
+				and b.parent in
+				<foreach collection="idList" item="idList" open="(" separator="," close=")">
+					#{idList}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	<select id="selectDeviceChildrenBySceneAsset" resultMap="baseDeviceTreeMap">
+		select
+		b.id,b.parent,b.type,b.catalog,b.`name`,b.caption
+		from
+		db_vibe_monitor.t_scene_asset a
+		left join
+		db_vibe_monitor.t_device b
+		on
+		a.assetId = b.id
+		<where>
+			b.id is not null and b.parent = #{id}
+		</where>
+	</select>
 </mapper>

@@ -12,13 +12,13 @@ import com.vibe.service.global.SystemService;
 
 @Controller
 public class SystemController {
-    @Autowired
-    private SystemService systemService;
+	@Autowired
+	private SystemService systemService;
 
-    @RequestMapping("/getSystemSettings")
-    @ResponseBody
-    public List<SystemSettingBean> getSystemSettings() {
-        return systemService.getSystemSettings();
-    }
+	@RequestMapping("/getSystemSettings")
+	@ResponseBody
+	public List<SystemSettingBean> getSystemSettings(){
+		return systemService.getSystemSettings();
+	}
 
 }

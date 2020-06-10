@@ -1,6 +1,6 @@
 
 package com.vibe.utils;
-
+ 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -8,20 +8,18 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
 import com.swetake.util.Qrcode;
 
 
 public class QRCodeUtils {
-
+ 
     /**
      * 编码字符串内容到目标File对象中
-     *
      * @param encodeddata
      * @param destFile
      * @throws IOException
      */
-    public static void qrCodeEncode(String encodeddata, File destFile) throws IOException {
+    public static void qrCodeEncode(String encodeddata,File destFile) throws IOException{
         Qrcode qrcode = new Qrcode();
         //错误修正容量   
         //L水平   7%的字码可被修正  
@@ -42,7 +40,7 @@ public class QRCodeUtils {
         g.clearRect(0, 0, 139, 139);
         //设置二维码图片颜色
         g.setColor(Color.BLACK);
-
+ 
         if (d.length > 0 && d.length < 123) {
             boolean[][] b = qrcode.calQrcode(d);
             for (int i = 0; i < b.length; i++) {
@@ -53,14 +51,14 @@ public class QRCodeUtils {
                 }
             }
         }
-
+ 
         g.dispose();
         bi.flush();
-
+ 
         ImageIO.write(bi, "png", destFile);
-        System.out.println("Input Encoded data is：" + encodeddata);
+        System.out.println("Input Encoded data is："+encodeddata);
     }
-
+     
     /**
      * 解析二维码，返回解析内容
      * @param imageFile
@@ -105,7 +103,7 @@ public class QRCodeUtils {
         String reText = QRCodeUtils.qrCodeDecode(qrFile);
         System.out.println(reText);
     }*/
-
+   
 }
  
 /*class J2SEImage implements QRCodeImage {

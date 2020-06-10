@@ -7,15 +7,15 @@ import com.vibe.pojo.Archaeology;
 
 
 public interface ArchaeologyService {
+	
+	public void insertArchaeology(Archaeology archaeology);
 
-    public void insertArchaeology(Archaeology archaeology);
+	public void deleteArchaeology(int parseInt);
 
-    public void deleteArchaeology(int parseInt);
+	public Archaeology queryArchaeology(int id);
 
-    public Archaeology queryArchaeology(int id);
+	public List<Archaeology> queryArchaeologyList();
 
-    public List<Archaeology> queryArchaeologyList();
-
-    public void updateArchaeology(Archaeology archaeology);
-
+	public void updateArchaeology(Archaeology archaeology);
+	
 }

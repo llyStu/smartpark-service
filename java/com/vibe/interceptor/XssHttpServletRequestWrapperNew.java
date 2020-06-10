@@ -20,31 +20,10 @@ public class XssHttpServletRequestWrapperNew extends HttpServletRequestWrapper {
 
 	*/
 /**
- * 覆盖getParameter方法，将参数名和参数值都做xss过滤。
- * 如果需要获得原始的值，则通过super.getParameterValues(name)来获取
- * getParameterNames,getParameterValues和getParameterMap也可能需要覆盖
- * <p>
- * 对一些特殊字符进行转义
- * <p>
- * 覆盖getHeader方法，将参数名和参数值都做xss过滤。 如果需要获得原始的值，则通过super.getHeaders(name)来获取
- * getHeaderNames 也可能需要覆盖
- * <p>
- * 将容易引起xss漏洞的半角字符直接替换成全角字符
- *
- * @param s
- * @return 获取最原始的request
- * @return 获取最原始的request的静态方法
- * @return 对一些特殊字符进行转义
- * <p>
- * 覆盖getHeader方法，将参数名和参数值都做xss过滤。 如果需要获得原始的值，则通过super.getHeaders(name)来获取
- * getHeaderNames 也可能需要覆盖
- * <p>
- * 将容易引起xss漏洞的半角字符直接替换成全角字符
- * @param s
- * @return 获取最原始的request
- * @return 获取最原始的request的静态方法
- * @return
- *//*
+	 * 覆盖getParameter方法，将参数名和参数值都做xss过滤。
+	 * 如果需要获得原始的值，则通过super.getParameterValues(name)来获取
+	 * getParameterNames,getParameterValues和getParameterMap也可能需要覆盖
+	 *//*
 
 	@Override
 	public String getParameter(String name) {
@@ -57,8 +36,8 @@ public class XssHttpServletRequestWrapperNew extends HttpServletRequestWrapper {
 	}
 	*/
 /**
- * 对一些特殊字符进行转义
- *//*
+	 * 对一些特殊字符进行转义
+	 *//*
 
 	public static String HTMLEncode(String aText) {
 		final StringBuilder result = new StringBuilder();
@@ -86,9 +65,9 @@ public class XssHttpServletRequestWrapperNew extends HttpServletRequestWrapper {
 
 	*/
 /**
- * 覆盖getHeader方法，将参数名和参数值都做xss过滤。 如果需要获得原始的值，则通过super.getHeaders(name)来获取
- * getHeaderNames 也可能需要覆盖
- *//*
+	 * 覆盖getHeader方法，将参数名和参数值都做xss过滤。 如果需要获得原始的值，则通过super.getHeaders(name)来获取
+	 * getHeaderNames 也可能需要覆盖
+	 *//*
 
 	@Override
 	public String getHeader(String name) {
@@ -101,20 +80,20 @@ public class XssHttpServletRequestWrapperNew extends HttpServletRequestWrapper {
 
 	*/
 /*
- *  目前xssProject对注入代码要求是必须开始标签和结束标签(如<script></script>)正确匹配才能解析，否则报错；
- * 因此只能替换调xssProject换为自定义实现
- *//*
+	 *  目前xssProject对注入代码要求是必须开始标签和结束标签(如<script></script>)正确匹配才能解析，否则报错；
+	 * 因此只能替换调xssProject换为自定义实现
+	 *//*
 
-
-
-
-
- */
+	
+	
+	
+	
+	*/
 /**
- * 将容易引起xss漏洞的半角字符直接替换成全角字符
- * @param s
- * @return
- *//*
+	 * 将容易引起xss漏洞的半角字符直接替换成全角字符
+	 * @param s
+	 * @return
+	 *//*
 
 	private static String xssEncode(String s) {
 		
@@ -252,20 +231,20 @@ public class XssHttpServletRequestWrapperNew extends HttpServletRequestWrapper {
 	// return null;
 	*/
 /**
- * 获取最原始的request
- *
- * @return
- *//*
+	 * 获取最原始的request
+	 * 
+	 * @return
+	 *//*
 
 	public HttpServletRequest getOrgRequest() {
 		return orgRequest;
 	}
 	*/
 /**
- * 获取最原始的request的静态方法
- *
- * @return
- *//*
+	 * 获取最原始的request的静态方法
+	 * 
+	 * @return
+	 *//*
 
 	public static HttpServletRequest getOrgRequest(HttpServletRequest req) {
 		if (req instanceof XssHttpServletRequestWrapperNew) {

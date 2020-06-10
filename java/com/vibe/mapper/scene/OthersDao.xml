@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.scene.OthersDao">
-
-    <insert id="insertOthers" parameterType="Others">
-        insert into db_vibe_monitor.Others (id, projectName, description, photo, date)
-        values (#{id,jdbcType=INTEGER}, #{projectName},
-        #{description}, #{photo}, #{date,jdbcType=DATE})
-    </insert>
-
-    <delete id="deleteOthers" parameterType="int">
-        delete from db_vibe_monitor.Others
-        where id = #{id}
-    </delete>
-
-    <update id="updateOthers" parameterType="Others">
-        update db_vibe_monitor.Others
-        <set>
-
-            <if test="date != '' and date != null">
-                date = #{date},
-            </if>
-            <if test="photo != null">
-                photo = #{photo},
-            </if>
-
-            <if test="projectName != null">
-                projectName = #{projectName},
-            </if>
-            <if test="description != null">
-                description = #{description},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-
-    <select id="queryOthersList" resultType="Others">
-        select * from db_vibe_monitor.Others order BY id DESC
-    </select>
-
-    <select id="queryOthers" parameterType="int" resultType="Others">
-        select * from db_vibe_monitor.Others
-        where id = #{id}
-    </select>
-
+	
+	<insert id="insertOthers" parameterType="Others">		
+		    insert into db_vibe_monitor.Others (id, projectName, description, photo, date)
+			  values (#{id,jdbcType=INTEGER}, #{projectName},
+			  #{description}, #{photo}, #{date,jdbcType=DATE})
+	</insert>
+		
+	<delete id="deleteOthers" parameterType="int">
+		delete from db_vibe_monitor.Others 
+			where id = #{id}
+	</delete>	
+	
+	<update id="updateOthers" parameterType="Others">
+			update db_vibe_monitor.Others
+	    <set>	   	     
+	     
+	      <if test="date != '' and date != null" >
+	        date = #{date},
+	      </if>
+	      <if test="photo != null" >
+	        photo = #{photo},
+	      </if>
+	     
+	      <if test="projectName != null" >
+	        projectName = #{projectName},
+	      </if>	 
+	      <if test="description != null" >
+	        description = #{description},
+	      </if>    
+	    </set>
+	    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<select id="queryOthersList" resultType="Others">
+		select * from db_vibe_monitor.Others  order BY id DESC
+	</select>
+	 
+	<select id="queryOthers" parameterType="int" resultType="Others">
+		select * from db_vibe_monitor.Others 
+			where id = #{id}
+	</select>
+	
 </mapper>
 
 

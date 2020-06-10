@@ -11,7 +11,7 @@ import com.vibe.pojo.AssetVo;
 
 @Controller
 public class Test {
-
+	
 //	ElectricRelay er = ElectricRelay.getInstance("COM3");
 //
 //	@RequestMapping("/antece/operate")

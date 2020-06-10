@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
 <mapper namespace="com.vibe.mapper.energy.EnergyDao">
-    <select id="fenxiangduibiTime" resultType="com.vibe.pojo.KeyValueBean">
-        <!-- <if test='timeType == "3"'> -->
-        select c.name name,value from db_vibe_data.t_energy_day_float f,db_vibe_basic.t_code c,db_vibe_monitor.t_probe p
-        where f.monitor = p.id and c.id = p.catalog and
-        (c.id = 44 or c.id = 45 or c.id = 47 or c.id = 48) and moment = #{time}
-        <!-- </if> -->
-    </select>
-    <select id="fenxiangduibiStartEndTime" resultType="com.vibe.pojo.KeyValueBean">
-
-    </select>
+	<select id="fenxiangduibiTime" resultType="com.vibe.pojo.KeyValueBean">
+		<!-- <if test='timeType == "3"'> -->
+    		select c.name name,value from db_vibe_data.t_energy_day_float f,db_vibe_basic.t_code c,db_vibe_monitor.t_probe p where f.monitor = p.id and c.id = p.catalog and 
+			(c.id = 44 or c.id = 45 or c.id = 47 or c.id = 48) and moment = #{time}
+  		<!-- </if> -->
+	</select>
+	<select id="fenxiangduibiStartEndTime" resultType="com.vibe.pojo.KeyValueBean">
+		
+	</select>
 </mapper>
 
 

@@ -18,19 +18,18 @@ import java.util.List;
 public interface CarPushDao {
     /**
      * 批量添加车位停车信息
-     *
      * @param carParkingStop 停车场管理对象
      */
     boolean saveBatchCarParkingStop(CarParkingStop carParkingStop);
 
     /**
      * 添加停车场信息统计
-     *
      * @param carParkingStop 停车场管理对象
      */
     void insertParkingInfo(CarParkingStop carParkingStop);
 
     /**
+     *
      * @param probeId 设备id
      * @return CarParkingStop 停车场管理对象
      */
@@ -38,7 +37,6 @@ public interface CarPushDao {
 
     /**
      * 过车记录分页查询
-     *
      * @param carParkingStop 停车场管理对象
      * @return
      */
@@ -47,7 +45,6 @@ public interface CarPushDao {
 
     /**
      * 通过parkId 查询停车信息
-     *
      * @param carParkingStop 停车场管理对象
      * @return
      */
@@ -55,14 +52,12 @@ public interface CarPushDao {
 
     /**
      * 更新停车信息通过parkId
-     *
      * @param carParkingStop 停车场管理对象
      */
     void updateParkInfoByParkId(CarParkingStop carParkingStop);
 
     /**
      * 更新停车信息通过停车名称
-     *
      * @param carParkingStop 停车场管理对象
      */
     void updateParkInfoByParkingStop(CarParkingStop carParkingStop);

@@ -6,9 +6,9 @@ import com.vibe.pojo.SingleTask;
 
 public interface SingleTaskService {
 
-    public abstract void insert(SingleTask singleTask);
-
-    public abstract Integer queryMaxId();
-
-    public abstract List<SingleTask> queryForList(int routeId);
+	public abstract void insert(SingleTask singleTask);
+	
+	public abstract Integer queryMaxId();
+	
+	public abstract List<SingleTask> queryForList(int routeId);
 }

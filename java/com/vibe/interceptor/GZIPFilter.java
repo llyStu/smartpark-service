@@ -23,23 +23,23 @@ public class GZIPFilter implements Filter {
             //searching for 'gzip' in ACCEPT_ENCODING header
             if (acceptEncoding.indexOf("gzip") >= 0) {
                 GZIPResponseWrapper gzipResponse = new GZIPResponseWrapper(httpResponse);
-                chain.doFilter(request, gzipResponse);
-                gzipResponse.finish();
-                return;
+               chain.doFilter(request, gzipResponse);
+               gzipResponse.finish();
+               return;
             }
         }
         chain.doFilter(request, response);
     }
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        // TODO Auto-generated method stub
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		// TODO Auto-generated method stub
+		
+	}
 
-    }
-
-    @Override
-    public void destroy() {
-        // TODO Auto-generated method stub
-
-    }
+	@Override
+	public void destroy() {
+		// TODO Auto-generated method stub
+		
+	}
 }

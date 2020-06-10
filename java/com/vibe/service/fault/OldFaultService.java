@@ -8,22 +8,22 @@ import com.vibe.pojo.TaskCount;
 
 
 public interface OldFaultService {
+	
+	public void insertFault(DailyCheck dailyCheck);
 
-    public void insertFault(DailyCheck dailyCheck);
+	public void deleteFault(int parseInt);
 
-    public void deleteFault(int parseInt);
+	public DailyCheck queryFault(int id);
 
-    public DailyCheck queryFault(int id);
+	public List<DailyCheck> queryFaultList();
 
-    public List<DailyCheck> queryFaultList();
+	public void updateFault(DailyCheck dailyCheck);
 
-    public void updateFault(DailyCheck dailyCheck);
-
-    public void insertDeviceFault(DailyCheck dailyCheck);
-
-    public void despatchTo(int id, int personId);
-
-    public List<DailyCheck> queryDespatchList(String username);
-
-    public TaskCount findTaskCount(int personId);
+	public void insertDeviceFault(DailyCheck dailyCheck);
+	
+	public void despatchTo(int id, int personId);
+	
+	public List<DailyCheck> queryDespatchList(String username);
+	
+	public TaskCount findTaskCount(int personId);
 }

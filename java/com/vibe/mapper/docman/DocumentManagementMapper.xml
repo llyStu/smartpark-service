@@ -1,132 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.vibe.mapper.docman.DocumentManagementMapper">
-    <insert id="saveDocumentDir" parameterType="com.vibe.pojo.docman.DocumentDir" useGeneratedKeys="true"
-            keyProperty="id">
-        insert into db_vibe_basic.t_docman_dir (
-        name, number, uid, modified, `desc`, pid, visible, attach
-        ) values (
-        #{name}, #{number}, #{uid}, #{modified}, #{desc}, #{pid}, #{visible}, #{attach}
-        )
-    </insert>
-    <insert id="restore" parameterType="com.vibe.pojo.docman.DocumentDir" useGeneratedKeys="true" keyProperty="id">
-        insert into db_vibe_basic.t_docman_dir (
-        id, name, number, uid, modified, `desc`, pid, visible, filenames, attach
-        ) values (
-        #{id}, #{name}, #{number}, #{uid}, #{modified}, #{desc}, #{pid}, #{visible}, #{filenames}, #{attach}
-        )
-    </insert>
-    <insert id="backup" parameterType="com.vibe.pojo.docman.DocumentBackup" useGeneratedKeys="true" keyProperty="bid">
-        insert into db_vibe_basic.t_docman_bak (
-        id, name, number, uid, modified, `desc`, pid, visible, filenames, attach, backup, buid, bdesc
-        ) select id, name, number, uid, modified, `desc`, pid, visible, filenames, attach, now() as backup, #{buid},
-        #{bdesc} from db_vibe_basic.t_docman_dir where id = #{id}
-    </insert>
-    <update id="updatedir" parameterType="com.vibe.pojo.docman.DocumentDir">
-        update db_vibe_basic.t_docman_dir
-        set id = #{id}
-        <if test="name != null and name != ''">, name = #{name}</if>
-        <if test="number != null and number != ''">, number = #{number}</if>
-        <if test="desc != null and desc != ''">, `desc` = #{desc}</if>
-        <if test="pid != null">, pid = #{pid}</if>
-        <if test="attach != null">, attach = #{attach}</if>
-        where id = #{id}
-    </update>
-    <update id="addDocumentFile" parameterType="com.vibe.pojo.docman.DocumentDir">
-        update db_vibe_basic.t_docman_dir set filenames = CONCAT(filenames, #{filenames}) where id = #{did}
-    </update>
-    <delete id="deleteDocumentDir">
-        delete from db_vibe_basic.t_docman_dir where id = #{did} and visible = #{visible}
-    </delete>
+	<insert id="saveDocumentDir" parameterType="com.vibe.pojo.docman.DocumentDir" useGeneratedKeys="true" keyProperty="id">
+		insert into db_vibe_basic.t_docman_dir (
+			name, number, uid, modified, `desc`, pid, visible, attach
+		) values (
+			#{name}, #{number}, #{uid}, #{modified}, #{desc}, #{pid}, #{visible}, #{attach}
+		)
+	</insert>
+	<insert id="restore" parameterType="com.vibe.pojo.docman.DocumentDir" useGeneratedKeys="true" keyProperty="id">
+		insert into db_vibe_basic.t_docman_dir (
+			id, name, number, uid, modified, `desc`, pid, visible, filenames, attach
+		) values (
+			#{id}, #{name}, #{number}, #{uid}, #{modified}, #{desc}, #{pid}, #{visible}, #{filenames}, #{attach}
+		)
+	</insert>
+	<insert id="backup" parameterType="com.vibe.pojo.docman.DocumentBackup" useGeneratedKeys="true" keyProperty="bid">
+		insert into db_vibe_basic.t_docman_bak (
+			id, name, number, uid, modified, `desc`, pid, visible, filenames, attach, backup, buid, bdesc
+		) select id, name, number, uid, modified, `desc`, pid, visible, filenames, attach, now() as backup, #{buid}, #{bdesc} from db_vibe_basic.t_docman_dir where id = #{id}
+	</insert>
+	<update id="updatedir" parameterType="com.vibe.pojo.docman.DocumentDir">
+		update db_vibe_basic.t_docman_dir
+		set id = #{id}
+			<if test="name != null and name != ''">, name = #{name}</if>
+			<if test="number != null and number != ''">, number = #{number}</if>
+			<if test="desc != null and desc != ''">, `desc` = #{desc}</if>
+			<if test="pid != null">, pid = #{pid}</if>
+			<if test="attach != null">, attach = #{attach}</if>
+		where id = #{id}
+	</update>
+	<update id="addDocumentFile" parameterType="com.vibe.pojo.docman.DocumentDir">
+		update db_vibe_basic.t_docman_dir set filenames = CONCAT(filenames, #{filenames}) where id = #{did}
+	</update>
+	<delete id="deleteDocumentDir">
+		delete from db_vibe_basic.t_docman_dir where id = #{did} and visible = #{visible}
+	</delete>
+	
+	<select id="findAllDocumentDir" resultType="com.vibe.pojo.docman.DocumentDir">
+	select * from db_vibe_basic.t_docman_dir where visible = true order by pid
+	</select>
+	<update id="delParent">
+	update db_vibe_basic.t_docman_dir set pid=1 where pid=#{pid}
+	</update>
+	
+	
+	
+	
+	<select id="findDocumentDir" resultType="com.vibe.pojo.docman.DocumentDir" parameterType="com.vibe.pojo.docman.DocumentDirVo">
+		select d.*, u.name as uname
+		from db_vibe_basic.t_docman_dir d
+		left join db_vibe_basic.t_user u
+		on d.uid = u.id
+		where visible = false
+			<if test="id != null">and d.id = #{id}</if>
+			<if test="pid != null">and d.pid = #{pid}</if>
+			<if test="name != null and name != ''">and d.name like "%"#{name}"%"</if>
+			<if test="number != null and number != ''">and d.number like "%"#{number}"%"</if>
+			<if test="uname != null and uname != ''">and u.name like "%"#{uname}"%"</if>
+			<!-- <if test="modified_max != null">and d.modified &lt;= #{modified_max}</if> -->
+			<if test="modified_max != null">
+			 and DATE_FORMAT(d.modified,'%Y-%m-%d') &lt;= DATE_FORMAT(#{modified_max},'%Y-%m-%d')
+			</if>
+			<if test="modified_min != null">and d.modified >= #{modified_min}</if>
+			<if test="desc != null">and d.desc like %#{desc}%</if>
+			<if test="attach != null and attach != ''">and d.attach  = #{attach}</if>
+			<if test="pids != null and pids.length > 0">
+				and d.pid in (<foreach collection="pids" item="it" separator="," >#{it}</foreach>)
+			</if>
+			<if test="filename != null and filename != ''">
+				<choose>
+					<when test="name != null and name == filename">or</when>
+					<otherwise>and</otherwise>
+				</choose>
+				d.filenames like "%"#{filename}"%"
+			</if>
+	</select>
+	
+	<select id="findbackup" resultType="com.vibe.pojo.docman.DocumentBackup" parameterType="com.vibe.pojo.docman.DocumentBackupVo">
+		select d.*, u.name as uname, u2.name AS buname
+		from db_vibe_basic.t_docman_bak d
+		left join db_vibe_basic.t_user u
+		on d.uid = u.id
+		LEFT JOIN  db_vibe_basic.t_user u2
+		ON d.buid = u2.id
+		LEFT JOIN db_vibe_basic.t_docman_dir dir
+		on d.id = dir.id
+		<where>
+			<if test="type != null">and dir.pid = #{type}</if>
 
-    <select id="findAllDocumentDir" resultType="com.vibe.pojo.docman.DocumentDir">
-        select * from db_vibe_basic.t_docman_dir where visible = true order by pid
-    </select>
-    <update id="delParent">
-        update db_vibe_basic.t_docman_dir set pid=1 where pid=#{pid}
-    </update>
+			<if test="bid != null">and d.bid = #{bid}</if>
+			<if test="backup_max != null">and d.backup &lt;= #{backup_max}</if>
+			<if test="backup_min != null">and d.backup >= #{backup_min}</if>
 
-
-    <select id="findDocumentDir" resultType="com.vibe.pojo.docman.DocumentDir"
-            parameterType="com.vibe.pojo.docman.DocumentDirVo">
-        select d.*, u.name as uname
-        from db_vibe_basic.t_docman_dir d
-        left join db_vibe_basic.t_user u
-        on d.uid = u.id
-        where visible = false
-        <if test="id != null">and d.id = #{id}</if>
-        <if test="pid != null">and d.pid = #{pid}</if>
-        <if test="name != null and name != ''">and d.name like "%"#{name}"%"</if>
-        <if test="number != null and number != ''">and d.number like "%"#{number}"%"</if>
-        <if test="uname != null and uname != ''">and u.name like "%"#{uname}"%"</if>
-        <!-- <if test="modified_max != null">and d.modified &lt;= #{modified_max}</if> -->
-        <if test="modified_max != null">
-            and DATE_FORMAT(d.modified,'%Y-%m-%d') &lt;= DATE_FORMAT(#{modified_max},'%Y-%m-%d')
-        </if>
-        <if test="modified_min != null">and d.modified >= #{modified_min}</if>
-        <if test="desc != null">and d.desc like %#{desc}%</if>
-        <if test="attach != null and attach != ''">and d.attach = #{attach}</if>
-        <if test="pids != null and pids.length > 0">
-            and d.pid in (<foreach collection="pids" item="it" separator=",">#{it}</foreach>)
-        </if>
-        <if test="filename != null and filename != ''">
-            <choose>
-                <when test="name != null and name == filename">or</when>
-                <otherwise>and</otherwise>
-            </choose>
-            d.filenames like "%"#{filename}"%"
-        </if>
-    </select>
-
-    <select id="findbackup" resultType="com.vibe.pojo.docman.DocumentBackup"
-            parameterType="com.vibe.pojo.docman.DocumentBackupVo">
-        select d.*, u.name as uname, u2.name AS buname
-        from db_vibe_basic.t_docman_bak d
-        left join db_vibe_basic.t_user u
-        on d.uid = u.id
-        LEFT JOIN db_vibe_basic.t_user u2
-        ON d.buid = u2.id
-        LEFT JOIN db_vibe_basic.t_docman_dir dir
-        on d.id = dir.id
-        <where>
-            <if test="type != null">and dir.pid = #{type}</if>
-
-            <if test="bid != null">and d.bid = #{bid}</if>
-            <if test="backup_max != null">and d.backup &lt;= #{backup_max}</if>
-            <if test="backup_min != null">and d.backup >= #{backup_min}</if>
-
-            <if test="id != null">and d.id = #{id}</if>
-            <if test="name != null and name != ''">and d.name like "%"#{name}"%"</if>
-            <if test="number != null and number != ''">and d.number like "%"#{number}"%"</if>
-            <if test="uname != null and uname != ''">and u.name like "%"#{uname}"%"</if>
-            <if test="modified_max != null">and d.modified &lt;= #{modified_max}</if>
-            <if test="modified_min != null">and d.modified >= #{modified_min}</if>
-            <if test="desc != null">and d.desc like %#{desc}%</if>
-            <if test="pid != null">and d.pid = #{pid}</if>
-            <if test="filename != null and filename != ''">
-                <choose>
-                    <when test="name != null and name == filename">or</when>
-                    <otherwise>and</otherwise>
-                </choose>
-                d.filenames like "%"#{filename}"%"
-            </if>
-        </where>
-    </select>
-
-
-    <update id="setBackupPath">
-        update db_vibe_basic.t_system set value=#{path} where name='docman.backup_path'
-    </update>
-    <insert id="saveBackupPath">
-        insert into db_vibe_basic.t_system(name, value, memo)
-        values("docman.backup_path", #{path}, "文档管理备份目录");
-    </insert>
-    <select id="getBackupPath" resultType="string">
-        select value from db_vibe_basic.t_system where name='docman.backup_path'
-    </select>
+			<if test="id != null">and d.id = #{id}</if>
+			<if test="name != null and name != ''">and d.name like "%"#{name}"%"</if>
+			<if test="number != null and number != ''">and d.number like "%"#{number}"%"</if>
+			<if test="uname != null and uname != ''">and u.name like "%"#{uname}"%"</if>
+			<if test="modified_max != null">and d.modified &lt;= #{modified_max}</if>
+			<if test="modified_min != null">and d.modified >= #{modified_min}</if>
+			<if test="desc != null">and d.desc like %#{desc}%</if>
+			<if test="pid != null">and d.pid = #{pid}</if>
+			<if test="filename != null and filename != ''">
+				<choose>
+					<when test="name != null and name == filename">or</when>
+					<otherwise>and</otherwise>
+				</choose>
+				d.filenames like "%"#{filename}"%"
+			</if>
+		</where>
+	</select>
+	
+	
+	<update id="setBackupPath">
+		update db_vibe_basic.t_system set value=#{path} where name='docman.backup_path'
+	</update>
+	<insert id="saveBackupPath">
+		insert into db_vibe_basic.t_system(name, value, memo) 
+			values("docman.backup_path", #{path}, "文档管理备份目录");
+	</insert>
+	<select id="getBackupPath" resultType="string">
+		select value from db_vibe_basic.t_system where name='docman.backup_path'
+	</select>
 </mapper>
 
 

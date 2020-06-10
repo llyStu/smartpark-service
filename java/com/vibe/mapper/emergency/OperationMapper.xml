@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.emergency.OperationMapper">
+    <insert id="insertOperation" parameterType="com.vibe.pojo.emergency.Operation" useGeneratedKeys="true"
+            keyProperty="oid">
+        insert into db_vibe_basic.t_Operation(event, level, actionId, target, data)
+        values(#{event}, #{level}, #{actionId}, #{target}, #{data})
+    </insert>
+    <delete id="deleteOperation">
+        delete from db_vibe_basic.t_Operation where oid in (<foreach collection="oids" item="id" separator=",">
+        #{id}</foreach>)
+    </delete>
+    <update id="updateOperation" parameterType="com.vibe.pojo.emergency.Operation">
+        update db_vibe_basic.t_Operation
+        <set>
+            <if test="event != null and event != ''">event = #{event},</if>
+            <if test="level != null and level != ''">level = #{level},</if>
+            <if test="actionId != null and actionId != ''">actionId = #{actionId},</if>
+            <if test="target != null and target != ''">target = #{target},</if>
+            <if test="data != null and data != ''">data = #{data},</if>
+        </set>
+        where oid = #{oid}
+    </update>
+
+    <select id="queryOperation" parameterType="com.vibe.pojo.emergency.OperationVo"
+            resultType="com.vibe.pojo.emergency.Operation">
+        select * from db_vibe_basic.t_Operation
+        <where>
+            <if test="event != null and event !=''">and event = #{event}</if>
+            <if test="level != null and level !=''">and level = #{level}</if>
+            <if test="actionId != null and actionId !=''">and actionId = #{actionId}</if>
+            <if test="target != null and target !=''">and target = #{target}</if>
+            <if test="data != null and data !=''">and data like "%"#{data}"%"</if>
+            <if test="oids != null">and oid in (<foreach collection="oids" item="id" separator=",">#{id}</foreach>)
+            </if>
+            <if test="oid != null">and oid = #{oid}</if>
+        </where>
+    </select>
+</mapper>
+
+
+

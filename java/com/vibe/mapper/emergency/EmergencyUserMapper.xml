@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.emergency.EmergencyUserMapper">
+
+    <resultMap type="com.vibe.pojo.emergency.EmergencyUser" id="emergencyUserMapper">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="phone" property="phone"/>
+        <result column="department" property="department"/>
+        <result column="u_default" property="udefault"/>
+        <result column="eetid" property="etid"/>
+        <result column="eegid" property="egid"/>
+        <association property="emergencyEventType" javaType="com.vibe.pojo.emergency.EmergencyEventType">
+            <id column="etid" property="etid"/>
+            <result column="event_name" property="eventName"/>
+        </association>
+        <association property="emergencyEventGrade" javaType="com.vibe.pojo.emergency.EmergencyEventGrade">
+            <id column="egid" property="egid"/>
+            <result column="event_grade" property="eventGrade"/>
+        </association>
+    </resultMap>
+
+
+    <select id="findAllLimitUser" parameterType="com.vibe.pojo.emergency.EmergencyUser" resultMap="emergencyUserMapper">
+        select u.id,u.name,u.sex,u.phone,u.department,u.u_default,u.etid as eetid,u.egid as
+        eegid,et.etid,et.event_name,eg.egid,eg.event_grade
+        from db_vibe_basic.t_emergency_user as u
+        left join db_vibe_basic.t_emergency_event_type as et on u.etid=et.etid left join
+        db_vibe_basic.t_emergency_event_grade as eg on u.egid=eg.egid
+        <where>
+            <if test="name !=null">u.name like "%"#{name}"%"</if>
+            <if test="phone != null">and u.phone=#{phone}</if>
+            <if test="department != null">and u.department=#{department}</if>
+            <if test="etid != null">and u.etid=#{etid}</if>
+            <if test="egid != null">and u.egid=#{egid}</if>
+        </where>
+        order by u.u_default desc
+    </select>
+    <delete id="deleteLead">
+        delete from db_vibe_basic.t_emergency_user where id=#{id}
+    </delete>
+
+    <delete id="deleteLeads">
+        delete from db_vibe_basic.t_emergency_user
+        <where>
+            id in
+            <foreach collection="ids" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+    <insert id="insertLead" parameterType="com.vibe.pojo.emergency.EmergencyUser">
+        insert into db_vibe_basic.t_emergency_user(name,sex,phone,department,u_default,etid,egid) value
+        (#{name},#{sex},#{phone},#{department},#{udefault},#{etid},#{egid})
+    </insert>
+
+    <select id="findOneLead" resultMap="emergencyUserMapper">
+        select * from db_vibe_basic.t_emergency_user
+        <where>
+            <if test="egid !=null">and egid=#{egid}</if>
+            <if test="udefault !=null">and u_default=#{udefault}</if>
+        </where>
+    </select>
+    <update id="updateOneLead">
+        update db_vibe_basic.t_emergency_user
+        <set>
+            <if test="udefault !=null">u_default=#{udefault}</if>
+        </set>
+        where id=#{id} and etid=#{etid} and egid=#{egid}
+    </update>
+    <update id="updateOneEmergencyLead" parameterType="com.vibe.pojo.emergency.EmergencyUser">
+        update db_vibe_basic.t_emergency_user
+        <set>
+            <if test="name !=null">name=#{name},</if>
+            <if test="sex !=null">sex=#{sex},</if>
+            <if test="phone !=null">phone=#{phone},</if>
+            <if test="department !=null">department=#{department},</if>
+            <if test="etid !=null">etid=#{etid},</if>
+            <if test="egid !=null">egid=#{egid},</if>
+            <if test="udefault !=null">u_default=#{udefault}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="findAllLead" resultMap="emergencyUserMapper">
+        select * from db_vibe_basic.t_emergency_user
+        <where>
+            <if test="udefault !=null">and u_default=#{udefault}</if>
+        </where>
+    </select>
+
+    <select id="findAllTypeGradeOfLead" resultMap="emergencyUserMapper">
+
+        select u.id,u.name,u.sex,u.phone,u.department,u.u_default,u.etid as eetid,u.egid as eegid
+        from
+        db_vibe_basic.t_emergency_user as u where u.etid=#{etid} and u.egid=#{egid}
+
+    </select>
+
+</mapper>
+
+
+

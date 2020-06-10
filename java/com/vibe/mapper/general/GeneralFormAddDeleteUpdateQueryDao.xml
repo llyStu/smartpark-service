@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.general.GeneralFormAddDeleteUpdateQueryDao">
+
+    <select id="queryForms" resultType="com.vibe.pojo.GeneralForm">
+        select * from db_vibe_monitor.t_general_form where business = #{business} order by id desc
+    </select>
+
+    <delete id="deleteForm">
+        delete from db_vibe_monitor.t_general_form where id = #{id} and where business = #{business}
+    </delete>
+
+    <insert id="insertForm" useGeneratedKeys="true" keyProperty="id" parameterType="com.vibe.pojo.GeneralForm">
+        insert into db_vibe_monitor.t_general_form(data,business) values(#{data},#{business})
+    </insert>
+
+    <update id="updateForm">
+        update db_vibe_monitor.t_general_form
+        set data = #{data} where id = #{id}
+    </update>
+
+</mapper>
+
+
+

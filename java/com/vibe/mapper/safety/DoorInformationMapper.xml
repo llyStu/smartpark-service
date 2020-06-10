@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.safety.DoorInformationMapper">
+    <select id="findDoorRecord" parameterType="com.vibe.pojo.safety.SafetyMessage" resultMap="resultSafetyMessage">
+        select
+        t.id as tid,t.card_mark,t.card_name,t.incident_time,t.incident_type,p.caption from
+        db_vibe_monitor.t_probe_security as t left join db_vibe_monitor.t_probe
+        as p on t.probe_id=p.id
+        <where>
+            <if test="cardName !=null">t.card_name like "%"#{cardName}"%"</if>
+            <if test="cardMark != null">and t.card_mark=#{cardMark}</if>
+            <if test="startTime != null">and t.incident_time >= #{startTime}</if>
+            <if test="stopTime != null">and t.incident_time &lt;= #{stopTime}</if>
+        </where>
+        order by t.id desc
+    </select>
+    <resultMap type="com.vibe.pojo.safety.SafetyMessage" id="resultSafetyMessage">
+        <id column="tid" property="id"/>
+        <result column="card_mark" property="cardMark"/>
+        <result column="card_name" property="cardName"/>
+        <result column="incident_time" property="incidentTime"/>
+        <result column="incident_type" property="incidentType"/>
+        <result column="incident_description" property="incidentDescription"/>
+        <result column="event_grade" property="eventGrade"/>
+        <association property="assetVo" javaType="com.vibe.pojo.AssetVo">
+            <result column="caption" property="caption"/>
+        </association>
+    </resultMap>
+
+    <select id="findAllDoorRecord" parameterType="com.vibe.pojo.safety.SafetyMessage" resultMap="resultSafetyMessage">
+        select
+        t.id as tid,t.card_mark,t.card_name,t.incident_time,t.incident_type,p.caption from
+        db_vibe_monitor.t_probe_security as t left join db_vibe_monitor.t_probe
+        as p on t.probe_id=p.id
+        <where>
+            <if test="cardName !=null">t.card_name like "%"#{cardName}"%"</if>
+            <if test="cardMark != null">and t.card_mark=#{cardMark}</if>
+            <if test="startTime != null">and t.incident_time >= #{startTime}</if>
+            <if test="stopTime != null">and t.incident_time &lt;= #{stopTime}</if>
+        </where>
+        order by t.id desc
+    </select>
+</mapper>
+
+
+

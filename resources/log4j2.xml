@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration status="error">
+    <appenders>
+        <!--这个输出控制台的配置-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--这个都知道是输出日志的格式-->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </Console>
+
+        <!-- <File name="Product" fileName="${web:rootDir}/mylog/Vibe-${date:yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </File> -->
+    </appenders>
+
+    <!--  <loggers>
+         建立一个默认的root的logger
+         <root level="error">
+             <appender-ref ref="Product"/>
+             <appender-ref ref="Console"/>
+         </root>
+         第三方日志系统
+         <logger name="org.springframework.core" level="error"/>
+         <logger name="org.springframework.beans" level="error"/>
+         <logger name="org.springframework.context" level="error"/>
+         <logger name="org.springframework.web" level="error"/>
+         <logger name="org.jboss.netty" level="error"/>
+         <logger name="org.apache.http" level="error"/>
+     </loggers> -->
+    <loggers>
+        <!--建立一个默认的root的logger-->
+        <root level="info">
+            <!-- <appender-ref ref="Product"/> -->
+            <appender-ref ref="Console"/>
+        </root>
+        <!-- 第三方日志系统 -->
+        <logger name="org.springframework.core" level="info"/>
+        <logger name="org.springframework.beans" level="info"/>
+        <logger name="org.springframework.context" level="info"/>
+        <logger name="org.springframework.web" level="info"/>
+        <logger name="org.jboss.netty" level="warn"/>
+        <logger name="org.apache.http" level="warn"/>
+        <logger name="com.vibe.monitor.drivers.yinao.service.YinaoService" level="trace"/>
+        <logger name="com.vibe.monitor.drivers.route.bio.ModbusBridge" level="trace"/>
+
+    </loggers>
+</configuration> 

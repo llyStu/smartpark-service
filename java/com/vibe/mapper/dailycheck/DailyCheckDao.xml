@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.dailycheck.DailyCheckDao">
+
+
+    <insert id="insertDailyCheck" parameterType="DailyCheck">
+
+        insert into db_vibe_monitor.t_dailyCheck (id, checkType, date, photo, description, person,
+        result, checkStatus, checkState)
+        values (#{id,jdbcType=INTEGER}, #{checkType,jdbcType=INTEGER}, #{date},
+        #{photo,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{person,jdbcType=INTEGER},
+
+        #{result,jdbcType=VARCHAR}, #{checkStatus,jdbcType=INTEGER}, #{checkState,jdbcType=INTEGER})
+    </insert>
+
+
+    <delete id="deleteDailyCheck" parameterType="int">
+
+        delete from db_vibe_monitor.t_dailyCheck
+        where id = #{id}
+    </delete>
+
+
+    <update id="updateDailyCheck" parameterType="DailyCheck">
+
+        update db_vibe_monitor.t_dailyCheck
+        <set>
+
+            <if test="checkType != null">
+                checkType = #{checkType},
+            </if>
+
+            <if test="date != '' and date !=null">
+                date = #{date},
+            </if>
+            <if test="photo != null">
+                photo = #{photo},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="person != null">
+                person = #{person},
+            </if>
+            <if test="result != null">
+                result = #{result},
+            </if>
+            <if test="checkStatus != null">
+                checkStatus = #{checkStatus},
+            </if>
+            <if test="checkState != null">
+                checkState = #{checkState},
+            </if>
+            <!--  <if test="state != null" >
+               state = #{state},
+             </if> -->
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryDailyCheckList" resultType="DailyCheck">
+        select da.*,co.name as typeStr from db_vibe_monitor.t_dailyCheck as da,db_vibe_basic.t_code as co where
+        da.checkType = co.id and catalog = 16001 order BY id DESC
+    </select>
+
+    <select id="queryDailyCheck" parameterType="int" resultType="DailyCheck">
+        select * from db_vibe_monitor.t_dailyCheck
+        where id = #{id}
+    </select>
+
+</mapper>
+
+
+

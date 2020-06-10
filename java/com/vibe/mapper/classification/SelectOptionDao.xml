@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.classification.SelectOptionDao">
+    <!-- 用parentId和catalogId接收不到前台传来的同名参数，用param1和param2就可以？？ -->
+    <select id="querySelectOptionList" resultType="CommonSelectOption">
+        select id,name,catalog catalogId,unit from db_vibe_basic.t_code
+        <where>
+            catalog = #{catalogId}
+            <if test="parentId != null">
+                and parent = #{parentId}
+            </if>
+        </where>
+
+    </select>
+    <select id="getWorkItems" resultType="CommonSelectOption">
+        select id,name,catalog catalogId,unit from db_vibe_basic.t_code
+        where parent = #{parentId}
+        and catalog = #{catalogId}
+
+    </select>
+
+    <select id="queryIdListByParent" parameterType="Integer" resultType="Integer">
+        select id from db_vibe_basic.t_code
+        where parent = #{param1}
+    </select>
+    <select id="anQuerySelectOptionList" parameterType="Integer" resultType="CommonSelectOption">
+        select id,catalog catalogId,name,unit,parent parentId from db_vibe_basic.t_code
+        where catalog = #{catalogId}
+    </select>
+
+    <select id="getSelectOption" parameterType="Integer" resultType="CommonSelectOption">
+        select * from db_vibe_basic.t_code
+        where id=#{param1} and catalog = #{param2}
+    </select>
+
+    <select id="getSelectListData" parameterType="Integer" resultType="CommonSelectOption">
+        select parent parentId,name,unit from db_vibe_basic.t_code
+        where id=#{id}
+    </select>
+
+    <select id="getSelectIdList" resultType="Integer">
+        select id from db_vibe_basic.t_code
+        <where>
+            parent=#{catalogId}
+            <if test="catalog != null">and catalog=#{catalog}</if>
+        </where>
+
+    </select>
+
+    <select id="querySelectOptionListbyArray" resultType="CommonSelectOption">
+        select id,parent parentId,name,unit from db_vibe_basic.t_code
+        where catalog=#{catalogId} and parent in
+        <if test="list != null">
+            <foreach item="item" index="index" collection="list"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="queryMenusCodes" parameterType="Integer" resultType="Integer">
+        select code,catalog,menu from db_vibe_basic.t_code_menu
+        where menu = #{menu} and catalog=#{catalog}
+    </select>
+    <select id="getIdByCatlog" resultType="java.lang.Integer">
+        select id from db_vibe_basic.t_code where catalog = #{catlog}
+    </select>
+    <select id="getSystem" resultType="java.lang.Integer">
+        select id from db_vibe_basic.t_code where catalog = #{catlog} and parent = 0
+    </select>
+    <select id="getSystemItem" resultType="java.lang.Integer">
+        select id from db_vibe_basic.t_code where catalog = 2002 and parent = 0 and name like "%"#{caption}"%"
+    </select>
+    <select id="getParentId" resultType="java.lang.Integer">
+        select parent from db_vibe_basic.t_code where id = #{id} and catalog = #{type}
+    </select>
+</mapper>
+
+
+

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vibe.mapper.user.RoleMapper">
+
+    <select id="getAllRole" parameterType="int" resultType="Role">
+        select ur.rid as id, r.name, r.caption
+        from t_role as r
+        right join db_vibe_basic.t_user_role as ur on ur.rid = r.id
+        where ur.uid = #{uid}
+    </select>
+    <select id="queryRoleList" parameterType="Role" resultType="Role">
+        select id,name,caption from db_vibe_basic.t_role
+        <where>
+            <if test="id != null and id !='' ">
+                and id=#{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name like "%"#{name}"%"
+            </if>
+            <if test="caption != null and caption !=''">
+                and caption like "%"#{caption}"%"
+            </if>
+        </where>
+
+    </select>
+    <select id="queryMenuByRoleId" parameterType="integer" resultType="integer">
+        select distinct(p.menu_id)menuId from
+        db_vibe_basic.t_role_permission rp
+        left join db_vibe_basic.t_permission p on p.id =rp.pid
+        where rp.rid =#{id};
+    </select>
+    <select id="queryRoleById" parameterType="Role" resultType="Role">
+        select id,name,caption from db_vibe_basic.t_role where id=#{id}
+    </select>
+
+    <!-- 添加角色 -->
+    <insert id="addRole" parameterType="Role">
+        insert into db_vibe_basic.t_role (id, name,caption)
+        values (#{id},#{name},#{caption})
+    </insert>
+
+    <!-- 更新角色 -->
+    <update id="editRoleById" parameterType="Role">
+        update db_vibe_basic.t_role
+        <set>
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="caption!=null">
+                caption = #{caption},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteRoleById" parameterType="int">
+        delete from db_vibe_basic.t_role where id = #{id}
+    </delete>
+
+</mapper>

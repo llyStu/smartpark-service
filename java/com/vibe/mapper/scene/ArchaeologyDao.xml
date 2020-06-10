@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.scene.ArchaeologyDao">
+
+    <insert id="insertArchaeology" parameterType="Archaeology">
+        insert into db_vibe_monitor.Archaeology (id, projectName, number, area, photo, date)
+        values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER},
+        #{area}, #{photo,jdbcType=VARCHAR}, #{date,jdbcType=DATE})
+    </insert>
+
+    <delete id="deleteArchaeology" parameterType="int">
+        delete from db_vibe_monitor.Archaeology
+        where id = #{id}
+    </delete>
+
+    <update id="updateArchaeology" parameterType="Archaeology">
+        update db_vibe_monitor.Archaeology
+        <set>
+            <if test="projectName != null">
+                projectName = #{projectName},
+            </if>
+            <if test="date != '' and date != null">
+                date = #{date},
+            </if>
+            <if test="photo != null">
+                photo = #{photo},
+            </if>
+            <if test="number != null">
+                number = #{number},
+            </if>
+            <if test="area != null">
+                area = #{area},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="queryArchaeologyList" resultType="Archaeology">
+        select * from db_vibe_monitor.Archaeology order BY id DESC
+    </select>
+
+    <select id="queryArchaeology" parameterType="int" resultType="Archaeology">
+        select * from db_vibe_monitor.Archaeology
+        where id = #{id}
+    </select>
+
+</mapper>
+
+
+

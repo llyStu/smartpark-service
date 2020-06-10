@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.information.ShowTaskMapper">
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id">
+        insert into db_vibe_basic.t_show_task(startTime, endTime, `interval`, url, type, equipment)
+        values(#{startTime}, #{endTime}, #{interval}, #{url}, #{type}, #{equipment})
+    </insert>
+
+
+    <select id="getByStartAfter" resultType="com.vibe.pojo.infomation.ShowTask">
+        select id, startTime, endTime, `interval`, url, type, equipment from db_vibe_basic.t_show_task
+        where type = 'show' and startTime >= #{startTime} and startTime &lt;= DATE_ADD(#{startTime}, INTERVAL 1 MINUTE)
+        order by startTime
+    </select>
+    <select id="getAfterStart">
+        select Min(startTime) from db_vibe_basic.t_show_task
+        where type = 'show' and startTime > DATE_ADD(#{startTime}, INTERVAL 1 MINUTE)
+    </select>
+
+
+    <select id="getById" resultType="com.vibe.pojo.infomation.ShowTask">
+        select id, startTime, endTime, `interval`, url, type, equipment from db_vibe_basic.t_show_task
+        where id = #{id}
+    </select>
+
+
+    <update id="setType">
+        update db_vibe_basic.t_show_task set type = #{type}
+        where id in (0
+        <foreach collection="ids" item="id"
+                 open="," separator=", ">#{id}
+        </foreach>
+        )
+    </update>
+
+    <select id="getByIds" resultType="com.vibe.pojo.infomation.ShowTask">
+        select id, startTime, endTime, `interval`, url, type, equipment from db_vibe_basic.t_show_task
+        where id in (0
+        <foreach collection="ids" item="id"
+                 open="," separator=", ">#{id}
+        </foreach>
+        )
+    </select>
+
+    <select id="find" resultType="com.vibe.pojo.infomation.ShowTask">
+        select id, startTime, endTime, `interval`, url, type, equipment from db_vibe_basic.t_show_task
+        <where>
+            <if test="startTime != null and startTime !=''">and startTime = #{startTime}</if>
+            <if test="startTimeMax != null and startTimeMax !=''">and startTime &lt;= #{startTimeMax}</if>
+            <if test="startTimeMin != null and startTimeMin !=''">and startTime >= #{startTimeMin}</if>
+
+            <if test="endTime != null and endTime !=''">and endTime = #{endTime}</if>
+            <if test="endTimeMax != null and endTimeMax !=''">and endTime &lt;= #{endTimeMax}</if>
+            <if test="endTimeMin != null and endTimeMin !=''">and endTime >= #{endTimeMin}</if>
+
+            <if test="interval != null and interval !=''">and `interval` = #{interval}</if>
+            <if test="intervalMax != null and intervalMax !=''">and `interval` &lt;= #{intervalMax}</if>
+            <if test="intervalMin != null and intervalMin !=''">and `interval` >= #{intervalMin}</if>
+
+            <if test="url != null and url !=''">and url like "%"#{url}"%"</if>
+            <if test="type != null and type !=''">and type = #{type}</if>
+            <if test="equipment != null and equipment !=''">and equipment = #{equipment}</if>
+        </where>
+    </select>
+
+
+    <update id="update">
+        update db_vibe_basic.t_show_task set id = id
+        <if test="startTime != null">, startTime = #{startTime}</if>
+        <if test="endTime != null">, endTime = #{endTime}</if>
+        <if test="interval != null and interval != ''">, `interval` = #{interval}</if>
+        <if test="url != null and url != ''">, url = #{url}</if>
+        <if test="type != null and type != ''">, type = #{type}</if>
+        <if test="equipment != null and equipment != ''">, equipment = #{equipment}</if>
+        where id = #{id}
+    </update>
+</mapper>
+
+
+

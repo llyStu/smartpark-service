@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.energy.HandInputMapper">
+    <insert id="addHandInputData" parameterType="com.vibe.pojo.HandInputData">
+        insert into
+        db_vibe_data.t_hand_input_float(monitor,person,look_time,value)values(#{monitor},#{person},#{lookTime},#{value})
+    </insert>
+    <update id="updateHandInput" parameterType="com.vibe.pojo.HandInputData">
+        update db_vibe_data.t_hand_input_float set monitor = #{monitor},look_time = #{lookTime},value = #{value} where
+        id = #{id}
+    </update>
+    <delete id="deleteHandInput" parameterType="java.lang.String">
+        delete from db_vibe_data.t_hand_input_float where id = #{id}
+    </delete>
+    <select id="findHandInput" resultType="com.vibe.pojo.HandInputData">
+        select h.id as id,monitor,person,look_time as lookTime,value,p.caption as monitorStr from
+        db_vibe_data.t_hand_input_float as h,db_vibe_monitor.t_probe as p where h.monitor = p.id
+        <if test="start != null and start != ''">
+            and look_time >= #{start}
+        </if>
+        <if test="end != null and end != ''">
+            and look_time &lt;= #{end}
+        </if>
+        order by look_time desc
+    </select>
+    <select id="findAHandInput" resultType="com.vibe.pojo.HandInputData">
+        select id,monitor,person,look_time as lookTime,value from db_vibe_data.t_hand_input_float where id = #{id}
+    </select>
+
+    <select id="getProbe" resultType="com.vibe.pojo.energy.ProbeMeter" parameterType="int">
+        select p.id,p.caption
+        from
+        db_vibe_monitor.t_probe p
+        left join db_vibe_monitor.t_probe_energy e on p.id=e.probe_id
+        where e.meter_type=0
+        <if test="subitemType != 0">
+            and e.itemize_type=#{subitemType}
+        </if>
+        <if test="subitemType == 0">
+            and e.itemize_type=#{energyType}
+        </if>
+        <if test="tp == 0">
+            and p.type not like 'InputProbe'
+        </if>
+        <if test="tp == 1">
+            and p.type like 'InputProbe'
+        </if>
+    </select>
+
+    <select id="findHandInputById" resultType="com.vibe.pojo.HandInputData" parameterType="int">
+        select h.id,h.monitor,h.person,h.look_time as lookTime,h.value,cp.`name` as parentName,c.parent parentId,c.name
+        childName,c.id childId,p.caption monitorStr
+        from
+        db_vibe_data.t_hand_input_float h
+        left join db_vibe_monitor.t_probe p on h.monitor = p.id
+        left join db_vibe_monitor.t_probe_energy e on e.probe_id = p.id
+        left join db_vibe_basic.t_code c on c.id = e.itemize_type
+        left join db_vibe_basic.t_code cp on cp.id = c.parent
+        where h.id = #{id}
+    </select>
+</mapper>
+
+
+

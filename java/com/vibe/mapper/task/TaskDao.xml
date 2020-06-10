@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.task.TaskDao">
+
+    <select id="queryScheduledTasks" resultType="com.vibe.scheduledtasks.ScheduledTaskBean"
+            parameterType="com.vibe.scheduledtasks.ScheduledTaskBean">
+        select * from db_vibe_monitor.t_scheduled_task where 1 = 1
+        <if test="id != 0 and id != null">
+            and id = #{id}
+        </if>
+        <if test="type == 0 or type == null">
+            and type != 0
+        </if>
+        <if test="type != 0 and type != null">
+            and type = #{type}
+        </if>
+        <if test="state != 0 and state != null">
+            and state = #{state}
+        </if>
+        <if test="createPerson != 0 and createPerson != null">
+            and createPerson = #{createPerson}
+        </if>
+        <if test="executePerson != 0 and executePerson != null">
+            and executePerson = #{executePerson}
+        </if>
+        order by id desc
+    </select>
+
+    <insert id="insertScheduledTask" parameterType="com.vibe.scheduledtasks.ScheduledTaskBean">
+        insert into
+        db_vibe_monitor.t_scheduled_task(type,timeExpression,description,name,createPerson,grade,executePerson,className)
+        values(#{type},#{timeExpression},#{description},#{name},#{createPerson},#{grade},#{executePerson},"com.vibe.scheduledtasks.statisticstask.ScheduledTask")
+    </insert>
+
+    <update id="updateScheduledTask" parameterType="com.vibe.scheduledtasks.ScheduledTaskBean">
+        update db_vibe_monitor.t_scheduled_task set type = #{type},timeExpression = #{timeExpression},state =
+        #{state},name = #{name},description = #{description},createPerson = #{createPerson},executePerson =
+        #{executePerson},grade = #{grade} where id = #{id}
+    </update>
+
+    <delete id="deleteScheduledTask">
+        delete from db_vibe_monitor.t_scheduled_task where id = #{id}
+    </delete>
+
+    <select id="queryTasks" resultType="com.vibe.scheduledtasks.CommonTaskBean"
+            parameterType="com.vibe.scheduledtasks.CommonTaskBean">
+        select * from db_vibe_monitor.t_task where 1=1
+        <if test="id != 0 and id != null">
+            and id = #{id}
+        </if>
+        <if test="type != 0 and type != null">
+            and type = #{type}
+        </if>
+        <if test="state != 0 and state != null">
+            and state = #{state}
+        </if>
+        <if test="scheduledTaskId != 0 and scheduledTaskId != null">
+            and scheduledTaskId = #{scheduledTaskId}
+        </if>
+        <if test="createPerson != 0 and createPerson != null">
+            and createPerson = #{createPerson}
+        </if>
+        <if test="executePerson != 0 and executePerson != null">
+            and executePerson = #{executePerson}
+        </if>
+        <if test="startStop != 0 and startStop != null">
+            and startStop = #{startStop}
+        </if>
+        order by id desc
+    </select>
+
+    <update id="updateTask" parameterType="com.vibe.scheduledtasks.CommonTaskBean">
+        update db_vibe_monitor.t_task set
+        taskId = #{taskId},executePerson = #{executePerson},name = #{name},state=#{state},createPerson =
+        #{createPerson},grade = #{grade},requestFinishTime = #{requestFinishTime},detail = #{detail},rejectReason =
+        #{rejectReason},refuseReason = #{refuseReason},stateTime = #{stateTime},startStop = #{startStop} where id =
+        #{id}
+    </update>
+
+    <delete id="deleteTask" parameterType="com.vibe.scheduledtasks.CommonTaskBean">
+        delete from db_vibe_monitor.t_task where 1 = 1
+        <if test="id != 0 and id != null">
+            and id = #{id}
+        </if>
+        <if test="type != 0 and type != null">
+            and type = #{type}
+        </if>
+        <if test="state != 0 and state != null">
+            and state = #{state}
+        </if>
+        <if test="scheduledTaskId != 0 and scheduledTaskId != null">
+            and scheduledTaskId = #{scheduledTaskId}
+        </if>
+        <if test="createPerson != 0 and createPerson != null">
+            and createPerson = #{createPerson}
+        </if>
+        <if test="executePerson != 0 and executePerson != null">
+            and executePerson = #{executePerson}
+        </if>
+        <if test="startStop != 0 and startStop != null">
+            and startStop = #{startStop}
+        </if>
+    </delete>
+
+</mapper>
+
+
+

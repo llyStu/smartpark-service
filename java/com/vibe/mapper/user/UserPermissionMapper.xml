@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vibe.mapper.user.UserPermissionMapper">
+    <!-- 登录功能查询 用户 -->
+    <select id="queryUserPermission" parameterType="int" resultType="UserPermission">
+        select * from t_user_permission where uid=#{id}
+    </select>
+    <select id="queryPermissions" parameterType="int" resultType="Permission">
+        select p.id,p.name,p.menu_id menuId from db_vibe_basic.t_role r
+        inner join db_vibe_basic.t_role_permission rp on r.id=rp.rid
+        inner join db_vibe_basic.t_user_role ru on ru.rid=r.id
+        inner join db_vibe_basic.t_user u on u.id=ru.uid
+        inner join db_vibe_basic.t_permission p on p.id=rp.pid
+        where u.id=#{id};
+    </select>
+    <!-- 根据用户id，删除用户权限 -->
+    <delete id="deleteUserPermission" parameterType="int">
+        delete from
+        t_user_permission where uid=#{uid}
+    </delete>
+    <!-- 根据用户uid,添加权限pid -->
+    <insert id="addUserPermission" parameterType="userPermission">
+        insert into t_user_permission (uid,pid
+        ) values (#{uid},#{pid})
+
+    </insert>
+</mapper>

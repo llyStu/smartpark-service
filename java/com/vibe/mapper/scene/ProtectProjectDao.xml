@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.scene.ProtectProjectDao">
+
+    <!-- “增” ——参数名：protectProject，类型：ProtectProject -->
+    <insert id="insertProtectProject" parameterType="ProtectProject">
+        insert into
+        db_vibe_monitor.protectproject_new (id, projectName, relateElement,
+        projectType, exhibit, picture,
+        projectReplyFileNum, projectReplyFileTitle,
+        projectReport, planReplyFileNum, planReplyFileTitle,
+        planStartDate, planProduceDept, planReplyDate,
+        planReport, planBudget, planBudget2,
+        otherFileNum, otherFileTitle, otherReport,
+        isReport, feedBackTime, feedBackConclusion,
+        filePath, progress, constructDept,
+        supervisionDept, supervisionReport, startTime,
+        endTime, endReport, otherFiles, protectBudget,
+        protectBudget2, governCheckTime)
+        values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR},
+        #{relateElement,jdbcType=VARCHAR},
+        #{projectType,jdbcType=INTEGER}, #{exhibit,jdbcType=INTEGER}, #{picture,jdbcType=VARCHAR},
+        #{projectReplyFileNum,jdbcType=VARCHAR},
+        #{projectReplyFileTitle,jdbcType=VARCHAR},
+        #{projectReport,jdbcType=VARCHAR},
+        #{planReplyFileNum,jdbcType=VARCHAR},
+        #{planReplyFileTitle,jdbcType=VARCHAR},
+        #{planStartDate,jdbcType=DATE}, #{planProduceDept,jdbcType=VARCHAR},
+        #{planReplyDate,jdbcType=DATE},
+        #{planReport,jdbcType=VARCHAR}, #{planBudget,jdbcType=DOUBLE}, #{planBudget2,jdbcType=DOUBLE},
+        #{otherFileNum,jdbcType=VARCHAR}, #{otherFileTitle,jdbcType=VARCHAR},
+        #{otherReport,jdbcType=VARCHAR},
+        #{isReport,jdbcType=INTEGER}, #{feedBackTime,jdbcType=DATE},
+        #{feedBackConclusion,jdbcType=INTEGER},
+        #{filePath,jdbcType=VARCHAR}, #{progress,jdbcType=VARCHAR}, #{constructDept,jdbcType=VARCHAR},
+        #{supervisionDept,jdbcType=VARCHAR},
+        #{supervisionReport,jdbcType=VARCHAR}, #{startTime,jdbcType=DATE},
+        #{endTime,jdbcType=DATE}, #{endReport,jdbcType=VARCHAR},
+        #{otherFiles,jdbcType=VARCHAR}, #{protectBudget,jdbcType=DOUBLE},
+        #{protectBudget2,jdbcType=DOUBLE}, #{governCheckTime,jdbcType=DATE})
+    </insert>
+
+    <!-- “删”——参数名：id,类型：int -->
+    <delete id="deleteProtectProject" parameterType="int">
+        delete from db_vibe_monitor.protectproject_new
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <!-- “改”——参数名：protectProject,参数类型：ProtectProject -->
+    <update id="updateProtectProject" parameterType="ProtectProject">
+        update db_vibe_monitor.protectproject_new
+        <set>
+            <if test="projectName != null">
+                projectName = #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="relateElement != null">
+                relateElement = #{relateElement,jdbcType=INTEGER},
+            </if>
+            <if test="projectType != null">
+                projectType = #{projectType,jdbcType=INTEGER},
+            </if>
+            <if test="exhibit != null">
+                exhibit = #{exhibit,jdbcType=INTEGER},
+            </if>
+            <if test="picture != null">
+                picture = #{picture,jdbcType=VARCHAR},
+            </if>
+            <if test="projectReplyFileNum != null">
+                projectReplyFileNum = #{projectReplyFileNum,jdbcType=VARCHAR},
+            </if>
+            <if test="projectReplyFileTitle != null">
+                projectReplyFileTitle = #{projectReplyFileTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="projectReport != null">
+                projectReport = #{projectReport,jdbcType=VARCHAR},
+            </if>
+            <if test="planReplyFileNum != null">
+                planReplyFileNum = #{planReplyFileNum,jdbcType=VARCHAR},
+            </if>
+            <if test="planReplyFileTitle != null">
+                planReplyFileTitle = #{planReplyFileTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="planStartDate != null">
+                planStartDate = #{planStartDate},
+            </if>
+            <if test="planProduceDept != null">
+                planProduceDept = #{planProduceDept,jdbcType=VARCHAR},
+            </if>
+            <if test="planReplyDate != null">
+                planReplyDate = #{planReplyDate},
+            </if>
+            <if test="planReport != null">
+                planReport = #{planReport,jdbcType=VARCHAR},
+            </if>
+            <if test="planBudget != null">
+                planBudget = #{planBudget,jdbcType=DOUBLE},
+            </if>
+            <if test="planBudget2 != null">
+                planBudget2 = #{planBudget2,jdbcType=DOUBLE},
+            </if>
+            <if test="otherFileNum != null">
+                otherFileNum = #{otherFileNum,jdbcType=VARCHAR},
+            </if>
+            <if test="otherFileTitle != null">
+                otherFileTitle = #{otherFileTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="otherReport != null">
+                otherReport = #{otherReport,jdbcType=VARCHAR},
+            </if>
+            <if test="isReport != null">
+                isReport = #{isReport,jdbcType=INTEGER},
+            </if>
+            <if test="feedBackTime != null">
+                feedBackTime = #{feedBackTime},
+            </if>
+            <if test="feedBackConclusion != null">
+                feedBackConclusion = #{feedBackConclusion,jdbcType=INTEGER},
+            </if>
+            <if test="filePath != null">
+                filePath = #{filePath,jdbcType=VARCHAR},
+            </if>
+            <if test="progress != null">
+                progress = #{progress,jdbcType=VARCHAR},
+            </if>
+            <if test="constructDept != null">
+                constructDept = #{constructDept,jdbcType=VARCHAR},
+            </if>
+            <if test="supervisionDept != null">
+                supervisionDept = #{supervisionDept,jdbcType=VARCHAR},
+            </if>
+            <if test="supervisionReport != null">
+                supervisionReport = #{supervisionReport,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime},
+            </if>
+            <if test="endTime != null">
+                endTime = #{endTime},
+            </if>
+            <if test="endReport != null">
+                endReport = #{endReport,jdbcType=VARCHAR},
+            </if>
+            <if test="protectBudget != null">
+                protectBudget = #{protectBudget,jdbcType=DOUBLE},
+            </if>
+            <if test="protectBudget2 != null">
+                protectBudget2 = #{protectBudget2,jdbcType=DOUBLE},
+            </if>
+            <if test="governCheckTime != null">
+                governCheckTime = #{governCheckTime},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 查询列表 -->
+    <select id="listProtectProject" resultType="ProtectProject">
+        select * from
+        db_vibe_monitor.protectproject_new order by id desc
+    </select>
+
+    <!-- “查询单个”——参数名：id,参数类型：int -->
+    <select id="queryProtectProject" parameterType="int" resultType="ProtectProject">
+        select * from db_vibe_monitor.protectproject_new
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+</mapper>
+
+
+

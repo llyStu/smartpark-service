@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.0.final using JasperReports Library version 6.5.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="Blank_A4_1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20"
+              topMargin="20" bottomMargin="20" uuid="aed488b4-f6fc-48fa-9bc7-f7266e0fb229">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+    <property name="com.jaspersoft.studio.report.description" value=""/>
+    <parameter name="reporttime" class="java.util.Date"/>
+    <field name="time" class="java.util.Date"/>
+    <field name="t1" class="java.lang.Integer"/>
+    <field name="t2" class="java.lang.Integer"/>
+    <field name="t3" class="java.lang.Integer"/>
+    <field name="t4" class="java.lang.Integer"/>
+    <field name="t5" class="java.lang.Integer"/>
+    <field name="t6" class="java.lang.Integer"/>
+    <field name="t7" class="java.lang.Integer"/>
+    <variable name="rowsum" class="java.lang.Integer" resetType="None" incrementType="Report">
+        <variableExpression><![CDATA[$F{t1}+$F{t2}+$F{t3}+$F{t4}+$F{t5}+$F{t6}+$F{t7}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="rownum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[1]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t1sum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[$F{t1}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t2sum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[$F{t2}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t3sum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[$F{t3}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t4sum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[$F{t4}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t5sum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[$F{t5}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t6sum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[$F{t6}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t7sum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[$F{t7}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="sum" class="java.lang.Integer" calculation="Sum">
+        <variableExpression><![CDATA[$V{rowsum}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t1max" class="java.lang.Integer" calculation="Highest">
+        <variableExpression><![CDATA[$F{t1}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t2max" class="java.lang.Integer" calculation="Highest">
+        <variableExpression><![CDATA[$F{t2}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t3max" class="java.lang.Integer" calculation="Highest">
+        <variableExpression><![CDATA[$F{t3}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t4max" class="java.lang.Integer" calculation="Highest">
+        <variableExpression><![CDATA[$F{t4}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t5max" class="java.lang.Integer" calculation="Highest">
+        <variableExpression><![CDATA[$F{t5}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t6max" class="java.lang.Integer" calculation="Highest">
+        <variableExpression><![CDATA[$F{t6}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="t7max" class="java.lang.Integer" calculation="Highest">
+        <variableExpression><![CDATA[$F{t7}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <variable name="max" class="java.lang.Integer" calculation="Highest">
+        <variableExpression><![CDATA[$V{rowsum}]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+    <title>
+        <band height="35">
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+            <staticText>
+                <reportElement x="192" y="0" width="168" height="20" uuid="f76b2cc9-c2b6-4491-a79d-8af6d4b6cea7"/>
+                <text><![CDATA[ 用 电 量 月 统 计 与 分 析 报 表 ]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="110" y="20" width="190" height="15" uuid="a3822d35-3351-438c-bb97-9908791ad286">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textFieldExpression><![CDATA[$P{reporttime}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="60" y="20" width="50" height="15" uuid="83213c2f-07be-42f1-b227-e2c4f4e27652">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <text><![CDATA[报表日期:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="490" y="20" width="60" height="15" uuid="83c54410-1097-471c-8109-89ba60212f11">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <text><![CDATA[单位：kWh]]></text>
+            </staticText>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="24">
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+            <staticText>
+                <reportElement positionType="Float" mode="Opaque" x="0" y="0" width="25" height="24" forecolor="#000000"
+                               backcolor="#EEEEEE" uuid="b7376396-687b-44f2-b54b-01b7dbe4bc15">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[序号]]></text>
+            </staticText>
+            <staticText>
+                <reportElement positionType="Float" mode="Opaque" x="25" y="0" width="55" height="24"
+                               backcolor="#EEEEEE" uuid="5c6208ec-5e7b-4fa0-9b81-e55b41b316f9">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[日期]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="80" y="0" width="56" height="24" backcolor="#EEEEEE"
+                               uuid="49ff53a3-005a-4e15-8544-7984e8366856">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                    <paragraph lineSpacing="1_1_2"/>
+                </textElement>
+                <text><![CDATA[T1(401)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="136" y="0" width="56" height="24" backcolor="#EEEEEE"
+                               uuid="b695772a-4647-457c-931b-82b117e854c0">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                    <paragraph lineSpacing="1_1_2"/>
+                </textElement>
+                <text><![CDATA[T2(402)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="192" y="0" width="56" height="24" backcolor="#EEEEEE"
+                               uuid="8600d76f-e1ea-4524-a908-9cc325ca15cd">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                    <paragraph lineSpacing="1_1_2"/>
+                </textElement>
+                <text><![CDATA[T3(403)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="248" y="0" width="56" height="24" backcolor="#EEEEEE"
+                               uuid="7b079d41-1dab-4228-b949-b126499901ff">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                    <paragraph lineSpacing="1_1_2"/>
+                </textElement>
+                <text><![CDATA[T4(404)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="304" y="0" width="56" height="24" backcolor="#EEEEEE"
+                               uuid="9d759ade-a077-4bb1-b6d2-f7ff13e0ec78">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                    <paragraph lineSpacing="1_1_2"/>
+                </textElement>
+                <text><![CDATA[T5(405)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="360" y="0" width="56" height="24" backcolor="#EEEEEE"
+                               uuid="1564d6d9-4929-4f3d-8747-7ab1e024edb5">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                    <paragraph lineSpacing="1_1_2"/>
+                </textElement>
+                <text><![CDATA[T6(406)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="416" y="0" width="56" height="24" backcolor="#EEEEEE"
+                               uuid="8c8a10ca-e2d5-4cc2-9a87-a620b3b9abee">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                    <paragraph lineSpacing="1_1_2"/>
+                </textElement>
+                <text><![CDATA[T7(407)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="472" y="0" width="78" height="24" backcolor="#EEEEEE"
+                               uuid="e909105b-dda8-437a-b11c-192ffa5ef564">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                </reportElement>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                    <paragraph lineSpacing="1_1_2"/>
+                </textElement>
+                <text><![CDATA[合计]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="32" splitType="Stretch">
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+            <textField>
+                <reportElement mode="Opaque" x="0" y="0" width="25" height="32" backcolor="#EEEEEE"
+                               uuid="83e5746b-591d-4d94-9ce0-5f45495585a1"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{rownum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="25" y="0" width="55" height="32" uuid="951daf55-9275-4cd8-8fd5-441aa51045ea"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="80" y="0" width="56" height="32" uuid="bdc3d101-1554-44cb-b3bf-6b33bbdc6a9c"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$F{t1}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="136" y="0" width="56" height="32" uuid="b2ef3594-ec96-4eb1-8df5-ebe1948192ab"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$F{t2}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="192" y="0" width="56" height="32" uuid="2f557159-29b6-4822-8065-66d6d035cf0e"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$F{t3}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="248" y="0" width="56" height="32" uuid="3b0caa8f-9b47-4dfb-974d-ac52b1234744"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$F{t4}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="304" y="0" width="56" height="32" uuid="904ac1cc-6051-4cd6-8693-a3a550f72175"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$F{t5}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="360" y="0" width="56" height="32" uuid="02dcc599-aa07-40c1-8fe5-d44bba7adaed"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$F{t6}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="416" y="0" width="56" height="32" uuid="1e01355d-fc72-4007-a7d2-37d6d25e8441"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$F{t7}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="472" y="0" width="78" height="32" uuid="d11ac20b-aa4d-42cc-8009-5ba0ec289079"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textFieldExpression><![CDATA[$V{rowsum}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <summary>
+        <band height="313">
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+            <textField>
+                <reportElement x="80" y="0" width="56" height="32" uuid="2c34f6b0-f3a6-4a22-b9c6-5079fd4945bc"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t1sum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="136" y="0" width="56" height="32" uuid="8b23126c-4dc5-442f-91be-81b1f60118cc"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t2sum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="192" y="0" width="56" height="32" uuid="cbe02e3b-337b-4a96-96a3-dab4e1cfb591"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t3sum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="248" y="0" width="56" height="32" uuid="b1bec4b8-a58a-40ef-b459-4df17ce32322"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t4sum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="304" y="0" width="56" height="32" uuid="64f7dd61-c3a9-460a-a959-ff23b604a3e9"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t5sum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="360" y="0" width="56" height="32" uuid="60c2d8f5-c910-4c6e-848d-7a8eb9de7572"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t6sum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="416" y="0" width="56" height="32" uuid="3ba5da57-8974-4c0c-91a6-e8f9c90c8a62"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t7sum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="472" y="0" width="78" height="32" uuid="a333987d-f55f-4b9c-a1a4-2c633d0e257e"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{sum}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="416" y="32" width="56" height="32" uuid="06fced54-b5ad-425b-9a01-3e7d717f3f65"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t7max}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="136" y="32" width="56" height="32" uuid="bb8fe5fb-0994-4210-ac5f-25abc83fbd10"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t2max}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="192" y="32" width="56" height="32" uuid="bac14886-c187-4514-a006-96225a4b104c"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t3max}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="360" y="32" width="56" height="32" uuid="f6a58a29-7faa-47aa-8c74-9179b447ddf3"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t6max}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="80" y="32" width="56" height="32" uuid="2dc93664-29a1-4a35-9bc1-fd92cbe1886b"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t1max}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="472" y="32" width="78" height="32" uuid="bda86b6c-7e2d-46ee-b2f5-8bea3804ae80"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{max}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="304" y="32" width="56" height="32" uuid="dd049fd7-1708-422c-8e99-38f490ed75c1"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t5max}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="248" y="32" width="56" height="32" uuid="bb9afdd8-af79-4039-9aed-356af1e1af25"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{t4max}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="25" y="0" width="55" height="32" backcolor="#FFFFFF"
+                               uuid="9f3864c2-e1e4-41f5-b56d-b50f51afb9b0"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[小计]]></text>
+            </staticText>
+            <staticText>
+                <reportElement stretchType="ContainerHeight" x="25" y="32" width="55" height="32"
+                               uuid="13084738-9e2e-4175-b824-0ba762fe9511"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[最大值]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="0" y="0" width="25" height="32" backcolor="#FFFFFF"
+                               uuid="0df11643-be2b-45e1-98e1-717bade7bb68"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <text><![CDATA[]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Transparent" x="0" y="32" width="25" height="32" backcolor="#FFFFFF"
+                               uuid="7a7343b0-8ec5-42af-84d9-2733447622b2"/>
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+                <text><![CDATA[]]></text>
+            </staticText>
+        </band>
+    </summary>
+</jasperReport>

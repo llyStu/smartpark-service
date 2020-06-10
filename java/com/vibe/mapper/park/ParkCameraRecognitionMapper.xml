@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.park.ParkCameraRecognitionMapper">
+
+    <resultMap type="com.vibe.pojo.park.CameraRecognitionData" id="ParkCameraRecognitiondatas">
+        <id column="id" property="id"/>
+        <result column="camera_name" property="cameraName"/>
+        <result column="event_detail" property="eventDetail"/>
+        <result column="licence_plate" property="licencePlate"/>
+        <result column="time" property="time"/>
+        <result column="camera_id" property="cameraId"/>
+    </resultMap>
+
+
+    <select id="findCameraRecognitionLog" parameterType="com.vibe.pojo.park.CameraRecognitionData"
+            resultMap="ParkCameraRecognitiondatas">
+        select
+        pcl.id,pcl.camera_name,pcl.event_detail,pcl.licence_plate,pcl.time,pcl.camera_id
+        from db_vibe_monitor.t_park_camera_log as pcl
+        <where>
+            <if test="cameraName!=null">
+                pcl.camera_name like "%"#{cameraName}"%"
+            </if>
+            <if test="licencePlate!=null">
+                and pcl.licence_plate like "%"#{licencePlate}"%"
+            </if>
+            <if test="startTime !=null">
+                and pcl.time >= #{startTime}
+            </if>
+            <if test="stopTime !=null">
+                and pcl.time &lt;
+                = #{stopTime}
+            </if>
+        </where>
+        order by pcl.id desc
+    </select>
+    <delete id="delCameraRecognitionlog">
+        delete from db_vibe_monitor.t_park_camera_log
+        <where>
+            id in(
+            <foreach collection="ids" item="id" separator=",">
+                #{id}
+            </foreach>
+            )
+        </where>
+    </delete>
+
+</mapper>
+
+
+

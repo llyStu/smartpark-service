@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vibe.mapper.dept.DeptMapper">
+    <!-- 根据父id,查询部门树节点的数据 -->
+    <select id="queryDeptTreeData" parameterType="int" resultType="department">
+        select id,name,parent,organ,abbr
+        from db_vibe_basic.t_department
+        where parent=#{id} and valid=1
+    </select>
+    <!-- 查询部门列表的数据 -->
+    <select id="queryDeptList" parameterType="department"
+            resultType="department">
+        select id,name,parent,organ,abbr
+        from db_vibe_basic.t_department
+        <where>
+            valid=1
+            <if test="id != null and id !='' ">
+                and id=#{id}
+            </if>
+            <if test="parent != null ">
+                and parent=#{parent}
+            </if>
+            <if test="organ != null and organ !='' ">
+                and organ=#{organ}
+            </if>
+            <if test="name != null and name != ''">
+                and name like "%"#{name}"%"
+            </if>
+            <if test="abbr != null and abbr != ''">
+                and abbr=#{abbr}
+            </if>
+        </where>
+        order by id desc
+    </select>
+    <!-- 查询部门根据id ， -->
+    <select id="queryDeptById" resultType="department"
+            parameterType="int">
+        select id,name,parent,level,organ,abbr,valid,sequence
+        from db_vibe_basic.t_department
+        where id=#{did} and valid=1
+    </select>
+    <select id="queryDeptByIds" resultType="department"
+            parameterType="Integer">
+        select id,name,parent,organ,abbr
+        from db_vibe_basic.t_department
+        where valid=1 and id not in
+        <foreach item="item" index="index" collection="list" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <insert id="saveDepttoDB" parameterType="department">
+        insert into db_vibe_basic.t_department
+        (id,name,parent,level,organ,abbr)values(#{id},#{name},#{parent},#{level},#{organ},#{abbr})
+    </insert>
+    <!-- 更新部门 -->
+    <update id="editDeptById" parameterType="department">
+        update db_vibe_basic.t_department
+        <set>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="parent!=null">
+                parent=#{parent},
+            </if>
+            <if test="level!=null">
+                level=#{level},
+            </if>
+            <if test="abbr!=null">
+                abbr=#{abbr},
+            </if>
+            <if test="valid!=null">
+                valid=#{valid},
+            </if>
+
+        </set>
+        WHERE id=#{id}
+    </update>
+</mapper>

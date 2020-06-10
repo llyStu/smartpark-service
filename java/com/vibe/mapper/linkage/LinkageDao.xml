@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.linkage.LinkageDao">
+
+    <insert id="insertLinkageRuleCause" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.vibe.monitor.linkage.LinkageRuleCauseBean">
+        insert into db_vibe_monitor.t_linkage_rule_cause(assetId,value) values(#{assetId},#{value})
+    </insert>
+
+    <insert id="insertLinkageRuleEffect" parameterType="com.vibe.monitor.linkage.LinkageRuleEffectBean">
+        insert into db_vibe_monitor.t_linkage_rule_effect(causeId,assetId,value) values(#{causeId},#{assetId},#{value})
+    </insert>
+
+    <select id="getLinkageLog" resultType="com.vibe.pojo.LinkageLogCauseBean">
+        select cause.id as id,assetId as causeAsset,value,time from db_vibe_monitor.t_linkage_rule_cause as
+        cause,db_vibe_monitor.t_linkage_log as log where cause.id = log.rule_cause_id
+        <if test="start != null and start != ''">
+            and time >= #{start}
+        </if>
+        <if test="end != null and end != ''">
+            and time &lt;= #{end}
+        </if>
+        order by time desc
+    </select>
+
+    <delete id="deleteLinkageRuleCause">
+        delete from db_vibe_monitor.t_linkage_rule_cause where id = #{id}
+    </delete>
+
+    <select id="getLinkageRuleCause" resultType="com.vibe.monitor.linkage.LinkageRuleCauseBean">
+        select * from db_vibe_monitor.t_linkage_rule_cause where id = #{id}
+    </select>
+
+    <update id="updateLinkageRuleCause" parameterType="com.vibe.monitor.linkage.LinkageRuleCauseBean">
+        update db_vibe_monitor.t_linkage_rule_cause
+        set assetId = #{assetId},value = #{value}
+        where id=#{id}
+    </update>
+
+    <update id="updateLinkageRuleEffect" parameterType="com.vibe.monitor.linkage.LinkageRuleEffectBean">
+        update db_vibe_monitor.t_linkage_rule_effect
+        set assetId = #{assetId},value = #{value}
+        where id=#{id}
+    </update>
+
+    <delete id="deleteLinkageRuleEffect">
+        delete from db_vibe_monitor.t_linkage_rule_effect where id = #{id}
+    </delete>
+
+    <delete id="deleteLinkageRuleEffectByCause">
+        delete from db_vibe_monitor.t_linkage_rule_effect where causeId = #{causeId}
+    </delete>
+</mapper>
+
+
+

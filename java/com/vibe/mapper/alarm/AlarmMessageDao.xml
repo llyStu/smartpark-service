@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.alarm.AlarmMessageDao">
+
+    <select id="queryAlarmMessageListByTime" resultType="AlarmMessage">
+        select a.id,caption,assetId,state,time startTime,auto,errorMessage,handled,(select time from
+        db_vibe_monitor.t_error_message_log t where t.assetId = e.assetId order by t.id desc limit 0,1) endTime from
+        db_vibe_monitor.t_alarm_message a,db_vibe_monitor.t_error_message_log e
+        where a.logId = e.id and auto = 1
+        <if test="start != null and start != ''">
+            and e.time >= #{start}
+        </if>
+        <if test="end != null and end != ''">
+            and e.time &lt;= #{end}
+        </if>
+        union select a.id,caption,assetId,state,time startTime,auto,errorMessage,handled,endTime from
+        db_vibe_monitor.t_alarm_message a,db_vibe_monitor.t_error_message_log e
+        where a.logId = e.id and auto = 2
+        <if test="start != null and start != ''">
+            and e.time >= #{start}
+        </if>
+        <if test="end != null and end != ''">
+            and e.time &lt;= #{end}
+        </if>
+        order by endTime desc limit #{pageNum},#{pageCount}
+    </select>
+
+    <update id="handleAlarmMessage">
+        update db_vibe_monitor.t_alarm_message set handled = 2 where id = #{id}
+    </update>
+
+    <select id="getAlarmRuleByAssetId" resultType="com.vibe.monitor.alarm.AlarmRule">
+        select * from db_vibe_monitor.t_alarm_rule where assetId = #{id}
+    </select>
+
+    <select id="queryAllAlarmMessageListByTime" resultType="AlarmMessage">
+        select * from (
+        select a.id,caption,assetId,state,time startTime,auto,errorMessage,handled,(select endTime from
+        db_vibe_monitor.t_error_message_log t where t.state = e.state order by t.id desc limit 0,1) endTime from
+        db_vibe_monitor.t_alarm_message a,db_vibe_monitor.t_error_message_log e
+        where a.logId = e.id and auto = 1
+        union
+        select a.id,caption,assetId,state,time startTime,auto,errorMessage,handled,endTime from
+        db_vibe_monitor.t_alarm_message a,db_vibe_monitor.t_error_message_log e
+        where a.logId = e.id and auto = 2
+        ) as list
+        <where>
+            <if test="start != null and start != ''">
+                and DATE_FORMAT(list.startTime,'%Y-%m-%d %H:%i:%S') <![CDATA[>=]]> #{start}
+            </if>
+            <if test="end != null and end != ''">
+                and DATE_FORMAT(list.startTime,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]> #{end}
+            </if>
+            <if test="handled != 0">
+                and list.handled =#{handled}
+            </if>
+        </where>
+        order by list.startTime desc
+    </select>
+
+    <insert id="insertAlarmRule">
+        insert into db_vibe_monitor.t_alarm_rule(assetId,rule,way,start) values(#{assetId},#{rule},#{way},#{start})
+    </insert>
+
+    <update id="updateAlarmRule">
+        update db_vibe_monitor.t_alarm_rule set rule = #{rule},way = #{way},start = #{start} where assetId = #{assetId}
+    </update>
+
+    <insert id="insertPersonAlarmLog" useGeneratedKeys="true" keyProperty="id"
+            parameterType="com.vibe.pojo.AlarmMessage">
+        <if test="alarmRuleId == 0">
+            insert into db_vibe_monitor.t_error_message_log(state,errorMessage,time,endTime,assetId)
+            values(#{state},#{errorMessage},#{startTime},#{endTime},#{assetId})
+        </if>
+        <if test="alarmRuleId != 0">
+            insert into db_vibe_monitor.t_error_message_log(alarmRuleId,state,errorMessage,time,endTime,assetId)
+            values(#{alarmRuleId},#{state},#{errorMessage},#{startTime},#{endTime},#{assetId})
+        </if>
+    </insert>
+
+    <insert id="insertPersonAlarmMessage">
+        insert into db_vibe_monitor.t_alarm_message(logId,caption,auto) values(#{logId},#{caption},2)
+    </insert>
+
+    <select id="queryAlarmMessageListByAssetId" resultType="AlarmMessage">
+        select a.id,caption,assetId,state,time startTime,auto,errorMessage,handled,(select time from
+        db_vibe_monitor.t_error_message_log t where t.assetId = e.assetId order by t.id desc limit 0,1) endTime from
+        db_vibe_monitor.t_alarm_message a,db_vibe_monitor.t_error_message_log e
+        where a.logId = e.id and auto = 1 and assetId = #{assetId}
+        union select a.id,caption,assetId,state,time startTime,auto,errorMessage,handled,endTime from
+        db_vibe_monitor.t_alarm_message a,db_vibe_monitor.t_error_message_log e
+        where a.logId = e.id and auto = 2 and assetId = #{assetId}
+        order by endTime desc
+    </select>
+
+    <select id="alarmCount" resultType="java.lang.Integer">
+        select count(id) from db_vibe_monitor.t_alarm_message
+    </select>
+
+    <select id="getAlarmByTimeState" resultType="com.vibe.pojo.AvgNum">
+        select
+        DATE_FORMAT(t1.time,'%H') as time,
+        count(t1.id) as num
+        from db_vibe_monitor.t_error_message_log t1
+        <trim prefix="where" prefixOverrides="and">
+            <if test="state != null and state != ''">
+                and t1.state = #{state}
+            </if>
+            and UNIX_TIMESTAMP(t1.time) &gt;= UNIX_TIMESTAMP(DATE_FORMAT(#{time},'%Y-%m-%d'))
+            and UNIX_TIMESTAMP(t1.time) &lt;= UNIX_TIMESTAMP(#{time})
+        </trim>
+        group by DATE_FORMAT(t1.time,'%Y-%m-%d %H')
+        order by DATE_FORMAT(t1.time,'%Y-%m-%d %H');
+    </select>
+</mapper>
+
+
+

@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vibe.mapper.energy.EnergyStatisticsMapper">
+    <select id="queryRealTimeTotal" resultType="double" statementType="STATEMENT">
+        select sum(amountValue) value from db_vibe_data.${tableName}
+        <where>
+            monitor=${id} and substr(moment,1,${subNum})='${nowTime}'
+        </where>
+    </select>
+    <select id="queryRealTime" resultType="com.vibe.pojo.CommonMonitorDataVo" statementType="STATEMENT">
+        select amountValue value , moment from db_vibe_data.${tableName}
+        <where>
+            monitor=${id}
+            <if test="nowTime != null and nowTime !=''">
+                and substr(moment,1,${subNum})='${nowTime}'
+            </if>
+        </where>
+    </select>
+    <!-- 查询两个时间段的和，比如1点到3点消耗的电能 -->
+    <select id="queryValueByTime" resultType="object" statementType="STATEMENT">
+        <!-- select sum(value) from db_vibe_data.t_energy_hour_float -->
+        <!-- 实际查询每小时的增量和,测试后需要改过来 -->
+        select sum(amountValue) value from db_vibe_data.${tableName}
+        <where>
+            monitor=${id}
+            <if test="startTime != null and lastTime != null and lastTime !=''">
+                and moment between '${startTime}' and '${lastTime}'
+            </if>
+            <if test="startTime != null and lastTime != null and lastTime ==''">
+                and substr(moment,1,${subNum})='${startTime}'
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询两个时间段之间的所有数据-->
+    <select id="queryValueList" resultType="com.vibe.pojo.CommonMonitorDataVo" statementType="STATEMENT">
+        select amountValue value , moment from db_vibe_data.${tableName}
+        <where>
+            monitor=${id}
+            <if test="startTime != null and lastTime != null and lastTime !=''">
+                and moment between '${startTime}' and '${lastTime}'
+            </if>
+            <if test="startTime != null and lastTime != null and lastTime ==''">
+                and substr(moment,1,${subNum})='${startTime}'
+            </if>
+        </where>
+    </select>
+    <select id="queryKindValue" resultType="com.vibe.pojo.CommonMonitorDataVo">
+        select f.monitor monitorId,f.value,p.caption from db_vibe_data.t_sample_float f left join
+        db_vibe_monitor.t_probe p
+        on f.monitor=p.id
+        where catalog=#{catalog} AND parent=#{id}
+
+    </select>
+    <select id="queryValueFromEnergyDay" resultType="com.vibe.scheduledtasks.statisticstask.MonitorValue">
+        select monitor monitorId,sum(value) value,moment,sum(carbon) carbon
+        from db_vibe_data.t_sample_float
+        <!-- 实际查询每小时的增量和,测试后需要改过来 -->
+        where monitor = #{id} and moment between #{startTime} and #{lastTime}
+
+    </select>
+
+    <select id="getRecentlyCarbon" resultType="com.vibe.scheduledtasks.statisticstask.MonitorValue">
+        select monitor monitorId,sum(carbon) carbon,substring(moment,6,2) moment
+        <!-- 实际查询每小时的增量和,测试后需要改过来 -->
+        from db_vibe_data.t_sample_float
+        <where>
+            <if test="monitorId!=null">
+                monitor = #{monitorId}
+            </if>
+            <if test="startTime!=null">
+                and moment >= #{startTime}
+            </if>
+            <if test="startTime != null and lastTime != null">
+                and moment between #{startTime} and #{lastTime}
+            </if>
+        </where>
+        group by SUBSTRING(moment,6,2)
+
+    </select>
+    <select id="queryFenShiEnergy" resultType="com.vibe.pojo.energy.EnergyCount" statementType="STATEMENT">
+        select d.avg AS value ,d.moment AS Time ,t.unit from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        <where>
+            and p.parent = ${ids}
+            and e.value_type=1
+            and itemize_type = ${catalog}
+            <if test="startTime != null and lastTime != null and lastTime !=''">
+                and d.moment between '${startTime}' and '${lastTime}'
+            </if>
+        </where>
+    </select>
+    <select id="queryFenShiEnergyTwo" resultType="com.vibe.pojo.energy.EnergyCount" statementType="STATEMENT">
+        select d.avg AS value ,d.moment AS Time,t.unit from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where p.parent = ${ids}
+        and e.value_type=1
+        and e.itemize_type = ${catalog}
+        <if test="startTime!=null">
+            and d.moment like '${startTime}'
+        </if>
+    </select>
+    <select id="queryFenShiEnergySeqShi" resultType="com.vibe.pojo.energy.EnergyCount" statementType="STATEMENT">
+        select d.avg AS value ,d.moment AS Time,t.unit from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where p.parent = ${ids}
+        and e.value_type=1
+        and e.itemize_type = ${catalog}
+        <if test="startTime!=null">
+            and d.moment like '${startTime}'
+        </if>
+        order by d.moment asc
+    </select>
+    <select id="queryFenShiEnergySeqValue" resultType="com.vibe.pojo.energy.EnergyCount" statementType="STATEMENT">
+        select d.avg AS value ,d.moment AS Time,t.unit from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where p.parent = ${ids}
+        and e.value_type=1
+        and e.itemize_type = ${catalog}
+        <if test="startTime!=null">
+            and d.moment like '${startTime}'
+        </if>
+        order by value asc
+    </select>
+    <select id="queryFenShiEnergySeqShiOne" resultType="com.vibe.pojo.energy.EnergyCount" statementType="STATEMENT">
+        select d.avg AS value ,d.moment AS Time ,t.unit from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        <where>
+            and p.parent = ${ids}
+            and e.value_type=1
+            and itemize_type = ${catalog}
+            <if test="startTime != null and lastTime != null and lastTime !=''">
+                and d.moment between '${startTime}' and '${lastTime}'
+            </if>
+            order by d.moment asc
+        </where>
+    </select>
+    <select id="queryFenShiEnergySeqValueOne" resultType="com.vibe.pojo.energy.EnergyCount" statementType="STATEMENT">
+        select d.avg AS value ,d.moment AS Time ,t.unit from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        <where>
+            and p.parent = ${ids}
+            and e.value_type=1
+            and itemize_type = ${catalog}
+            <if test="startTime != null and lastTime != null and lastTime !=''">
+                and d.moment between '${startTime}' and '${lastTime}'
+            </if>
+            order by value asc
+        </where>
+    </select>
+    <select id="queryFenXiangEnergyDuan" resultType="com.vibe.pojo.energy.EnergyCountOne" statementType="STATEMENT">
+        select d.moment,sum(d.avg) AS avg,t.name,t.unit
+        from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.parent=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.itemize_type = ${catalog}
+        and e.value_type=1
+        and p.parent = ${ids}
+        and d.moment between '${startTime}' and '${lastTime}'
+        group by t.name
+    </select>
+
+    <select id="queryFenXiangEnergy" resultType="com.vibe.pojo.energy.EnergyCountOne" statementType="STATEMENT">
+        select d.moment,avg(d.avg)AS avg,t.name,t.unit
+        from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.parent=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.itemize_type = ${catalog}
+        and p.parent = ${ids}
+        and e.value_type=1
+        and d.moment like '${startTime}'
+        group by name
+    </select>
+
+    <select id="queryEnergyZongLiang" resultType="java.lang.Double" statementType="STATEMENT">
+        select sum(d.avg) AS value
+        from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.parent=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.itemize_type = ${catalog}
+        and e.value_type=1
+        and p.parent = ${ids}
+        and d.moment like '${startTime}'
+    </select>
+
+    <select id="queryEnergyZongLiangDuan" resultType="java.lang.Double" statementType="STATEMENT">
+        select sum(value) from( select sum(d.avg) AS value
+        from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.parent=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.itemize_type = ${catalog}
+        and e.value_type=1
+        and p.parent = ${ids}
+        and d.moment between '${startTime}' and '${lastTime}'
+        group by t.name ) zonghe
+    </select>
+
+    <select id="queryFenXiangEnergySeqValue" resultType="com.vibe.pojo.energy.EnergyCountOne" statementType="STATEMENT">
+        select d.moment,avg(d.avg) AS avg,t.name,t.unit
+        from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.parent=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.itemize_type = ${catalog}
+        and e.value_type=1
+        and p.parent = ${ids}
+        and d.moment like '${startTime}'
+        group by name
+        order by d.avg asc
+    </select>
+
+    <select id="queryFenXiangEnergySeqValueDuan" resultType="com.vibe.pojo.energy.EnergyCountOne"
+            statementType="STATEMENT">
+        select d.moment,sum(d.avg) as avg,t.name,t.unit
+        from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.parent=e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.itemize_type = ${catalog}
+        and e.value_type=1
+        and p.parent = ${ids}
+        and d.moment between '${startTime}' and '${lastTime}'
+        group by t.name
+        order by d.avg asc
+    </select>
+
+    <select id="queryEnergyZong" resultType="com.vibe.pojo.energy.EnergyZong" statementType="STATEMENT">
+        select sum(d.avg) AS value,t.unit
+        from db_vibe_data. ${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id = e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.value_type=1 and e.itemize_type in
+        <foreach collection="lightList" item="id" open="(" close=")" separator=",">${id}
+        </foreach>
+        <if test="startTime!=null">
+            and d.moment like '${startTime}'
+        </if>
+        and p.parent = 1
+    </select>
+
+    <select id="queryEnergyZongDuan" resultType="com.vibe.pojo.energy.EnergyZong" statementType="STATEMENT">
+        select sum(d.avg) AS value,t.unit
+        from db_vibe_data. ${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id = e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.value_type=1 and e.itemize_type in
+        <foreach collection="lightList" item="id" open="(" close=")" separator=",">${id}
+        </foreach>
+        <if test="startTime != null and lastTime != null and lastTime !=''">
+            and d.moment between '${startTime}' and '${lastTime}'
+        </if>
+        and p.parent = 1
+    </select>
+
+
+    <select id="queryEnergyZongFenXiang" resultType="com.vibe.pojo.energy.EnergyCountOne" statementType="STATEMENT">
+        select avg(d.avg) AS avg,t.name,t.unit
+        from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id = e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.value_type=1 and e.itemize_type in
+        <foreach collection="lightList" item="id" open="(" close=")" separator=",">${id}
+        </foreach>
+        <if test="startTime!=null">
+            and d.moment like '${startTime}'
+        </if>
+        and p.parent = 1
+        group by name
+    </select>
+
+    <select id="queryEnergyZongFenXiangDuan" resultType="com.vibe.pojo.energy.EnergyCountOne" statementType="STATEMENT">
+        select sum(d.avg) AS avg,t.name,t.unit
+        from db_vibe_data.${tableName} d
+        left join db_vibe_monitor.t_probe_energy e on d.monitor=e.probe_id
+        left join db_vibe_monitor.t_probe p on d.monitor=p.id
+        left join db_vibe_basic.t_code t on t.id = e.itemize_type
+        left join db_vibe_monitor.t_space s on p.parent=s.id
+        where e.value_type=1 and e.itemize_type in
+        <foreach collection="lightList" item="id" open="(" close=")" separator=",">${id}
+        </foreach>
+        and d.moment between '${startTime}' and '${lastTime}'
+        and p.parent = 1
+        group by t.name
+    </select>
+
+
+    <select id="queryEnergyZongId" resultType="java.lang.Integer" statementType="STATEMENT">
+        select id from db_vibe_basic.t_code where parent = ${catalog}
+    </select>
+
+    <select id="queryEnergyType" resultType="com.vibe.pojo.energy.EnergyCountOne" statementType="STATEMENT">
+        select id, name from db_vibe_basic.t_code where parent in
+        <foreach collection="lightList" item="id" open="(" close=")" separator=",">${id}
+        </foreach>
+    </select>
+    <select id="queryEnergyTypeId" resultType="java.lang.Integer" statementType="STATEMENT">
+        select id from db_vibe_basic.t_code where parent=0
+        and catalog = 2200;
+    </select>
+
+    <select id="getEnergySumAll" resultType="com.vibe.pojo.energy.Energy" statementType="STATEMENT">
+
+        SELECT
+        TRUNCATE(sum(amountValue),2) as value,t.name,t.unit,t.id as nameId
+        FROM
+        db_vibe_data.${tableName} d
+        LEFT JOIN db_vibe_monitor.t_probe_energy e ON d.monitor = e.probe_id
+        LEFT JOIN db_vibe_monitor.t_probe p ON d.monitor = p.id
+        LEFT JOIN db_vibe_basic.t_code t ON t.id = e.itemize_type
+        where e.value_type=1 and (e.itemize_type = 46 or e.itemize_type = 34) and p.parent = 1
+        <choose>
+            <when test="redioType != 0">
+                and d.moment between '${startTime}' and '${lastTime}'
+            </when>
+            <otherwise>
+                and d.moment like '${startTime}%'
+            </otherwise>
+        </choose>
+        UNION
+        SELECT
+        TRUNCATE(sum(amountValue),2) as value,t.name,t.unit,t.id as nameId
+        FROM
+        db_vibe_data.${tableName} d
+        LEFT JOIN db_vibe_monitor.t_probe_energy e ON d.monitor = e.probe_id
+        LEFT JOIN db_vibe_monitor.t_probe p ON d.monitor = p.id
+        LEFT JOIN db_vibe_basic.t_code t ON t.id = e.itemize_type
+        where e.value_type=1 and (e.itemize_type = 50 or e.itemize_type = 37) and p.parent = 1
+        <choose>
+            <when test="redioType != 0">
+                and d.moment between '${startTime}' and '${lastTime}'
+            </when>
+            <otherwise>
+                and d.moment like '${startTime}%'
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <select id="queryEnergyAllElec" resultType="com.vibe.pojo.energy.Energy" statementType="STATEMENT">
+        SELECT
+        sum(amountValue) as value,t.name,t.unit
+        FROM
+        db_vibe_data.${tableName} d
+        LEFT JOIN db_vibe_monitor.t_probe_energy e ON d.monitor = e.probe_id
+        LEFT JOIN db_vibe_monitor.t_probe p ON d.monitor = p.id
+        LEFT JOIN db_vibe_basic.t_code t ON t.id = e.itemize_type
+        where e.value_type=1 and t.id = ${id}
+        <choose>
+            <when test="redioType != 0">
+                and d.moment between '${startTime}' and '${lastTime}'
+            </when>
+            <otherwise>
+                and d.moment like '${startTime}%'
+            </otherwise>
+        </choose>
+    </select>
+    <select id="queryEnergyAllWater" resultType="com.vibe.pojo.energy.Energy" statementType="STATEMENT">
+        SELECT
+        sum(amountValue) as value,t.name,t.unit
+        FROM
+        db_vibe_data.${tableName} d
+        LEFT JOIN db_vibe_monitor.t_probe_energy e ON d.monitor = e.probe_id
+        LEFT JOIN db_vibe_monitor.t_probe p ON d.monitor = p.id
+        LEFT JOIN db_vibe_basic.t_code t ON t.id = e.itemize_type
+        where e.value_type=1 and t.id =${id}
+        <choose>
+            <when test="redioType != 0">
+                and d.moment between '${startTime}' and '${lastTime}'
+            </when>
+            <otherwise>
+                and d.moment like '${startTime}%'
+            </otherwise>
+        </choose>
+    </select>
+    <select id="queryEnergyBySpaceId" resultType="com.vibe.pojo.energy.EnergyCountOne" statementType="STATEMENT">
+        SELECT
+        sum(amountValue) as avg,s.caption,t.name,t.unit,t.id
+        FROM
+        db_vibe_data.t_sample_float_day d
+        LEFT JOIN db_vibe_monitor.t_probe_energy e ON d.monitor = e.probe_id
+        LEFT JOIN db_vibe_monitor.t_probe p ON d.monitor = p.id
+        LEFT JOIN db_vibe_basic.t_code t ON t.id = e.itemize_type
+        LEFT JOIN db_vibe_monitor.t_space s ON p.parent = s.id
+        where e.value_type=1 and s.id =${spaceId} and t.id = ${parentId}
+        /* in (select id from db_vibe_basic.t_code t where t.parent = ${parentId}) */
+        <choose>
+            <when test="redioType != 0">
+                and d.moment between '${startTime}' and '${lastTime}'
+            </when>
+            <otherwise>
+                and d.moment like '${startTime}%'
+            </otherwise>
+        </choose>
+        GROUP BY t.id
+
+    </select>
+    <select id="getTypeList" resultType="com.vibe.pojo.energy.EnergyType">
+        select t.id,t.parent,t.`name` from db_vibe_basic.t_code t where t.catalog = 2200;
+    </select>
+
+    <select id="elecProportion" resultType="hashmap">
+        SELECT
+        TRUNCATE(sum(amountValue),2) as value,t.name,t.unit,t.id as nameId,p.caption,s.parent
+        FROM
+        db_vibe_data.t_sample_float_day d
+        LEFT JOIN db_vibe_monitor.t_probe_energy e ON d.monitor = e.probe_id
+        LEFT JOIN db_vibe_monitor.t_probe p ON d.monitor = p.id
+        LEFT JOIN db_vibe_basic.t_code t ON t.id = e.itemize_type
+        LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
+        where e.value_type=1 and (e.itemize_type = 46 or e.itemize_type = 34) and (s.parent = 1 or p.parent = 1) GROUP
+        BY d.monitor
+    </select>
+    <select id="waterProportion" resultType="hashmap">
+        SELECT
+        TRUNCATE(sum(amountValue),2) as value,t.name,t.unit,t.id as nameId,p.caption,s.parent
+        FROM
+        db_vibe_data.t_sample_float_day d
+        LEFT JOIN db_vibe_monitor.t_probe_energy e ON d.monitor = e.probe_id
+        LEFT JOIN db_vibe_monitor.t_probe p ON d.monitor = p.id
+        LEFT JOIN db_vibe_basic.t_code t ON t.id = e.itemize_type
+        LEFT JOIN db_vibe_monitor.t_space s ON s.id = p.parent
+        where e.value_type=1 and (e.itemize_type = 50 or e.itemize_type = 37) and (s.parent = 1 or p.parent = 1) GROUP
+        BY d.monitor
+    </select>
+
+</mapper>

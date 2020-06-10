@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vibe.mapper.task.PageTaskMapper">
+    <select id="queryTaskIds" parameterType="int" resultType="int">
+        select * from db_vibe_monitor.t_device_maintenance where device_id = #{deviceId}
+    </select>
+    <select id="queryMaintenaceList" resultType="maintenaceVo">
+        select
+        m.id taskId
+        ,t.name
+        ,t.responsible_people responsiblePeople
+        ,t.maintenance_type_id maintenanceType
+        ,t.task_interval taskInterval
+        ,t.maintenance_time maintenanceDate
+        ,t.result_desc resultDesc
+        from db_vibe_monitor.t_old_maintenance m
+        left join db_vibe_monitor.t_old_task t
+        on t.id=m.id
+        where t.state=3 and m.id in
+        <if test="list != null">
+            <foreach item="item" index="index" collection="list"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+    </select>
+
+    <!-- 根据id查找任务 -->
+    <select id="findTaskById" parameterType="int" resultType="maintenaceVo">
+        select
+        m.id taskId
+        ,t.name
+        ,t.responsible_people responsiblePeople
+        ,t.maintenance_type_id maintenanceType
+        ,t.task_interval taskInterval
+        ,t.maintenance_time maintenanceDate
+        ,t.result_desc resultDesc
+        from db_vibe_monitor.t_old_maintenance m
+        left join db_vibe_monitor.t_old_task t
+        on t.id=m.id
+        where t.id = #{taskId}
+    </select>
+    <!-- 新增任务维护记录 -->
+    <insert id="addTask" parameterType="task">
+        insert into db_vibe_monitor.t_old_task
+        (id,name,task_type_id,responsible_people,task_interval,grade,create_time,task_memo,maintenance_type_id,maintenance_time,result_desc,state,finish_time)
+        values(#{taskId},#{name},#{taskType},#{responsiblePeople},#{taskInterval},#{grade},#{createDate},#{taskMemo},#{maintenanceType},#{maintenanceDate},#{resultDesc},#{state},#{finishTime})
+    </insert>
+    <insert id="addMaintenace" parameterType="maintenaceVo">
+        insert into db_vibe_monitor.t_old_maintenance (id) values(#{taskId})
+    </insert>
+    <insert id="addTaskAndDevice" parameterType="maintenaceVo">
+        insert into db_vibe_monitor.t_device_maintenance (maintenance_id,device_id) values(#{taskId},#{deviceId})
+    </insert>
+    <!--修改任务记录 -->
+    <update id="updateTask" parameterType="task">
+        update db_vibe_monitor.t_old_task
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="taskType != null">
+                task_type_id=#{taskType},
+            </if>
+            <if test="responsiblePeople != null">
+                responsible_people=#{responsiblePeople},
+            </if>
+            <if test="taskInterval != null">
+                task_interval=#{taskInterval},
+            </if>
+            <if test="grade != null">
+                grade=#{grade},
+            </if>
+            <if test="finishTime != null">
+                finish_time=#{finishTime},
+            </if>
+            <if test="createDate != null">
+                create_time=#{createDate},
+            </if>
+            <if test="taskMemo != null">
+                task_memo=#{taskMemo},
+            </if>
+            <if test="maintenanceDate != null">
+                maintenance_time=#{maintenanceDate},
+            </if>
+            <if test="maintenanceType != null">
+                maintenance_type_id=#{maintenanceType},
+            </if>
+            <if test="resultDesc != null">
+                result_desc=#{resultDesc},
+            </if>
+            <if test="state != null">
+                state=#{state}
+            </if>
+        </set>
+        WHERE id=#{taskId}
+    </update>
+    <!-- 任务管理的增删改查 -->
+    <select id="queryTaskList" resultType="task" parameterType="task">
+        select t.id taskId
+        ,t.name
+        ,t.responsible_people responsiblePeople
+        ,t.create_time createDate
+        ,t.finish_time finishTime
+        ,t.state
+        ,t.grade
+        ,t.maintenance_type_id maintenanceType
+        ,t.task_interval taskInterval
+        ,t.maintenance_time maintenanceDate
+        ,t.result_desc resultDesc
+        from db_vibe_monitor.t_old_task t
+    </select>
+
+    <select id="queryTaskById" parameterType="int" resultType="task">
+        select t.id taskId
+        ,t.name
+        ,t.create_time createDate
+        ,t.finish_time finishTime
+        ,t.state
+        ,t.grade
+        ,t.task_memo taskMemo
+        ,t.responsible_people responsiblePeople
+        ,t.maintenance_type_id maintenanceType
+        ,t.task_interval taskInterval
+        ,t.maintenance_time maintenanceDate
+        ,t.result_desc resultDesc
+        from db_vibe_monitor.t_old_task t where id=#{id}
+    </select>
+    <delete id="deleteTaskById" parameterType="task">
+        delete from db_vibe_monitor.t_old_task where id=#{taskId}
+    </delete>
+</mapper>

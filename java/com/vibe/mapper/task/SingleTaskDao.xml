@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.task.SingleTaskDao">
+
+    <insert id="insert" parameterType="SingleTask">
+        insert into db_vibe_basic.t_single_task(site_name, route_id, sequence, memo)
+        values(#{siteName,jdbcType=INTEGER}, #{routeId,jdbcType=INTEGER}, #{sequence,jdbcType=INTEGER},
+        #{memo,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="queryMaxId" resultType="Integer">
+        select max(id) from db_vibe_basic.t_single_task
+    </select>
+
+    <select id="queryForList" parameterType="int" resultType="SingleTask">
+        select id, site_name as siteName, sequence, memo from db_vibe_basic.t_single_task
+        where route_id = #{routeId} order by sequence
+    </select>
+</mapper>
+
+
+

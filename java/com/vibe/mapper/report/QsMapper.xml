@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vibe.mapper.report.QsMapper">
+
+
+    <select id="qs" resultType="com.vibe.mapper.report.Qs">
+        select * from qs_test.qs
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="id_max != null">and id &lt;= #{id_max}</if>
+            <if test="id_min != null">and id >= #{id_min}</if>
+            <if test="time != null">and time = #{time}</if>
+            <if test="time_max != null">and time &lt;= #{time_max}</if>
+            <if test="time_min != null">and time >= #{time_min}</if>
+            <if test="name != null">and name = #{name}</if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.receiveAlarmData.CarPushDao">
+    <insert id="saveBatchCarParkingStop" parameterType="com.vibe.pojo.parking.CarParkingStop">
+        insert into
+        db_vibe_monitor.t_parklot_info
+        (id,park_id,is_null,lot_name,car_num,car_num_color,in_lot_time,out_lot_time,camera_id,camera_name,car_type,car_color,car_img_url,probe_id)
+        values
+        (#{id},#{parkId},#{isNull},#{lotName},#{carNum},#{carNumColor},#{inLotTime},#{outLotTime},#{cameraId},#{cameraName},#{carType},#{carColor},
+        #{carImgUrl},#{probeId})
+    </insert>
+    <insert id="insertParkingInfo" parameterType="com.vibe.pojo.parking.CarParkingStop">
+        insert into
+        db_vibe_monitor.t_car_park(id,park_name,idle_lot,used_lot,esidual_screen_num)
+        values
+        (#{parkId},#{parkName},#{idleLot},#{userdLot},
+        #{esidualScreenNum}
+        )
+        ON DUPLICATE KEY UPDATE
+        id = values(parkId),park_name = values(parkName),
+        idle_lot = values(idleLot),
+        used_lot = values(usedLot),
+        esidual_screen_num = values(esidualScreenNum)
+    </insert>
+    <select id="selectCarParkingById" parameterType="java.lang.Integer"
+            resultType="com.vibe.pojo.parking.CarParkingStop">
+        select
+        id,park_id parkId,is_null isNull,lot_name lotName,car_num carNum,car_num_color carNumColor,
+        in_lot_time inLotTime,out_lot_time outLotTime,camera_id cameraId,
+        camera_name cameraName,car_type carType,car_color carColor,car_img_url carImgUrl,probe_id probeId
+        from
+        db_vibe_monitor.t_parklot_info
+        where
+        probe_id = #{probeId} and is_null = 1
+        order by
+        id desc
+        limit 1
+    </select>
+    <!--停车场记录分页查询-->
+    <select id="selectCarParkingListByPage" parameterType="com.vibe.pojo.parking.CarParkingStop"
+            resultType="com.vibe.pojo.parking.CarParkingStop">
+        select
+        id,park_id parkId,is_null isNull,lot_name lotName,car_num carNum,car_num_color carNumColor,
+        in_lot_time inLotTime,out_lot_time outLotTime,camera_id cameraId,
+        camera_name cameraName,car_type carType,car_color carColor,car_img_url carImgUrl,probe_id probeId
+        from
+        db_vibe_monitor.t_parklot_info
+        <where>
+            <if test="lotName != null and lotName != ''">
+                and lot_name like CONCAT('%',#{lotName},'%')
+            </if>
+            <if test="parkId != null and parkId != ''">
+                and park_id = #{parkId}
+            </if>
+            <if test="isNull != null">
+                and is_null = #{isNull}
+            </if>
+            <if test="carNum != null">
+                and car_num = #{carNum}
+            </if>
+            <if test="inLotStartTime != null">
+                and DATE_FORMAT(in_lot_time,'%Y-%m-%d %H:%i:%S') <![CDATA[>=]]>
+                #{inLotStartTime}
+            </if>
+            <if test="inLotEndTime != null">
+                and DATE_FORMAT(in_lot_time,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]>
+                #{inLotEndTime}
+            </if>
+            <if test="outLotStartTime != null">
+                and DATE_FORMAT(out_lot_time,'%Y-%m-%d %H:%i:%S') <![CDATA[>=]]>
+                #{outLotStartTime}
+            </if>
+            <if test="outLotEndTime != null">
+                and DATE_FORMAT(out_lot_time,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]>
+                #{outLotEndTime}
+            </if>
+        </where>
+        order by
+        id desc
+    </select>
+    <select id="selectCarParkingByParkId" parameterType="com.vibe.pojo.parking.CarParkingStop"
+            resultType="com.vibe.pojo.parking.CarParkingStop">
+        select
+        id parkId,park_name parkName,idle_lot idleLot,
+        used_lot usedLot,esidual_screen_num esidualScreenNum
+        from
+        erp_office.t_car_park
+        where
+        id = #{parkId}
+    </select>
+    <update id="updateParkInfoByParkId" parameterType="com.vibe.pojo.parking.CarParkingStop">
+        update
+        erp_office.t_car_park
+        set
+        park_name = #{parkName},
+        idle_lot = #{idleLot},
+        used_lot = #{usedLot},
+        esidual_screen_num = #(esidualScreenNum)
+        where
+        id = #{parkId}
+    </update>
+    <update id="updateParkInfoByParkingStop" parameterType="com.vibe.pojo.parking.CarParkingStop">
+        update
+        db_vibe_monitor.t_parklot_info
+        set
+        park_id = #{parkId},
+        is_null = #{isNull},
+        car_num = #{carNum},
+        car_num_color = #{carNumColor},
+        out_lot_time = #{outLotTime},
+        camera_id = #{cameraId},
+        camera_name = #{cameraName},
+        car_type = #{carType},
+        car_color = #{carColor},
+        car_img_url = #{carImgUrl}
+        where
+        lot_name = #{lotName}
+
+    </update>
+</mapper>
+
+
+

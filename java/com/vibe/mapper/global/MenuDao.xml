@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.global.MenuDao">
+
+
+    <select id="getMenus" resultType="com.vibe.pojo.MenuBean">
+        select * from db_vibe_basic.t_menu
+    </select>
+
+    <select id="queryMenuByParent" parameterType="Integer" resultType="com.vibe.pojo.MenuBean">
+        select *
+        from db_vibe_basic.t_menu where parent=#{parent}
+
+    </select>
+    <resultMap id="menumMap" type="MenuBean">
+        <id property="id" column="id"></id>
+        <result property="parent" column="parent"/>
+        <result property="name" column="name"/>
+        <result property="caption" column="caption"/>
+        <result property="catalog" column="catalog"/>
+        <result property="sequence" column="sequence"/>
+        <result property="url" column="url"/>
+        <collection property="permisionList" column="pname" javaType="ArrayList" ofType="string"/>
+    </resultMap>
+
+    <select id="queryMenuById" resultMap="menumMap">
+        select p.name pname,m.id,m.parent,m.name,m.caption,m.catalog,m.sequence,m.url
+        from db_vibe_basic.t_menu m
+        left join db_vibe_basic.t_permission p on m.id = p.menu_id
+        where m.id=#{id}
+    </select>
+
+    <select id="queryPermissionBymIdAndRid" resultType="String">
+        select p.name pname
+        from db_vibe_basic.t_permission p
+        left join db_vibe_basic.t_role_permission rp on rp.pid = p.id
+        where p.menu_id=#{id} and rp.rid=#{rid}
+    </select>
+
+    <select id="queryParentMenu" parameterType="Integer" resultType="Integer">
+        select parent
+        from db_vibe_basic.t_menu where id=#{child}
+
+    </select>
+</mapper>
+
+ 
+

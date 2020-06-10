@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.auty.AutyMapper">
+    <!--
+
+        int insertArrangInfo(ArrangInfo info);
+        int deleteArrangInfo(int[] ids);
+        int updateArrangInfo(ArrangInfo info);
+        List<ArrangInfo> findArrangInfo(ArrangInfo info); -->
+    <insert id="insertArrangInfo" parameterType="com.vibe.pojo.auty.ArrangInfo" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into db_vibe_basic.t_arrang_info (
+        dutyPeople, start_Time, stop_Time, memo, confId
+        ) values (
+        #{dutyPeople}, #{startTime}, #{stopTime}, #{memo}, #{confId}
+        )
+    </insert>
+    <delete id="deleteArrangInfo">
+        delete from db_vibe_basic.t_arrang_info where id in (<foreach collection="ids" item="id" separator=",">
+        #{id}</foreach>)
+    </delete>
+    <delete id="deleteArrangInfoByConf">
+        delete from db_vibe_basic.t_arrang_info where confId in (<foreach collection="ids" item="id" separator=",">
+        #{id}</foreach>)
+    </delete>
+    <update id="updateArrangInfo" parameterType="com.vibe.pojo.auty.ArrangInfo">
+        update db_vibe_basic.t_arrang_info
+        <set>
+            <if test="dutyPeople != null ">dutyPeople = #{dutyPeople},</if>
+            <if test="startTime != null">start_Time = #{startTime},</if>
+            <if test="stopTime != null">stop_Time = #{stopTime},</if>
+            <if test="memo != null and memo != ''">memo = #{memo},</if>
+            <if test="confId != null">confId = #{confId},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="ids != null">id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+                </when>
+                <otherwise>id = #{id}</otherwise>
+            </choose>
+        </where>
+    </update>
+    <select id="findArrangInfo" parameterType="com.vibe.pojo.auty.ArrangInfo"
+            resultType="com.vibe.pojo.auty.ArrangInfo">
+        select t.*, t.start_time as startTime, t.stop_time as stopTime, u.name as dutyPeopleName,c.staff
+        from db_vibe_basic.t_arrang_info t
+        left join db_vibe_basic.t_user u
+        on t.dutyPeople = u.id
+        left join db_vibe_basic.t_arrang_info_conf c
+        on t.confId = c.id
+        <where>
+            <if test="id != null">and t.id = #{id}</if>
+            <if test="confId != null">and t.confId = #{confId}</if>
+            <if test="dutyPeople != null">and t.dutyPeople = #{dutyPeople}</if>
+            <if test="startTime != null">and t.start_Time >= #{startTime}</if>
+            <if test="stopTime != null">and t.stop_Time &lt;= #{stopTime}</if>
+            <if test="memo != null and memo != ''">and t.memo like "%"#{memo}"%"</if>
+            <if test="dutyPeopleName != null and dutyPeopleName != ''">and u.name like "%"#{dutyPeopleName}"%"</if>
+            <if test="ids != null">and t.id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+            </if>
+        </where>
+    </select>
+
+    <!--
+
+        int insertAuty(Auty info);
+        int deleteAuty(int[] ids);
+        int updateAuty(Auty info);
+        List<Auty> findAuty(Auty info);
+     -->
+    <insert id="insertAuty" parameterType="com.vibe.pojo.auty.Auty" useGeneratedKeys="true" keyProperty="id">
+        insert into db_vibe_basic.t_auty (
+        dutyPeople, memo, start_Time, stop_Time
+        ) values (
+        #{dutyPeople}, #{memo}, #{startTime}, #{stopTime}
+        )
+    </insert>
+    <delete id="deleteAuty">
+        delete from db_vibe_basic.t_auty where id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+    </delete>
+    <update id="updateAuty" parameterType="com.vibe.pojo.auty.Auty">
+        update db_vibe_basic.t_auty
+        <set>
+            <if test="dutyPeople != null">dutyPeople = #{dutyPeople},</if>
+            <if test="memo != null and memo != ''">memo = #{memo},</if>
+            <if test="startTime != null">start_Time = #{startTime},</if>
+            <if test="stopTime != null">stop_Time = #{stopTime},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="ids != null">id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+                </when>
+                <otherwise>id = #{id}</otherwise>
+            </choose>
+        </where>
+    </update>
+    <select id="findAuty" parameterType="com.vibe.pojo.auty.Auty" resultType="com.vibe.pojo.auty.Auty">
+        select t.*, t.start_time as startTime, t.stop_time as stopTime, u.name as dutyPeopleName
+        from db_vibe_basic.t_auty t
+        left join db_vibe_basic.t_user u
+        on t.dutyPeople = u.id
+        <where>
+            <if test="id != null">and t.id = #{id}</if>
+            <if test="dutyPeople != null">and t.dutyPeople = #{dutyPeople}</if>
+            <if test="memo != null and memo != ''">and t.memo like "%"#{memo}"%"</if>
+            <if test="startTime != null">and t.start_Time >= #{startTime}</if>
+            <if test="stopTime != null">and t.stop_Time >= #{stopTime}</if>
+            <if test="dutyPeopleName != null and dutyPeopleName != ''">and u.name like "%"#{dutyPeopleName}"%"</if>
+            <if test="ids != null">and t.id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+            </if>
+        </where>
+    </select>
+
+    <!--
+
+    int insertAbnormality(Abnormality info);
+    int deleteAbnormality(int[] ids);
+    int updateAbnormality(Abnormality info);
+    List<Abnormality> findAbnormality(Abnormality info); -->
+    <insert id="insertAbnormality" parameterType="com.vibe.pojo.auty.Abnormality" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into db_vibe_basic.t_abnormality (
+        autyid, `desc`, manage, result, memo
+        ) values (
+        #{autyid}, #{desc}, #{manage}, #{result}, #{memo}
+        )
+    </insert>
+    <delete id="deleteAbnormality">
+        delete from db_vibe_basic.t_abnormality where id in (<foreach collection="ids" item="id" separator=",">
+        #{id}</foreach>)
+    </delete>
+    <update id="updateAbnormality" parameterType="com.vibe.pojo.auty.Abnormality">
+        update db_vibe_basic.t_abnormality
+        <set>
+            <if test="autyid != null">autyid = #{autyid},</if>
+            <if test="desc != null and desc != ''">`desc` = #{desc},</if>
+            <if test="manage != null and manage != ''">manage = #{manage},</if>
+            <if test="result != null and result != ''">result = #{result},</if>
+            <if test="memo != null and memo != ''">memo = #{memo},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="ids != null">id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+                </when>
+                <otherwise>id = #{id}</otherwise>
+            </choose>
+        </where>
+    </update>
+    <select id="findAbnormality" parameterType="com.vibe.pojo.auty.Abnormality"
+            resultType="com.vibe.pojo.auty.Abnormality">
+        select t.*
+        from db_vibe_basic.t_abnormality t
+        <where>
+            <if test="id != null">and t.id = #{id}</if>
+            <if test="autyid != null">and autyid = #{autyid}</if>
+            <if test="desc != null and desc != ''">and `desc` like "%"#{desc}"%"</if>
+            <if test="manage != null and manage != ''">and manage like "%"#{manage}"%"</if>
+            <if test="result != null and result != ''">and result like "%"#{result}"%"</if>
+            <if test="memo != null and memo != ''">and t.memo like "%"#{memo}"%"</if>
+            <if test="ids != null">and t.id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+            </if>
+        </where>
+    </select>
+    <!--
+
+    int insertChangeShifts(ChangeShifts info);
+    int deleteChangeShifts(int[] ids);
+    int updateChangeShifts(ChangeShifts info);
+    List<ChangeShifts> findChangeShifts(ChangeShifts info); -->
+    <insert id="insertChangeShifts" parameterType="com.vibe.pojo.auty.ChangeShifts" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into db_vibe_basic.t_change_shifts (
+        submissionPeople, takeOverPeople, time, memo
+        ) values (
+        #{submissionPeople}, #{takeOverPeople}, #{time}, #{memo}
+        )
+    </insert>
+    <delete id="deleteChangeShifts">
+        delete from db_vibe_basic.t_change_shifts where id in (<foreach collection="ids" item="id" separator=",">
+        #{id}</foreach>)
+    </delete>
+    <update id="updateChangeShifts" parameterType="com.vibe.pojo.auty.ChangeShifts">
+        update db_vibe_basic.t_change_shifts
+        <set>
+            <if test="submissionPeople != null">submissionPeople = #{submissionPeople},</if>
+            <if test="takeOverPeople != null">takeOverPeople = #{takeOverPeople},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="memo != null and memo != ''">memo = #{memo},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="ids != null">id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+                </when>
+                <otherwise>id = #{id}</otherwise>
+            </choose>
+        </where>
+    </update>
+    <select id="findChangeShifts" parameterType="com.vibe.pojo.auty.ChangeShifts"
+            resultType="com.vibe.pojo.auty.ChangeShifts">
+        select t.*, u1.name as submissionPeopleName, u2.name as takeOverPeopleName
+        from db_vibe_basic.t_change_shifts t
+        left join db_vibe_basic.t_user u1 on t.submissionPeople = u1.id
+        left join db_vibe_basic.t_user u2 on t.takeOverPeople = u2.id
+        <where>
+            <if test="id != null">and t.id = #{id}</if>
+            <if test="submissionPeople != null">and submissionPeople = #{submissionPeople}</if>
+            <if test="takeOverPeople != null">and takeOverPeople = #{takeOverPeople}</if>
+            <if test="time != null">and time >= #{time}</if>
+            <if test="memo != null and memo != ''">and t.memo like "%"#{memo}"%"</if>
+            <if test="submissionPeopleName != null and submissionPeopleName != ''">and u1.name like
+                "%"#{submissionPeopleName}"%"
+            </if>
+            <if test="takeOverPeopleName != null and takeOverPeopleName != ''">and u2.name like
+                "%"#{takeOverPeopleName}"%"
+            </if>
+            <if test="ids != null">and t.id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+            </if>
+        </where>
+    </select>
+
+    <!--
+
+    int insertChangeShiftsGood(ChangeShiftsGood info);
+    int deleteChangeShiftsGood(int[] ids);
+    int updateChangeShiftsGood(ChangeShiftsGood info);
+    List<ChangeShiftsGood> findChangeShiftsGood(ChangeShiftsGood info); -->
+    <insert id="insertChangeShiftsGood" parameterType="com.vibe.pojo.auty.ChangeShiftsGood" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into db_vibe_basic.t_change_shifts_good (
+        changeShiftsId, number, name, memo
+        ) values (
+        #{changeShiftsId}, #{number}, #{name}, #{memo}
+        )
+    </insert>
+    <delete id="deleteChangeShiftsGood">
+        delete from db_vibe_basic.t_change_shifts_good where id in (<foreach collection="ids" item="id" separator=",">
+        #{id}</foreach>)
+    </delete>
+    <update id="updateChangeShiftsGood" parameterType="com.vibe.pojo.auty.ChangeShiftsGood">
+        update db_vibe_basic.t_change_shifts_good
+        <set>
+            <if test="changeShiftsId != null">changeShiftsId = #{changeShiftsId},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="memo != null and memo != ''">memo = #{memo},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="ids != null">id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+                </when>
+                <otherwise>id = #{id}</otherwise>
+            </choose>
+        </where>
+    </update>
+    <select id="findChangeShiftsGood" parameterType="com.vibe.pojo.auty.ChangeShiftsGood"
+            resultType="com.vibe.pojo.auty.ChangeShiftsGood">
+        select t.*
+        from db_vibe_basic.t_change_shifts_good t
+        <where>
+            <if test="id != null">and t.id = #{id}</if>
+            <if test="changeShiftsId != null">and changeShiftsId = #{changeShiftsId}</if>
+            <if test="number != null">and number = #{number}</if>
+            <if test="memo != null and memo != ''">and t.memo like "%"#{memo}"%"</if>
+            <if test="name != null and name != ''">and name like "%"#{name}"%"</if>
+            <if test="ids != null">and t.id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+            </if>
+        </where>
+    </select>
+
+    <!--
+
+    int insertArrangInfoConf(ArrangInfoConf conf);
+    int deleteArrangInfoConf(int[] ids);
+    int updateArrangInfoConf(ArrangInfoConf info);
+    List<ArrangInfo> findArrangInfoConf(ArrangInfoConf info); -->
+    <insert id="insertArrangInfoConf" parameterType="com.vibe.pojo.auty.ArrangInfoConf" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into db_vibe_basic.t_Arrang_Info_Conf (
+        startTime, stopTime, memo, type, staff
+        ) values (
+        #{startTime}, #{stopTime}, #{memo}, #{type}, #{staffAsString}
+        )
+    </insert>
+
+    <insert id="insertArrangInfoConfType1" useGeneratedKeys="true" keyProperty="id">
+        insert into db_vibe_basic.t_Arrang_Info_Conf (
+        id, type, startTime, stopTime, memo
+        ) values (
+        #{id}, #{type}, #{startTime}, #{stopTime},#{memo}
+        )
+    </insert>
+    <delete id="deleteArrangInfoConf">
+        delete from db_vibe_basic.t_Arrang_Info_Conf where id in (<foreach collection="ids" item="id" separator=",">
+        #{id}</foreach>)
+    </delete>
+    <delete id="deleteArrangInfoConfType1">
+        delete from db_vibe_basic.t_Arrang_Info_Conf where id in (<foreach collection="ids" item="id" separator=",">
+        #{id}</foreach>)
+    </delete>
+    <update id="updateArrangInfoConf" parameterType="com.vibe.pojo.auty.ArrangInfoConf">
+        update db_vibe_basic.t_Arrang_Info_Conf
+        <set>
+            <if test="startTime != null">startTime = #{startTime},</if>
+            <if test="stopTime != null">stopTime = #{stopTime},</if>
+            <if test="memo != null and memo != ''">memo = #{memo},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="staff != null">staff = #{staffAsString},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="ids != null">id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+                </when>
+                <otherwise>id = #{id}</otherwise>
+            </choose>
+        </where>
+    </update>
+    <update id="updateArrangInfoConfType1" parameterType="com.vibe.pojo.auty.ArrangInfoConf">
+        update db_vibe_basic.t_Arrang_Info_Conf
+        <set>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="startTime != null">startTime = #{startTime},</if>
+            <if test="stopTime != null">stopTime = #{stopTime},</if>
+            <if test="memo != null and memo != ''">memo = #{memo},</if>
+        </set>
+        <where>
+            <choose>
+                <when test="ids != null">id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+                </when>
+                <otherwise>id = #{id}</otherwise>
+            </choose>
+        </where>
+    </update>
+    <select id="findArrangInfoConf" parameterType="com.vibe.pojo.auty.ArrangInfoConf"
+            resultType="com.vibe.pojo.auty.ArrangInfoConf">
+        select t.*
+        from db_vibe_basic.t_Arrang_Info_Conf t
+        <where>
+            <if test="id != null">and t.id = #{id}</if>
+            <if test="startTime != null">and t.startTime >= #{startTime}</if>
+            <if test="stopTime != null">and t.stopTime >= #{stopTime}</if>
+            <if test="memo != null and memo != ''">and t.memo like "%"#{memo}"%"</if>
+            <if test="type != null">and type = #{type}</if>
+            <if test="staff != null">and staff like "%"#{staffAsString}"%"</if>
+            <if test="ids != null">and t.id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+            </if>
+        </where>
+    </select>
+    <select id="findArrangInfoConfType1" parameterType="com.vibe.pojo.auty.ArrangInfoConf"
+            resultType="com.vibe.pojo.auty.ArrangInfoConf">
+        select t.*
+        from db_vibe_basic.t_Arrang_Info_Conf t
+        <where>
+            <if test="id != null">and t.id = #{id}</if>
+            <if test="type != null">and type = #{type}</if>
+            <if test="startTime != null">and t.startTime >= #{startTime}</if>
+            <if test="stopTime != null">and t.stopTime >= #{stopTime}</if>
+            <if test="memo != null and memo != ''">and t.memo like "%"#{memo}"%"</if>
+            <if test="ids != null">and t.id in (<foreach collection="ids" item="id" separator=",">#{id}</foreach>)
+            </if>
+        </where>
+    </select>
+    <select id="selectDutyPeopleListByIds" resultType="java.lang.String">
+        select `name` from db_vibe_basic.t_user where id in (${staffIds})
+    </select>
+
+</mapper>
+
+
+

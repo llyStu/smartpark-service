@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.energy.EnergyMeterMapper">
+    <select id="queryEnergyMeterByProbeId" resultType="com.vibe.service.energy.Meter">
+        SELECT p.id
+        ,p.parent parentId
+        ,p.caption
+        ,p.catalog catalogId
+        ,p.name
+        ,p.source
+        ,p.time_interval
+        ,p.transform
+        ,p.warn_cond
+        ,p.memo
+        ,p.type typeName
+        ,e.grade
+        ,e.parent_meter parentMeter
+        ,e.meter_type meterType
+        ,e.itemize_type itemizeType
+        ,e.itemize_expression itemizeExpression
+        from db_vibe_monitor.t_probe p LEFT JOIN db_vibe_monitor.t_probe_energy e ON p.id=e.probe_id
+        <where>
+            p.removed = 0
+            <if test="probeId == null">
+                and e.value_type=1
+            </if>
+
+            <if test="probeId != null">
+                and e.probe_id =#{probeId}
+            </if>
+
+        </where>
+    </select>
+    <select id="queryEnergyMeter" parameterType="com.vibe.service.energy.Meter"
+            resultType="com.vibe.service.energy.Meter">
+        SELECT p.id
+        ,p.parent parentId
+        ,p.name
+        ,p.type typeName
+        ,p.caption
+        ,p.catalog catalogId
+        ,e.grade
+        ,e.parent_meter parentMeter
+        ,e.meter_type meterType
+        ,e.itemize_type itemizeType
+        ,e.itemize_expression itemizeExpression
+        FROM db_vibe_monitor.t_probe p LEFT JOIN db_vibe_monitor.t_probe_energy e ON p.id=e.probe_id
+        <where>
+            p.removed = 0 and e.value_type=0
+            <if test="meterTypes != null and meterTypes.length>0">
+                and e.meter_type in
+                <foreach item="item" index="index" collection="meterTypes"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="meterType != null">
+                and e.meter_type = #{meterType}
+            </if>
+            <if test="grade!=null">
+                and e.grade=#{grade}
+            </if>
+            <if test="caption != null">
+                and p.caption like "%"#{caption}"%"
+            </if>
+            <if test="itemizeType != null">
+                and e.itemize_type = #{itemizeType}
+            </if>
+            <if test="catalogId != null">
+                and p.catalog=#{catalogId}
+            </if>
+            <if test="parentId != null">
+                and p.parent =#{parentId}
+            </if>
+            <!-- 暂时解决左侧菜单点击总耗电显示设备 加  and parentMeter != 2525 -->
+            <if test="parentMeter != null">
+                and e.parent_meter =#{parentMeter}
+            </if>
+            <if test="id != null">
+                and e.probe_id =#{id}
+            </if>
+            <if test="catalogs != null and catalogs.size()>0">
+                and e.itemize_type in
+                <foreach item="item" index="index" collection="catalogs"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="parents != null and parents.size()>0">
+                and p.parent in
+                <foreach item="item" index="index" collection="parents"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+
+    </select>
+    <select id="queryEnergyMeterByParentId" parameterType="com.vibe.service.energy.Meter"
+            resultType="com.vibe.service.energy.Meter">
+        SELECT p.id
+        ,p.caption
+        ,p.parent parentId
+        ,p.catalog catalogId
+        ,e.grade
+        ,e.parent_meter parentMeter
+        ,e.meter_type meterType
+        ,e.itemize_type itemizeType
+        ,e.itemize_expression itemizeExpression
+        from db_vibe_monitor.t_probe p LEFT JOIN db_vibe_monitor.t_probe_energy e ON p.id=e.probe_id
+        <where>
+            p.removed = 0
+            <if test="meterType != null">
+                and e.meter_type = #{meterType}
+            </if>
+            <if test="parentMeter != null">
+                and e.parent_meter = #{parentMeter}
+            </if>
+            <if test="parentId != null">
+                and p.parent = #{parentId}
+            </if>
+            <if test="catalogId != null">
+                and p.catalog = #{catalogId}
+            </if>
+            <!-- 暂时解决：只让左侧菜单出现总耗电  and e.itemize_type = 34  -->
+            <if test="catalogId == 1002">
+                and e.itemize_type = 34
+            </if>
+            <if test="meterTypes != null and meterTypes.length>0">
+                and e.meter_type in
+                <foreach item="item" index="index" collection="meterTypes"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <update id="updateEnergyMeterById" parameterType="com.vibe.service.energy.Meter">
+        update db_vibe_monitor.t_probe_energy
+        <set>
+            <if test="meterType!=null">
+                meter_type=#{meterType},
+            </if>
+            <if test="parentMeter!=null">
+                parent_meter=#{parentMeter},
+            </if>
+            <if test="itemizeType!=null">
+                itemize_type=#{itemizeType},
+            </if>
+            <if test="grade!=null">
+                grade=#{grade},
+            </if>
+            <if test="itemizeExpression!=null">
+                itemize_expression=#{itemizeExpression},
+            </if>
+
+        </set>
+        WHERE probe_id=#{id}
+    </update>
+    <!-- 新增监测器 -->
+    <insert id="addEnergyMeter" parameterType="com.vibe.service.energy.Meter">
+        insert into
+        db_vibe_monitor.t_probe_energy
+        (probe_id,meter_type,parent_meter,itemize_type,grade,itemize_expression,value_type
+        )values(#{id},#{meterType},#{parentMeter}, #{itemizeType},#{grade},#{itemizeExpression},#{valueType})
+    </insert>
+
+    <insert id="addMeterRelation" parameterType="com.vibe.pojo.energy.MeterRelation">
+        insert into
+        db_vibe_monitor.t_meter_relation
+        (actual_id,dummy_id,meter_kind,percentage)values(#{actualId},#{dummyId},#{meterKind},#{percentage})
+    </insert>
+
+    <select id="queryMeterRelation" parameterType="com.vibe.pojo.energy.MeterRelation"
+            resultType="com.vibe.pojo.energy.MeterRelation">
+        SELECT actual_id actualId
+        ,dummy_id dummyId
+        ,meter_kind meterKind
+        ,percentage
+        from db_vibe_monitor.t_meter_relation
+        <where>
+            <if test="dummyId != null">
+                and dummy_id = #{dummyId}
+            </if>
+            <if test="meterKind != null">
+                and meter_kind = #{meterKind}
+            </if>
+        </where>
+    </select>
+    <select id="queryEnergyMeterId" parameterType="com.vibe.service.energy.Meter"
+            resultType="com.vibe.service.energy.Meter">
+        SELECT p.id
+        ,p.parent parentId
+        ,p.name
+        ,p.type typeName
+        ,p.caption
+        ,p.catalog catalogId
+        ,e.grade
+        ,e.parent_meter parentMeter
+        ,e.meter_type meterType
+        ,e.itemize_type itemizeType
+        ,e.itemize_expression itemizeExpression
+        FROM db_vibe_monitor.t_probe p LEFT JOIN db_vibe_monitor.t_probe_energy e ON p.id=e.probe_id
+        where p.removed = 0 and p.name = #{name}
+
+    </select>
+</mapper>
+
+
+

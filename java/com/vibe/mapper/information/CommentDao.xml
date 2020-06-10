@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.information.CommentDao">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="cid">
+        insert into qs_test.t_Comment(pid, uid, commented, content, replyId, pcid)
+        values(#{pid}, #{uid}, #{commented}, #{content}, #{replyId}, #{pcid})
+    </insert>
+    <!-- <select id="queryByPost" resultType="com.vibe.pojo.infomation.Comment">
+        select cid, pid, uid, commented, content, replyId, pcid from qs_test.t_Comment
+        <where>
+            pid = #{pid} and replyId = 0
+        </where>
+    </select> -->
+    <resultMap type="com.vibe.pojo.infomation.Comment" id="CommentAndUserLoginName">
+        <id column="cid" property="cid"/>
+        <result column="pid" property="pid"/>
+        <result column="commented" property="commented"/>
+        <result column="content" property="content"/>
+        <result column="replyId" property="replyId"/>
+        <result column="pcid" property="pcid"/>
+        <result column="login_id" property="loginName"/>
+    </resultMap>
+    <select id="queryByPost" resultMap="CommentAndUserLoginName">
+        select cm.cid, cm.pid, cm.uid, cm.commented , cm.content, cm.replyId, cm.pcid,u.login_id from qs_test.t_Comment
+        as cm left join db_vibe_basic.t_user as u on cm.uid=u.id
+        <where>
+            cm.pid = #{pid} and replyId = 0
+        </where>
+    </select>
+
+    <!-- <select id="queryByPage" resultType="com.vibe.pojo.infomation.Comment">
+        <foreach collection="pageCommnets" item="comment" open="(" separator=") UNION (" close=")">
+            select cid, pid, uid, commented, content, replyId, pcid from qs_test.t_Comment
+                where pid = #{comment.pid} AND pcid = #{comment.cid} ORDER BY commented
+        </foreach>
+    </select> -->
+    <select id="queryByPage" resultMap="CommentAndUserLoginName">
+        <foreach collection="pageCommnets" item="comment" open="(" separator=") UNION (" close=")">
+            select cm.cid, cm.pid, cm.uid, cm.commented, cm.content, cm.replyId, cm.pcid,u.login_id from
+            qs_test.t_Comment as cm left join db_vibe_basic.t_user as u on cm.uid=u.id
+            where cm.pid = #{comment.pid} AND cm.pcid = #{comment.cid} ORDER BY cm.commented
+        </foreach>
+    </select>
+
+
+</mapper>
+
+
+

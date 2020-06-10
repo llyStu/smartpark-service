@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vibe.mapper.task.SinglePropDao">
+
+    <select id="queryForList" parameterType="int" resultType="SingleProp">
+        select * from db_vibe_basic.t_code p inner join db_vibe_basic.t_task_prop r
+        on p.id = r.p_id
+        where r.t_id = #{taskId} and catalog = #{catalog}
+    </select>
+
+    <insert id="insert" parameterType="SingleProp">
+        insert into db_vibe_basic.t_single_prop (name, value)
+        values(#{name}, #{value})
+    </insert>
+
+    <insert id="insertIntoIntervalTable" parameterType="int">
+        insert into db_vibe_basic.t_task_prop (t_id, p_id)
+        values(#{taskId}, #{propId})
+    </insert>
+
+    <select id="queryMaxId" resultType="int">
+        select max(id) as maxPropId from db_vibe_basic.t_single_prop
+    </select>
+
+</mapper>
+
+
+
